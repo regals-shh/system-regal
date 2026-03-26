@@ -17,7 +17,7 @@ dotenv.config({ path: require('path').join(__dirname, '../', '.env') });
 const EMAIL_HOST = (process.env.EMAIL_HOST || 'smtp.gmail.com').trim();
 const EMAIL_PORT = (process.env.EMAIL_PORT || 587).toString().trim();
 const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_EMAIL || '').trim();
-const EMAIL_APP_PASSWORD = (process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD || '').trim().replace(/\s+/g, '');
+const EMAIL_APP_PASSWORD = process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD || '';
 
 console.log('Email User configured:', !!EMAIL_USER);
 console.log('Email App Password configured:', !!EMAIL_APP_PASSWORD);
@@ -31,7 +31,7 @@ if (EMAIL_APP_PASSWORD && EMAIL_USER) {
             service: 'gmail',
             auth: {
                 user: EMAIL_USER,
-                pass: EMAIL_APP_PASSWORD.replace(/\s+/g, '')
+                pass: EMAIL_APP_PASSWORD
             }
         });
     } else {
@@ -41,7 +41,7 @@ if (EMAIL_APP_PASSWORD && EMAIL_USER) {
             secure: parseInt(EMAIL_PORT) === 465,
             auth: {
                 user: EMAIL_USER,
-                pass: EMAIL_APP_PASSWORD.replace(/\s+/g, '')
+                pass: EMAIL_APP_PASSWORD
             }
         });
     }
