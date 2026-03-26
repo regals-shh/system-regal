@@ -116,6 +116,19 @@ const sendResetEmail = async (email, resetCode, userType) => {
     await transporter.sendMail(mailOptions);
 };
 
+// Debug endpoint to check email configuration
+router.get('/debug-email', (req, res) => {
+    res.json({
+        EMAIL_HOST: process.env.EMAIL_HOST || 'not set',
+        EMAIL_PORT: process.env.EMAIL_PORT || 'not set',
+        EMAIL_USER: process.env.EMAIL_USER || process.env.GMAIL_EMAIL || 'not set',
+        EMAIL_APP_PASSWORD: process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD ? 'configured' : 'not set',
+        GMAIL_EMAIL: process.env.GMAIL_EMAIL || 'not set',
+        GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD ? 'configured' : 'not set',
+        transporter_configured: !!transporter && transporter.sendMail
+    });
+});
+
 // POST /api/auth/forgot-password-tenant
 router.post('/forgot-password-tenant', async (req, res) => {
     try {
@@ -146,7 +159,16 @@ router.post('/forgot-password-tenant', async (req, res) => {
         await passwordReset.save();
 
         // Send reset email
-        await sendResetEmail(email, resetCode, 'tenant');
+        try {
+            await sendResetEmail(email, resetCode, 'tenant');
+            console.log('Reset email sent successfully to:', email);
+        } catch (emailError) {
+            console.error('Failed to send reset email:', emailError);
+            return res.status(500).json({ 
+                message: 'Failed to send reset email. Please try again.',
+                error: emailError.message 
+            });
+        }
 
         res.json({ 
             message: 'Password reset code sent to your email',
