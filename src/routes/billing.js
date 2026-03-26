@@ -6,9 +6,16 @@ const jwt = require("jsonwebtoken");
 
 const multer = require("multer");
 const path = require("path");
-const fs = require("fs");
 
 const SECRET_KEY = 'supersecretkey';
+
+// GridFS bucket reference (will be set from server.js)
+let gridfsBucket;
+
+// Function to set GridFS bucket (called from server.js)
+function setGridFSBucket(bucket) {
+    gridfsBucket = bucket;
+}
 
 /* =========================
    AUTH MIDDLEWARE
@@ -28,39 +35,14 @@ function authenticate(req, res, next) {
 }
 
 /* =========================
-   CREATE UPLOAD FOLDER
+   FILE UPLOAD CONFIG (MEMORY -> GRIDFS)
 ========================= */
 
-const uploadFolder = path.join(__dirname, "../uploads");
-
-if (!fs.existsSync(uploadFolder)) {
-fs.mkdirSync(uploadFolder);
-}
-
-/* =========================
-   FILE UPLOAD CONFIG
-========================= */
-
-const storage = multer.diskStorage({
-
-destination: function (req, file, cb) {
-cb(null, uploadFolder);
-},
-
-filename: function (req, file, cb) {
-
-const uniqueName =
-Date.now() + "-" + Math.round(Math.random() * 1E9);
-
-cb(null, uniqueName + path.extname(file.originalname));
-
-}
-
-});
+const storage = multer.memoryStorage();
 
 const upload = multer({
-storage: storage,
-limits: { fileSize: 5 * 1024 * 1024 } // 5MB
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB
 });
 
 /* =========================
@@ -229,7 +211,7 @@ error:"Failed to fetch tenant invoices by ID"
 });
 
 /* =========================
-   UPLOAD PAYMENT PROOF
+   UPLOAD PAYMENT PROOF (GRIDFS)
 ========================= */
 
 router.post(
@@ -247,6 +229,10 @@ error:"No file uploaded"
 
 }
 
+if (!gridfsBucket) {
+    return res.status(500).json({ error: "GridFS not initialized" });
+}
+
 const invoice =
 await Invoice.findById(req.params.id);
 
@@ -258,30 +244,48 @@ error:"Invoice not found"
 
 }
 
-/* DELETE OLD PROOF */
+/* DELETE OLD PROOF FROM GRIDFS */
 
-if(invoice.proofImage){
+if(invoice.proofImage && gridfsBucket){
 
-const oldPath =
-path.join(uploadFolder, invoice.proofImage);
-
-if(fs.existsSync(oldPath)){
-fs.unlinkSync(oldPath);
+try {
+    const oldFile = await gridfsBucket.find({ filename: invoice.proofImage }).toArray();
+    if (oldFile && oldFile.length > 0) {
+        await gridfsBucket.delete(oldFile[0]._id);
+    }
+} catch (err) {
+    console.log("Old file not found or already deleted");
 }
 
 }
 
-/* SAVE NEW PROOF */
+/* SAVE NEW PROOF TO GRIDFS */
 
-invoice.proofImage = req.file.filename;
+const uniqueName = Date.now() + "-" + Math.round(Math.random() * 1E9) + path.extname(req.file.originalname);
+
+const uploadStream = gridfsBucket.openUploadStream(uniqueName, {
+    contentType: req.file.mimetype
+});
+
+uploadStream.end(req.file.buffer);
+
+// Wait for upload to complete
+await new Promise((resolve, reject) => {
+    uploadStream.on('finish', resolve);
+    uploadStream.on('error', reject);
+});
+
+invoice.proofImage = uniqueName;
 invoice.status = "Pending";
 
 await invoice.save();
 
+console.log("Proof uploaded to GridFS:", uniqueName);
+
 res.json({
 
 message:"Proof uploaded successfully",
-file:req.file.filename
+file:uniqueName
 
 });
 
@@ -295,10 +299,11 @@ error:"Upload failed"
 
 }
 
-});
+}
+);
 
 /* =========================
-   DELETE PAYMENT PROOF
+   DELETE PAYMENT PROOF (GRIDFS)
 ========================= */
 
 router.delete("/delete-proof/:id", async (req,res)=>{
@@ -325,18 +330,18 @@ console.log("Invoice before deletion:", {
     status: invoice.status
 });
 
-/* REMOVE FILE */
+/* REMOVE FILE FROM GRIDFS */
 
-if(invoice.proofImage){
+if(invoice.proofImage && gridfsBucket){
 
-const filePath =
-path.join(uploadFolder, invoice.proofImage);
-
-if(fs.existsSync(filePath)){
-console.log("Deleting file:", filePath);
-fs.unlinkSync(filePath);
-} else {
-    console.log("File not found:", filePath);
+try {
+    const file = await gridfsBucket.find({ filename: invoice.proofImage }).toArray();
+    if (file && file.length > 0) {
+        await gridfsBucket.delete(file[0]._id);
+        console.log("Deleted file from GridFS:", invoice.proofImage);
+    }
+} catch (err) {
+    console.log("File not found in GridFS, may already be deleted");
 }
 
 }
@@ -434,7 +439,7 @@ error:"Update failed"
 });
 
 /* =========================
-   DELETE INVOICE
+   DELETE INVOICE (GRIDFS)
 ========================= */
 
 router.delete("/delete-invoice/:id", authenticate, async (req,res)=>{
@@ -444,13 +449,15 @@ try{
 const invoice =
 await Invoice.findById(req.params.id);
 
-if(invoice && invoice.proofImage){
+if(invoice && invoice.proofImage && gridfsBucket){
 
-const filePath =
-path.join(uploadFolder, invoice.proofImage);
-
-if(fs.existsSync(filePath)){
-fs.unlinkSync(filePath);
+try {
+    const file = await gridfsBucket.find({ filename: invoice.proofImage }).toArray();
+    if (file && file.length > 0) {
+        await gridfsBucket.delete(file[0]._id);
+    }
+} catch (err) {
+    console.log("File not found in GridFS");
 }
 
 }
@@ -473,4 +480,6 @@ error:"Delete failed"
 
 });
 
+// Export the router and the setGridFSBucket function
 module.exports = router;
+module.exports.setGridFSBucket = setGridFSBucket;

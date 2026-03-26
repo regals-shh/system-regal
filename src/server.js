@@ -4,6 +4,7 @@ const cors = require("cors");
 const path = require("path");
 const multer = require("multer");
 const dotenv = require("dotenv");
+const Grid = require("gridfs-stream");
 
 // Load environment variables from parent directory
 dotenv.config({ path: path.join(__dirname, '..', '.env') });
@@ -38,27 +39,20 @@ app.use(express.json());
 // SERVE FRONTEND FILES
 app.use(express.static(path.join(__dirname, "..")));
 
-// SERVE UPLOADED FILES
-app.use("/uploads", express.static("uploads"));
+// GridFS setup
+let gfs;
+let gridfsBucket;
 
 /* =========================
-   MULTER FILE UPLOAD SETUP
+   MULTER FILE UPLOAD SETUP (MEMORY -> GRIDFS)
 ========================= */
 
-const storage = multer.diskStorage({
+const storage = multer.memoryStorage();
 
-destination: function(req,file,cb){
-cb(null, path.join(__dirname,"uploads"));
-},
-
-filename: function(req, file, cb){
-const uniqueName = Date.now() + path.extname(file.originalname);
-cb(null, uniqueName);
-}
-
+const upload = multer({ 
+    storage: storage,
+    limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
 });
-
-const upload = multer({ storage: storage });
 
 /* =========================
    API ROUTES
@@ -77,7 +71,32 @@ app.use('/api/auth', authRoutes);
 app.use('/api', visitorRoutes);
 
 /* =========================
-   UPLOAD PAYMENT PROOF
+   GRIDFS IMAGE RETRIEVAL
+========================= */
+
+app.get("/api/proof-image/:filename", async (req, res) => {
+    try {
+        if (!gridfsBucket) {
+            return res.status(500).json({ message: "GridFS not initialized" });
+        }
+        
+        const file = await gridfsBucket.find({ filename: req.params.filename }).toArray();
+        
+        if (!file || file.length === 0) {
+            return res.status(404).json({ message: "Image not found" });
+        }
+        
+        const readStream = gridfsBucket.openDownloadStreamByName(req.params.filename);
+        res.set('Content-Type', file[0].contentType || 'image/jpeg');
+        readStream.pipe(res);
+    } catch (error) {
+        console.error("Error retrieving image:", error);
+        res.status(500).json({ message: "Error retrieving image" });
+    }
+});
+
+/* =========================
+   UPLOAD PAYMENT PROOF (GRIDFS)
 ========================= */
 
 app.post("/api/upload-payment/:id", upload.single("proof"), async (req,res)=>{
@@ -94,16 +113,42 @@ if(!invoice){
 return res.status(404).json({message:"Invoice not found"});
 }
 
-invoice.proofImage = req.file.filename;
+// Delete old proof from GridFS if exists
+if(invoice.proofImage && gridfsBucket) {
+    try {
+        const oldFile = await gridfsBucket.find({ filename: invoice.proofImage }).toArray();
+        if (oldFile && oldFile.length > 0) {
+            await gridfsBucket.delete(oldFile[0]._id);
+        }
+    } catch (err) {
+        console.log("Old file not found or already deleted");
+    }
+}
+
+// Save new file to GridFS
+const uniqueName = Date.now() + path.extname(req.file.originalname);
+const uploadStream = gridfsBucket.openUploadStream(uniqueName, {
+    contentType: req.file.mimetype
+});
+
+uploadStream.end(req.file.buffer);
+
+// Wait for upload to complete
+await new Promise((resolve, reject) => {
+    uploadStream.on('finish', resolve);
+    uploadStream.on('error', reject);
+});
+
+invoice.proofImage = uniqueName;
 invoice.status = "Pending";
 
 await invoice.save();
 
-console.log("Uploaded file:", req.file.filename);
+console.log("Uploaded file to GridFS:", uniqueName);
 
 res.json({
 message:"Payment proof uploaded successfully",
-file:req.file.filename
+file:uniqueName
 });
 
 }catch(error){
@@ -116,7 +161,7 @@ res.status(500).json({message:"Server error"});
 });
 
 /* =========================
-   DELETE PAYMENT PROOF
+   DELETE PAYMENT PROOF (GRIDFS)
 ========================= */
 
 app.delete("/api/delete-proof/:id", async (req,res)=>{
@@ -133,13 +178,17 @@ if(!invoice.proofImage){
 return res.status(400).json({message:"No proof image to delete"});
 }
 
-// Delete the file from filesystem
-const fs = require('fs');
-const filePath = path.join(__dirname, 'uploads', invoice.proofImage);
-
-if(fs.existsSync(filePath)){
-fs.unlinkSync(filePath);
-console.log("Deleted file:", invoice.proofImage);
+// Delete the file from GridFS
+if (gridfsBucket) {
+    try {
+        const file = await gridfsBucket.find({ filename: invoice.proofImage }).toArray();
+        if (file && file.length > 0) {
+            await gridfsBucket.delete(file[0]._id);
+            console.log("Deleted file from GridFS:", invoice.proofImage);
+        }
+    } catch (err) {
+        console.log("File not found in GridFS, may already be deleted");
+    }
 }
 
 // Remove proof from invoice
@@ -172,6 +221,18 @@ if (!process.env.MONGODB_URI) {
 mongoose.connect(process.env.MONGODB_URI)
 .then(() => {
     console.log("✅ Database Connected");
+    
+    // Initialize GridFS
+    const db = mongoose.connection.db;
+    gridfsBucket = new mongoose.mongo.GridFSBucket(db, {
+        bucketName: 'proofImages'
+    });
+    gfs = Grid(db, mongoose.mongo);
+    gfs.collection('proofImages');
+    console.log("✅ GridFS Initialized");
+    
+    // Pass gridfsBucket to billing routes
+    billingRoutes.setGridFSBucket(gridfsBucket);
 })
 .catch(err => {
     console.error("❌ Database Error:", err);

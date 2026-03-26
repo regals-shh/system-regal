@@ -330,7 +330,7 @@ function viewProof(url){
   if(!url){ alert("No proof image"); return; }
   const modal = document.getElementById("proofModal");
   const img = document.getElementById("proofImg");
-  img.src = url.startsWith("http") ? url : `/uploads/${url}`;
+  img.src = url.startsWith("http") ? url : `/api/proof-image/${url}`;
   modal.style.display="flex";
 }
 function closeProofModal(){ document.getElementById("proofModal").style.display="none"; document.getElementById("proofImg").src=""; }
