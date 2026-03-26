@@ -4,13 +4,14 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {
-    // Production server URL - REPLACE WITH YOUR ACTUAL SERVER URL
+    // Production server URL - Render deployment
     private static final String PRODUCTION_BASE_URL = "https://regal-system.onrender.com/";
     
-    // Development server URL (for local testing)
-    private static final String DEVELOPMENT_BASE_URL = "http://192.168.100.143:5000/";
+    // Development server URL (for emulator testing - use 10.0.2.2 for localhost)
+    private static final String DEVELOPMENT_BASE_URL = "http://10.0.2.2:5000/";
     
     // Set to true for production, false for development
     private static final boolean IS_PRODUCTION = true;
@@ -22,7 +23,15 @@ public class RetrofitClient {
         if (retrofit == null) {
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
-            OkHttpClient client = new OkHttpClient.Builder().addInterceptor(interceptor).build();
+            
+            // Add timeout settings for mobile networks and emulator
+            OkHttpClient client = new OkHttpClient.Builder()
+                .addInterceptor(interceptor)
+                .connectTimeout(30, TimeUnit.SECONDS)
+                .readTimeout(30, TimeUnit.SECONDS)
+                .writeTimeout(30, TimeUnit.SECONDS)
+                .retryOnConnectionFailure(true)
+                .build();
 
             retrofit = new Retrofit.Builder()
                     .baseUrl(BASE_URL)
