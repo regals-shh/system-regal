@@ -22,15 +22,26 @@ const EMAIL_APP_PASSWORD = process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_A
 console.log('Email User configured:', !!EMAIL_USER);
 console.log('Email App Password configured:', !!EMAIL_APP_PASSWORD);
 
-// Email transporter setup (supports Gmail and custom SMTP)
+// Email transporter setup - supports Gmail, custom SMTP, or SendGrid
 let transporter;
 if (EMAIL_APP_PASSWORD && EMAIL_USER) {
-    // Use Gmail OAuth2/service configuration for Render compatibility
-    if (EMAIL_HOST.includes('gmail')) {
+    // Use SendGrid if EMAIL_HOST is sendgrid
+    if (EMAIL_HOST.includes('sendgrid')) {
+        transporter = nodemailer.createTransport({
+            host: 'smtp.sendgrid.net',
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+                user: 'apikey',
+                pass: EMAIL_APP_PASSWORD
+            }
+        });
+    } else if (EMAIL_HOST.includes('gmail')) {
         transporter = nodemailer.createTransport({
             host: 'smtp.gmail.com',
             port: 587,
-            secure: false, // Use STARTTLS
+            secure: false,
             requireTLS: true,
             auth: {
                 user: EMAIL_USER,
