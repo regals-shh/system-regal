@@ -7,13 +7,13 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class RetrofitClient {
     // Production server URL - REPLACE WITH YOUR ACTUAL SERVER URL
-    private static final String PRODUCTION_BASE_URL = "https://your-production-domain.com/api/";
+    private static final String PRODUCTION_BASE_URL = "https://regal-system.onrender.com/";
     
     // Development server URL (for local testing)
     private static final String DEVELOPMENT_BASE_URL = "http://192.168.100.143:5000/";
     
     // Set to true for production, false for development
-    private static final boolean IS_PRODUCTION = false;
+    private static final boolean IS_PRODUCTION = true;
     
     private static final String BASE_URL = IS_PRODUCTION ? PRODUCTION_BASE_URL : DEVELOPMENT_BASE_URL;
     private static Retrofit retrofit = null;

@@ -233,12 +233,12 @@
         document.querySelectorAll('.animate-element').forEach(el => el.classList.add('visible'));
     }, 100);
 
-    const API = "http://localhost:5000/api";
+    const API = "/api";
     let editingRoomId = null;
     let editingTypeId = null;
 
     async function loadRooms(){
-        const typesRes = await fetch(API+"/room-types");
+        const typesRes = await fetch(`${API}/room-types`);
         const types = await typesRes.json();
 
         const roomsRes = await fetch(API+"/rooms");
