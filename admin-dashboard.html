@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Admin Dashboard | Regal Rooms</title>
 <script src="https://unpkg.com/@phosphor-icons/web"></script>
-<link rel="stylesheet" href="css/admin.css">
+<link rel="stylesheet" href="css/admin.css?v=2">
 </head>
 <body>
 
@@ -137,10 +137,11 @@ window.top.location = window.location;
       tbody.innerHTML = "";
       data.recentPayments.forEach(p => {
         const tr = document.createElement("tr");
+        const datePaid = p.datePaid ? new Date(p.datePaid).toLocaleDateString() : 'N/A';
         tr.innerHTML = `
           <td>${p.tenantName}</td>
           <td>${p.room}</td>
-          <td>${new Date(p.datePaid).toLocaleDateString()}</td>
+          <td>${datePaid}</td>
           <td>₱${p.amount}</td>
           <td><span class="status ${p.status.toLowerCase()}">${p.status}</span></td>
         `;
@@ -170,6 +171,6 @@ window.top.location = window.location;
     mobileMenuBtn.addEventListener("click", () => sidebar.classList.toggle('open'));
   }
 </script>
-<script src="js/admin.js"></script>
+<script src="js/admin.js?v=2"></script>
 </body>
 </html>
