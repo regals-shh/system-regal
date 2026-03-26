@@ -14,11 +14,12 @@ const bcrypt = require('bcryptjs');
 dotenv.config({ path: require('path').join(__dirname, '../', '.env') });
 
 // Email configuration
-const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_EMAIL || 'regalsapartment@gmail.com').trim();
+const FROM_EMAIL = (process.env.FROM_EMAIL || process.env.GMAIL_EMAIL || 'regalsapartment@gmail.com').trim();
+const EMAIL_USER = (process.env.EMAIL_USER || 'apikey').trim();
 const SENDGRID_API_KEY = process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD || '';
 
 console.log('Email configuration:');
-console.log('  From:', EMAIL_USER);
+console.log('  From:', FROM_EMAIL);
 console.log('  API Key configured:', !!SENDGRID_API_KEY);
 
 // Initialize SendGrid if API key is available
@@ -38,7 +39,7 @@ const generateResetCode = () => {
 const sendResetEmail = async (email, resetCode, userType) => {
     try {
         console.log(`Attempting to send reset email to ${email}...`);
-        console.log(`From: ${EMAIL_USER}`);
+        console.log(`From: ${FROM_EMAIL}`);
         
         const subject = `Password Reset Code - Regal Rooms ${userType === 'admin' ? 'Admin' : 'Tenant'} Account`;
         const htmlContent = `
@@ -77,7 +78,7 @@ const sendResetEmail = async (email, resetCode, userType) => {
         const msg = {
             to: email,
             from: {
-                email: EMAIL_USER,
+                email: FROM_EMAIL,
                 name: 'Regal Rooms'
             },
             subject: subject,
@@ -138,10 +139,10 @@ router.get('/debug-email', async (req, res) => {
 // Test email endpoint - actually tries to send an email
 router.get('/test-email', async (req, res) => {
     try {
-        if (!EMAIL_USER || !SENDGRID_API_KEY) {
+        if (!FROM_EMAIL || !SENDGRID_API_KEY) {
             return res.status(500).json({ 
                 error: 'Email not configured',
-                EMAIL_USER: !!EMAIL_USER,
+                FROM_EMAIL: !!FROM_EMAIL,
                 SENDGRID_API_KEY: !!SENDGRID_API_KEY
             });
         }
@@ -149,9 +150,9 @@ router.get('/test-email', async (req, res) => {
         const testCode = generateResetCode();
         
         const msg = {
-            to: EMAIL_USER,
+            to: FROM_EMAIL,
             from: {
-                email: EMAIL_USER,
+                email: FROM_EMAIL,
                 name: 'Regal Rooms Test'
             },
             subject: 'Test Email from Regal Rooms',
@@ -159,14 +160,14 @@ router.get('/test-email', async (req, res) => {
         };
         
         console.log('Attempting to send test email...');
-        console.log('From:', EMAIL_USER);
+        console.log('From:', FROM_EMAIL);
         
         await sgMail.send(msg);
         
         res.json({
             success: true,
             message: 'Test email sent successfully',
-            to: EMAIL_USER
+            to: FROM_EMAIL
         });
     } catch (error) {
         console.error('Test email error:', error);
