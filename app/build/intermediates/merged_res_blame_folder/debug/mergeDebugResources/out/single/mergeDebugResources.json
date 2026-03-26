@@ -1,238 +1,234 @@
 [
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_priority_important_bg.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\priority_important_bg.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_sun.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_sun.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_payment_card_gradient.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\payment_card_gradient.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_dialog_rooftop_request.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/dialog_rooftop_request.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_bg_circle_icon_light.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\bg_circle_icon_light.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_item_maintenance.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/item_maintenance.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\menu_drawer_menu.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\menu\\drawer_menu.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_list.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_list.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_shield_check.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_shield_check.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_fragment_payments.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_payments.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_dialog_parking_request.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\dialog_parking_request.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_dialog_edit_maintenance.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/dialog_edit_maintenance.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_btn_amber_selector.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\btn_amber_selector.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_btn_blue_selector.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/btn_blue_selector.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\mipmap-xhdpi_ic_launcher.jpg.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\mipmap-xhdpi\\ic_launcher.jpg"
+        "merged": "com.regalrooms.tenant-debug-44:/mipmap-xxxhdpi_ic_launcher.jpg.flat",
+        "source": "com.regalrooms.tenant-main-46:/mipmap-xxxhdpi/ic_launcher.jpg"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_item_invoice.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\item_invoice.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_pencil.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_pencil.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_logo_regal.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\logo_regal.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_item_service_request.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/item_service_request.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_status_overdue_bg.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\status_overdue_bg.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_fragment_settings.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_settings.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_dialog_edit_visitor.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\dialog_edit_visitor.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_car.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_car.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_item_dashboard_transaction.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\item_dashboard_transaction.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/menu_drawer_menu.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/menu/drawer_menu.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_item_announcement.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\item_announcement.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_user_plus.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_user_plus.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_user_gear.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_user_gear.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_fragment_services.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_services.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_item_visitor.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\item_visitor.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_wrench.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_wrench.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_list.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_list.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_item_dashboard_transaction.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/item_dashboard_transaction.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_item_service_request.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\item_service_request.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/mipmap-hdpi_ic_launcher.jpg.flat",
+        "source": "com.regalrooms.tenant-main-46:/mipmap-hdpi/ic_launcher.jpg"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_megaphone.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_megaphone.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_status_overdue_bg.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/status_overdue_bg.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_sun.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_sun.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_bg_circle_icon_light.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/bg_circle_icon_light.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_spinner_border.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\spinner_border.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_sign_out.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_sign_out.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_fragment_settings.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\fragment_settings.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_activity_login.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/activity_login.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_user_plus.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_user_plus.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_edittext_border.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/edittext_border.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_car.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_car.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_activity_forgot_password.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/activity_forgot_password.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\mipmap-mdpi_ic_launcher.jpg.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\mipmap-mdpi\\ic_launcher.jpg"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_payment_card_gradient.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/payment_card_gradient.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_activity_login.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\activity_login.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_app_icon.jpg.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/app_icon.jpg"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_dialog_rooftop_request.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\dialog_rooftop_request.xml"
-    },
-    {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_fragment_payments.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\fragment_payments.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_priority_normal_bg.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/priority_normal_bg.xml"
     },
     {
         "merged": "com.regalrooms.tenant-debug-44:/xml_network_security_config.xml.flat",
         "source": "com.regalrooms.tenant-main-46:/xml/network_security_config.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_fragment_services.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\fragment_services.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_priority_important_bg.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/priority_important_bg.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_credit_card.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_credit_card.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_megaphone.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_megaphone.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_bg_circle_icon_gold.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\bg_circle_icon_gold.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_priority_urgent_bg.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/priority_urgent_bg.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_status_paid_bg.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\status_paid_bg.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_nav_header.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/nav_header.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_fragment_dashboard.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\fragment_dashboard.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/mipmap-mdpi_ic_launcher.jpg.flat",
+        "source": "com.regalrooms.tenant-main-46:/mipmap-mdpi/ic_launcher.jpg"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_sparkle.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_sparkle.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_activity_main.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/activity_main.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_sign_out.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_sign_out.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_bg_circle_icon_gold.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/bg_circle_icon_gold.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_activity_forgot_password.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\activity_forgot_password.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_squares_four.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_squares_four.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_pencil.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_pencil.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_fragment_maintenance.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_maintenance.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_status_pending_bg.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\status_pending_bg.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_dialog_edit_visitor.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/dialog_edit_visitor.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_edittext_border.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\edittext_border.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/mipmap-xxhdpi_ic_launcher.jpg.flat",
+        "source": "com.regalrooms.tenant-main-46:/mipmap-xxhdpi/ic_launcher.jpg"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_app_icon.jpg.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\app_icon.jpg"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_fragment_dashboard.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_dashboard.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\xml_network_security_config.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\xml\\network_security_config.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_spinner_border.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/spinner_border.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_btn_blue_selector.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\btn_blue_selector.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_sparkle.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_sparkle.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_calendar.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_calendar.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_item_visitor.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/item_visitor.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_fragment_visitors.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\fragment_visitors.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_shield_check.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_shield_check.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_priority_urgent_bg.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\priority_urgent_bg.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_btn_amber_selector.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/btn_amber_selector.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_fragment_announcements.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\fragment_announcements.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_status_paid_bg.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/status_paid_bg.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\mipmap-xxxhdpi_ic_launcher.jpg.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\mipmap-xxxhdpi\\ic_launcher.jpg"
+        "merged": "com.regalrooms.tenant-debug-44:/mipmap-xhdpi_ic_launcher.jpg.flat",
+        "source": "com.regalrooms.tenant-main-46:/mipmap-xhdpi/ic_launcher.jpg"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_priority_normal_bg.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\priority_normal_bg.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_dialog_parking_request.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/dialog_parking_request.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\mipmap-xxhdpi_ic_launcher.jpg.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\mipmap-xxhdpi\\ic_launcher.jpg"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_credit_card.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_credit_card.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_edit_text_bg.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\edit_text_bg.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_calendar.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_calendar.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_dialog_edit_maintenance.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\dialog_edit_maintenance.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_item_invoice.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/item_invoice.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_squares_four.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_squares_four.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_logo_regal.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/logo_regal.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\drawable_ic_ph_wrench.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\drawable\\ic_ph_wrench.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_item_announcement.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/item_announcement.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_nav_header.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\nav_header.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_edit_text_bg.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/edit_text_bg.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_fragment_maintenance.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\fragment_maintenance.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_fragment_announcements.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_announcements.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\mipmap-hdpi_ic_launcher.jpg.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\mipmap-hdpi\\ic_launcher.jpg"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_ic_ph_user_gear.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/ic_ph_user_gear.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_activity_main.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\activity_main.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/layout_fragment_visitors.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_visitors.xml"
     },
     {
-        "merged": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-debug-44:\\layout_item_maintenance.xml.flat",
-        "source": "C:\\Users\\Jerald\\.gradle\\daemon\\8.13\\com.regalrooms.tenant-main-46:\\layout\\item_maintenance.xml"
+        "merged": "com.regalrooms.tenant-debug-44:/drawable_status_pending_bg.xml.flat",
+        "source": "com.regalrooms.tenant-main-46:/drawable/status_pending_bg.xml"
     }
 ]

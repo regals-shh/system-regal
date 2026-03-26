@@ -1,6 +1,6 @@
-#Mon Mar 23 22:41:03 PST 2026
-base.0=C\:\\Users\\Jerald\\Desktop\\Regals Monitoring System - Copy\\app\\build\\intermediates\\dex\\debugAndroidTest\\mergeExtDexDebugAndroidTest\\classes.dex
-base.1=C\:\\Users\\Jerald\\Desktop\\Regals Monitoring System - Copy\\app\\build\\intermediates\\dex\\debugAndroidTest\\mergeProjectDexDebugAndroidTest\\0\\classes.dex
+#Fri Mar 27 05:53:11 PST 2026
+base.0=C\:\\Users\\Jerald\\Desktop\\FINAL\\app\\build\\intermediates\\dex\\debugAndroidTest\\mergeExtDexDebugAndroidTest\\classes.dex
+base.1=C\:\\Users\\Jerald\\Desktop\\FINAL\\app\\build\\intermediates\\dex\\debugAndroidTest\\mergeProjectDexDebugAndroidTest\\0\\classes.dex
 path.0=classes.dex
 path.1=0/classes.dex
 renamed.0=classes.dex

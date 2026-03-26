@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Visitor Logs | Regal Rooms</title>
     <script src="https://unpkg.com/@phosphor-icons/web"></script>
-    <link rel="stylesheet" href="css/tenant.css">
+    <link rel="stylesheet" href="css/tenant.css?v=2">
     
     <style>
     /* Enhanced button animations matching tenant-payments */
@@ -347,9 +347,9 @@
         </header>
 
         <section class="content-area">
-            <div id="currentTenantInfo" style="margin-bottom: 20px; padding: 15px; background: var(--bg-tint); border-radius: 8px; font-size: 0.9rem;">
-                <strong>Current Tenant:</strong> <span id="tenantNameDisplay">Loading...</span><br>
-                <strong>Room:</strong> <span id="roomNumberDisplay">Loading...</span>
+            <div id="currentTenantInfo" style="margin-bottom: 20px; padding: 15px; background: var(--bg-tint); border-radius: 8px; font-size: 0.9rem;" class="animate-element">
+                <strong>Current Tenant:</strong> <span id="tenantNameDisplay"></span><br>
+                <strong>Room:</strong> <span id="roomNumberDisplay"></span>
             </div>
             
             <div class="visitor-section animate-element">
@@ -390,7 +390,7 @@
         </section>
     </main>
 
-    <script src="js/tenant.js"></script>
+    <script src="js/tenant.js?v=2"></script>
     <script>
   //laban clickjacking//
 if (window.top !== window.self) {

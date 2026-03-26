@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.drawerlayout.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/drawer_layout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="@color/primary"
+            app:navigationIcon="@android:drawable/ic_menu_sort_by_size"
+            app:navigationIconTint="@color/white"
+            app:title="Regal Rooms"
+            app:titleCentered="true"
+            app:titleTextAppearance="@style/TextAppearance.Material3.TitleMedium"
+            app:titleTextColor="@color/white"
+            app:elevation="4dp" />
+
+        <FrameLayout
+            android:id="@+id/fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/bg_body" />
+
+    </LinearLayout>
+
+    <com.google.android.material.navigation.NavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="start"
+        android:background="@color/bg_surface"
+        app:headerLayout="@layout/nav_header"
+        app:itemIconPadding="24dp"
+        app:itemIconTint="@color/primary"
+        app:itemShapeFillColor="@color/bg_tint"
+        app:itemShapeAppearanceOverlay="@style/ShapeAppearance.Material3.Corner.Medium"
+        app:itemTextColor="@color/text_main"
+        app:itemVerticalPadding="12dp"
+        app:menu="@menu/drawer_menu"
+        app:subheaderColor="@color/text_grey" />
+
+</androidx.drawerlayout.widget.DrawerLayout>
