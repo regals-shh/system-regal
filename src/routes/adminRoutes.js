@@ -79,7 +79,7 @@ router.get('/dashboard', authenticate, async (req, res) => {
         const recentPayments = recentPaymentsRaw.map(inv => ({
             tenantName: inv.tenantName || 'Unknown Tenant',
             room: inv.roomNumber || 'Unknown Room',
-            datePaid: inv.datePaid,
+            datePaid: inv.datePaid || inv.updatedAt,
             amount: inv.amount,
             status: inv.status
         }));
