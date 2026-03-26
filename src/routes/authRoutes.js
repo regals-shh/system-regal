@@ -156,10 +156,57 @@ router.get('/debug-email', async (req, res) => {
             GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD ? 'configured' : 'not set',
             transporter_configured: !!transporter && !!transporter.sendMail,
             transporter_ready: transporterReady,
-            transporter_error: transporterError
+            transporter_error: transporterError,
+            processed_email_user: EMAIL_USER,
+            processed_password_length: EMAIL_APP_PASSWORD ? EMAIL_APP_PASSWORD.length : 0
         });
     } catch (error) {
         res.status(500).json({ error: error.message });
+    }
+});
+
+// Test email endpoint - actually tries to send an email
+router.get('/test-email', async (req, res) => {
+    try {
+        if (!EMAIL_USER || !EMAIL_APP_PASSWORD) {
+            return res.status(500).json({ 
+                error: 'Email not configured',
+                EMAIL_USER: !!EMAIL_USER,
+                EMAIL_APP_PASSWORD: !!EMAIL_APP_PASSWORD
+            });
+        }
+        
+        const testCode = generateResetCode();
+        
+        const mailOptions = {
+            from: `"Regal Rooms Test" <${EMAIL_USER}>`,
+            to: EMAIL_USER, // Send to yourself for testing
+            subject: 'Test Email from Regal Rooms',
+            html: `<h1>Test Email</h1><p>This is a test. Code: ${testCode}</p>`
+        };
+        
+        console.log('Attempting to send test email...');
+        console.log('From:', EMAIL_USER);
+        console.log('Password length:', EMAIL_APP_PASSWORD.length);
+        
+        const result = await transporter.sendMail(mailOptions);
+        
+        res.json({
+            success: true,
+            message: 'Test email sent successfully',
+            messageId: result.messageId,
+            to: EMAIL_USER
+        });
+    } catch (error) {
+        console.error('Test email error:', error);
+        res.status(500).json({
+            success: false,
+            error: error.message,
+            code: error.code,
+            response: error.response,
+            command: error.command,
+            fullError: error.toString()
+        });
     }
 });
 
