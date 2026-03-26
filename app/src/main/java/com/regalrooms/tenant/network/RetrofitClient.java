@@ -8,7 +8,7 @@ import java.util.concurrent.TimeUnit;
 
 public class RetrofitClient {
     // Production server URL - Render deployment
-    private static final String PRODUCTION_BASE_URL = "https://regal-system.onrender.com/";
+    private static final String PRODUCTION_BASE_URL = "https://regals-backend.onrender.com/";
     
     // Development server URL (for emulator testing - use 10.0.2.2 for localhost)
     private static final String DEVELOPMENT_BASE_URL = "http://10.0.2.2:5000/";
