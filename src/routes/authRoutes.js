@@ -74,59 +74,93 @@ const generateResetCode = () => {
 
 // Send password reset email
 const sendResetEmail = async (email, resetCode, userType) => {
-    const subject = `Password Reset Code - Regal Rooms ${userType === 'admin' ? 'Admin' : 'Tenant'} Account`;
-    const htmlContent = `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-            <div style="text-align: center; margin-bottom: 30px;">
-                <h1 style="color: #14532D; font-family: 'DM Serif Display', serif;">Regal Rooms</h1>
-                <p style="color: #bba97d; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">${userType === 'admin' ? 'Admin' : 'Tenant'} Portal</p>
-            </div>
-            
-            <div style="background: #F8F6F1; padding: 30px; border-radius: 15px; margin-bottom: 20px;">
-                <h2 style="color: #14532D; margin-bottom: 15px;">Password Reset Request</h2>
-                <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
-                    You requested to reset your password for your ${userType === 'admin' ? 'admin' : 'tenant'} account. 
-                    Use the verification code below to proceed with the password reset.
-                </p>
-                
-                <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; border: 2px solid #bba97d;">
-                    <p style="color: #888; font-size: 14px; margin-bottom: 10px;">Your Verification Code:</p>
-                    <h1 style="color: #14532D; font-size: 32px; letter-spacing: 8px; margin: 0;">${resetCode}</h1>
+    try {
+        console.log(`Attempting to send reset email to ${email}...`);
+        console.log(`Using EMAIL_USER: ${EMAIL_USER}`);
+        
+        const subject = `Password Reset Code - Regal Rooms ${userType === 'admin' ? 'Admin' : 'Tenant'} Account`;
+        const htmlContent = `
+            <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
+                <div style="text-align: center; margin-bottom: 30px;">
+                    <h1 style="color: #14532D; font-family: 'DM Serif Display', serif;">Regal Rooms</h1>
+                    <p style="color: #bba97d; font-size: 14px; text-transform: uppercase; letter-spacing: 2px;">${userType === 'admin' ? 'Admin' : 'Tenant'} Portal</p>
                 </div>
                 
-                <p style="color: #888; font-size: 12px; margin-top: 20px;">
-                    This code will expire in <strong>10 minutes</strong>. If you didn't request this, please ignore this email.
-                </p>
+                <div style="background: #F8F6F1; padding: 30px; border-radius: 15px; margin-bottom: 20px;">
+                    <h2 style="color: #14532D; margin-bottom: 15px;">Password Reset Request</h2>
+                    <p style="color: #666; line-height: 1.6; margin-bottom: 20px;">
+                        You requested to reset your password for your ${userType === 'admin' ? 'admin' : 'tenant'} account. 
+                        Use the verification code below to proceed with the password reset.
+                    </p>
+                    
+                    <div style="background: white; padding: 20px; border-radius: 10px; text-align: center; border: 2px solid #bba97d;">
+                        <p style="color: #888; font-size: 14px; margin-bottom: 10px;">Your Verification Code:</p>
+                        <h1 style="color: #14532D; font-size: 32px; letter-spacing: 8px; margin: 0;">${resetCode}</h1>
+                    </div>
+                    
+                    <p style="color: #888; font-size: 12px; margin-top: 20px;">
+                        This code will expire in <strong>10 minutes</strong>. If you didn't request this, please ignore this email.
+                    </p>
+                </div>
+                
+                <div style="text-align: center; color: #999; font-size: 12px;">
+                    <p> 2024 Regal Rooms. All rights reserved.</p>
+                    <p>This is an automated message, please do not reply to this email.</p>
+                </div>
             </div>
-            
-            <div style="text-align: center; color: #999; font-size: 12px;">
-                <p> 2024 Regal Rooms. All rights reserved.</p>
-                <p>This is an automated message, please do not reply to this email.</p>
-            </div>
-        </div>
-    `;
+        `;
 
-    const mailOptions = {
-        from: `"Regal Rooms" <${EMAIL_USER}>`,
-        to: email,
-        subject: subject,
-        html: htmlContent
-    };
+        const mailOptions = {
+            from: `"Regal Rooms" <${EMAIL_USER}>`,
+            to: email,
+            subject: subject,
+            html: htmlContent
+        };
 
-    await transporter.sendMail(mailOptions);
+        const result = await transporter.sendMail(mailOptions);
+        console.log('Email sent successfully:', result.messageId);
+        return result;
+    } catch (error) {
+        console.error('Detailed email error:', error);
+        throw error;
+    }
 };
 
 // Debug endpoint to check email configuration
-router.get('/debug-email', (req, res) => {
-    res.json({
-        EMAIL_HOST: process.env.EMAIL_HOST || 'not set',
-        EMAIL_PORT: process.env.EMAIL_PORT || 'not set',
-        EMAIL_USER: process.env.EMAIL_USER || process.env.GMAIL_EMAIL || 'not set',
-        EMAIL_APP_PASSWORD: process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD ? 'configured' : 'not set',
-        GMAIL_EMAIL: process.env.GMAIL_EMAIL || 'not set',
-        GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD ? 'configured' : 'not set',
-        transporter_configured: !!transporter && transporter.sendMail
-    });
+router.get('/debug-email', async (req, res) => {
+    try {
+        // Test transporter connection
+        let transporterReady = false;
+        let transporterError = null;
+        
+        if (transporter && transporter.verify) {
+            try {
+                await new Promise((resolve, reject) => {
+                    transporter.verify((err, success) => {
+                        if (err) reject(err);
+                        else resolve(success);
+                    });
+                });
+                transporterReady = true;
+            } catch (err) {
+                transporterError = err.message;
+            }
+        }
+        
+        res.json({
+            EMAIL_HOST: process.env.EMAIL_HOST || 'not set',
+            EMAIL_PORT: process.env.EMAIL_PORT || 'not set',
+            EMAIL_USER: process.env.EMAIL_USER || process.env.GMAIL_EMAIL || 'not set',
+            EMAIL_APP_PASSWORD: process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD ? 'configured' : 'not set',
+            GMAIL_EMAIL: process.env.GMAIL_EMAIL || 'not set',
+            GMAIL_APP_PASSWORD: process.env.GMAIL_APP_PASSWORD ? 'configured' : 'not set',
+            transporter_configured: !!transporter && !!transporter.sendMail,
+            transporter_ready: transporterReady,
+            transporter_error: transporterError
+        });
+    } catch (error) {
+        res.status(500).json({ error: error.message });
+    }
 });
 
 // POST /api/auth/forgot-password-tenant
@@ -160,10 +194,11 @@ router.post('/forgot-password-tenant', async (req, res) => {
 
         // Send reset email
         try {
+            console.log('Tenant forgot password: Sending email to', email);
             await sendResetEmail(email, resetCode, 'tenant');
-            console.log('Reset email sent successfully to:', email);
+            console.log('Tenant reset email sent successfully to:', email);
         } catch (emailError) {
-            console.error('Failed to send reset email:', emailError);
+            console.error('Failed to send tenant reset email:', emailError);
             return res.status(500).json({ 
                 message: 'Failed to send reset email. Please try again.',
                 error: emailError.message 
@@ -211,7 +246,17 @@ router.post('/forgot-password-admin', async (req, res) => {
         await passwordReset.save();
 
         // Send reset email
-        await sendResetEmail(email, resetCode, 'admin');
+        try {
+            console.log('Admin forgot password: Sending email to', email);
+            await sendResetEmail(email, resetCode, 'admin');
+            console.log('Admin reset email sent successfully to:', email);
+        } catch (emailError) {
+            console.error('Failed to send admin reset email:', emailError);
+            return res.status(500).json({ 
+                message: 'Failed to send reset email. Please try again.',
+                error: emailError.message 
+            });
+        }
 
         res.json({ 
             message: 'Password reset code sent to your email',
