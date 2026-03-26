@@ -14,10 +14,10 @@ const bcrypt = require('bcryptjs');
 dotenv.config({ path: require('path').join(__dirname, '../', '.env') });
 
 // Support both new EMAIL_ and legacy GMAIL_ environment variables
-const EMAIL_HOST = process.env.EMAIL_HOST || 'smtp.gmail.com';
-const EMAIL_PORT = process.env.EMAIL_PORT || 587;
-const EMAIL_USER = process.env.EMAIL_USER || process.env.GMAIL_EMAIL;
-const EMAIL_APP_PASSWORD = process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD;
+const EMAIL_HOST = (process.env.EMAIL_HOST || 'smtp.gmail.com').trim();
+const EMAIL_PORT = (process.env.EMAIL_PORT || 587).toString().trim();
+const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_EMAIL || '').trim();
+const EMAIL_APP_PASSWORD = (process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD || '').trim().replace(/\s+/g, '');
 
 console.log('Email User configured:', !!EMAIL_USER);
 console.log('Email App Password configured:', !!EMAIL_APP_PASSWORD);
