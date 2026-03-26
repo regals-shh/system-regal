@@ -69,7 +69,11 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onFailure(Call<LoginResponse> call, Throwable t) {
-                Toast.makeText(LoginActivity.this, "Server Connection Failed", Toast.LENGTH_SHORT).show();
+                String errorMsg = "Server Connection Failed: " + t.getMessage();
+                System.err.println("Login Error: " + errorMsg);
+                System.err.println("Request URL: " + call.request().url());
+                t.printStackTrace();
+                Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_LONG).show();
             }
         });
     }

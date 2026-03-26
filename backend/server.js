@@ -28,12 +28,9 @@ const visitorRoutes = require('./routes/visitorRoutes');
 const app = express();
 
 // MIDDLEWARE
-// CORS Configuration
-const allowedOrigins = process.env.ALLOWED_ORIGINS === '*' ? '*' : 
-    process.env.ALLOWED_ORIGINS ? process.env.ALLOWED_ORIGINS.split(',') : ['http://localhost:3000'];
-
+// CORS Configuration - Allow all origins for mobile app compatibility
 app.use(cors({
-    origin: allowedOrigins,
+    origin: true,  // Allow all origins including Android app (null origin)
     credentials: true
 }));
 app.use(express.json());
