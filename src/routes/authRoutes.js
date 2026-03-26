@@ -15,7 +15,8 @@ const bcrypt = require('bcryptjs');
 dotenv.config({ path: require('path').join(__dirname, '../', '.env') });
 
 // Email configuration
-const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_EMAIL || 'onboarding@resend.dev').trim();
+const FROM_EMAIL = 'onboarding@resend.dev';
+const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_EMAIL || 'regalsapartment@gmail.com').trim();
 const RESEND_API_KEY = process.env.RESEND_API_KEY || process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD || '';
 
 // Initialize Resend if API key is available
@@ -114,8 +115,9 @@ const sendResetEmail = async (email, resetCode, userType) => {
             console.log('Using Resend to send email...');
             try {
                 const result = await resend.emails.send({
-                    from: `Regal Rooms <${EMAIL_USER}>`,
+                    from: `Regal Rooms <${FROM_EMAIL}>`,
                     to: email,
+                    reply_to: EMAIL_USER,
                     subject: subject,
                     html: htmlContent
                 });
