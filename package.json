@@ -2,10 +2,10 @@
   "name": "regals-monitoring-system",
   "version": "1.0.0",
   "description": "Regals Apartment Monitoring System - Backend API",
-  "main": "backend/server.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node backend/server.js",
-    "dev": "node backend/server.js"
+    "start": "node src/server.js",
+    "dev": "node src/server.js"
   },
   "keywords": [],
   "author": "",
