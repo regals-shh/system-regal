@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const nodemailer = require('nodemailer');
+const sgMail = require('@sendgrid/mail');
 const crypto = require('crypto');
 const dotenv = require('dotenv');
 
@@ -13,79 +13,20 @@ const bcrypt = require('bcryptjs');
 // Load environment variables from parent directory
 dotenv.config({ path: require('path').join(__dirname, '../', '.env') });
 
-// Email configuration - supports SendGrid, Gmail, or custom SMTP
-const EMAIL_HOST = (process.env.EMAIL_HOST || 'smtp.gmail.com').trim();
-const EMAIL_PORT = parseInt(process.env.EMAIL_PORT || '587');
-const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_EMAIL || '').trim();
-const EMAIL_APP_PASSWORD = process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD || '';
+// Email configuration
+const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_EMAIL || 'regalsapartment@gmail.com').trim();
+const SENDGRID_API_KEY = process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD || '';
 
 console.log('Email configuration:');
-console.log('  Host:', EMAIL_HOST);
-console.log('  User configured:', !!EMAIL_USER);
-console.log('  Password configured:', !!EMAIL_APP_PASSWORD);
+console.log('  From:', EMAIL_USER);
+console.log('  API Key configured:', !!SENDGRID_API_KEY);
 
-// Create email transporter
-let transporter;
-if (EMAIL_APP_PASSWORD && EMAIL_USER) {
-    // Check if using SendGrid
-    const isSendGrid = EMAIL_HOST.includes('sendgrid');
-    
-    if (isSendGrid) {
-        // SendGrid SMTP configuration
-        transporter = nodemailer.createTransport({
-            host: 'smtp.sendgrid.net',
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: 'apikey',
-                pass: EMAIL_APP_PASSWORD
-            }
-        });
-        console.log('SendGrid SMTP configured');
-    } else if (EMAIL_HOST.includes('gmail')) {
-        // Gmail SMTP
-        transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: EMAIL_USER,
-                pass: EMAIL_APP_PASSWORD
-            }
-        });
-        console.log('Gmail SMTP configured');
-    } else {
-        // Custom SMTP
-        transporter = nodemailer.createTransport({
-            host: EMAIL_HOST,
-            port: EMAIL_PORT,
-            secure: EMAIL_PORT === 465,
-            auth: {
-                user: EMAIL_USER,
-                pass: EMAIL_APP_PASSWORD
-            }
-        });
-        console.log('Custom SMTP configured for:', EMAIL_HOST);
-    }
-    
-    // Verify transporter
-    transporter.verify((error, success) => {
-        if (error) {
-            console.log('SMTP transporter error:', error.message);
-        } else {
-            console.log('SMTP transporter ready');
-        }
-    });
+// Initialize SendGrid if API key is available
+if (SENDGRID_API_KEY && SENDGRID_API_KEY.startsWith('SG.')) {
+    sgMail.setApiKey(SENDGRID_API_KEY);
+    console.log('SendGrid HTTP API configured');
 } else {
-    console.warn('WARNING: Email not configured. Password reset emails will not work.');
-    transporter = {
-        sendMail: async (options) => {
-            throw new Error('Email service not configured');
-        },
-        verify: (callback) => callback(new Error('Email not configured'))
-    };
+    console.warn('WARNING: SendGrid API key not configured. Password reset emails will not work.');
 }
 
 // Generate 6-digit reset code
@@ -131,18 +72,26 @@ const sendResetEmail = async (email, resetCode, userType) => {
             </div>
         `;
 
-        // Send via SMTP (SendGrid or other provider)
-        console.log('Using SMTP to send email...');
-        const result = await transporter.sendMail({
-            from: `"Regal Rooms" <${EMAIL_USER}>`,
+        // Send via SendGrid HTTP API (works on Render)
+        console.log('Using SendGrid HTTP API to send email...');
+        const msg = {
             to: email,
+            from: {
+                email: EMAIL_USER,
+                name: 'Regal Rooms'
+            },
             subject: subject,
             html: htmlContent
-        });
-        console.log('Email sent successfully:', result.messageId);
-        return result;
+        };
+        
+        await sgMail.send(msg);
+        console.log('Email sent successfully via SendGrid');
+        return { success: true };
     } catch (error) {
         console.error('Email sending error:', error);
+        if (error.response) {
+            console.error('SendGrid error details:', error.response.body);
+        }
         throw error;
     }
 };
@@ -189,44 +138,45 @@ router.get('/debug-email', async (req, res) => {
 // Test email endpoint - actually tries to send an email
 router.get('/test-email', async (req, res) => {
     try {
-        if (!EMAIL_USER || !EMAIL_APP_PASSWORD) {
+        if (!EMAIL_USER || !SENDGRID_API_KEY) {
             return res.status(500).json({ 
                 error: 'Email not configured',
                 EMAIL_USER: !!EMAIL_USER,
-                EMAIL_APP_PASSWORD: !!EMAIL_APP_PASSWORD
+                SENDGRID_API_KEY: !!SENDGRID_API_KEY
             });
         }
         
         const testCode = generateResetCode();
         
-        const mailOptions = {
-            from: `"Regal Rooms Test" <${EMAIL_USER}>`,
-            to: EMAIL_USER, // Send to yourself for testing
+        const msg = {
+            to: EMAIL_USER,
+            from: {
+                email: EMAIL_USER,
+                name: 'Regal Rooms Test'
+            },
             subject: 'Test Email from Regal Rooms',
             html: `<h1>Test Email</h1><p>This is a test. Code: ${testCode}</p>`
         };
         
         console.log('Attempting to send test email...');
         console.log('From:', EMAIL_USER);
-        console.log('Password length:', EMAIL_APP_PASSWORD.length);
         
-        const result = await transporter.sendMail(mailOptions);
+        await sgMail.send(msg);
         
         res.json({
             success: true,
             message: 'Test email sent successfully',
-            messageId: result.messageId,
             to: EMAIL_USER
         });
     } catch (error) {
         console.error('Test email error:', error);
+        if (error.response) {
+            console.error('SendGrid error:', error.response.body);
+        }
         res.status(500).json({
             success: false,
             error: error.message,
-            code: error.code,
-            response: error.response,
-            command: error.command,
-            fullError: error.toString()
+            details: error.response ? error.response.body : null
         });
     }
 });
