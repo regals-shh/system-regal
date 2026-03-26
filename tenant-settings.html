@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Profile Settings | Regal Rooms</title>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="css/tenant.css">
+<style>
+    /* Enhanced button animations matching tenant-payments */
+    .btn {
+        background: var(--primary);
+        color: white;
+        padding: 12px 24px;
+        border-radius: var(--radius-btn);
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .btn:hover {
+        background: #0d381e;
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 10px 20px rgba(20, 83, 45, 0.2);
+    }
+
+    /* Enhanced button variants */
+    .btn-edit {
+        background: #dbeafe;
+        color: #1e40af;
+        padding: 8px 16px;
+        border-radius: var(--radius-btn);
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: var(--transition);
+        font-family: 'Inter', sans-serif;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-right: 8px;
+    }
+
+    .btn-edit:hover {
+        background: #1e40af;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    .btn-delete {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 8px 16px;
+        border-radius: var(--radius-btn);
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: var(--transition);
+        font-family: 'Inter', sans-serif;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-right: 8px;
+    }
+
+    .btn-delete:hover {
+        background: #991b1b;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    /* Enhanced link animations */
+    a {
+        transition: var(--transition);
+    }
+
+    a:hover {
+        transform: translateX(3px);
+        text-decoration: underline;
+    }
+
+    /* Enhanced card animations */
+    .card {
+        transition: var(--transition);
+    }
+
+    .card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main);}
+    .form-group input {
+        width: 100%; padding: 12px; border: 1.5px solid #e5e7eb; border-radius: 8px; outline: none; transition: 0.3s;
+        font-family: 'Inter', sans-serif; background: #fafafa; box-sizing: border-box;
+    }
+    .form-group input:focus { border-color: var(--gold); background: white; }
+    .error-msg { color: #dc2626; font-size: 0.75rem; margin-top: 4px; display: none; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar" aria-label="Main Navigation">
+    <div class="brand-area">
+        <h2>Regal Rooms</h2>
+        <span style="color: var(--text-sub); font-size: 0.8rem; letter-spacing: 1px;">TENANT PORTAL</span>
+    </div>
+    <nav class="nav-menu" role="navigation">
+        <a href="tenant-dashboard.html" class="nav-link"><i class="ph ph-squares-four" aria-hidden="true"></i> Overview</a>
+            <a href="tenant-visitors.html" class="nav-link"><i class="ph ph-user-plus"></i> Visitors</a>
+            <a href="tenant-payments.html" class="nav-link"><i class="ph ph-credit-card" aria-hidden="true"></i> Payments</a>
+            <a href="tenant-maintenance.html" class="nav-link"><i class="ph ph-wrench" aria-hidden="true"></i> Maintenance</a>
+            <a href="tenant-announcements.html" class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Announcements</a>
+            <a href="tenant-services.html" class="nav-link"><i class="ph ph-sparkle" aria-hidden="true"></i> Amenity Services</a>
+            <a href="tenant-settings.html" class="nav-link active"><i class="ph ph-user-gear" aria-hidden="true"></i> Settings</a>
+    </nav>
+    <button id="logoutBtn" class="logout-btn" aria-label="Secure Logout"><i class="ph ph-sign-out" aria-hidden="true"></i> Secure Logout</button>
+</aside>
+
+<main class="main-content">
+    <header class="top-header animate-element">
+        <div>
+            <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+            <div>
+                <h1>Profile Settings</h1>
+                <p style="color: var(--text-submain);">Update your personal details and account security.</p>
+            </div>
+        </div>
+        <div class="user-profile" aria-label="User Profile">
+            <div class="user-avatar" id="tenantAvatar">TR</div>
+            <span id="tenantHeaderName" style="font-weight:600;">Loading...</span>
+        </div>
+    </header>
+
+    <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+        <!-- Personal Info -->
+        <div class="card animate-element">
+            <h3 style="font-family: 'DM Sans'; font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Personal Information</h3>
+            <form id="profileForm">
+                <div class="form-group">
+                    <label for="tenantNameInput">Full Name</label>
+                    <input type="text" id="tenantNameInput" placeholder="Enter Full Name" required>
+                    <div id="nameError" class="error-msg">Name must contain only letters and spaces.</div>
+                </div>
+                <div class="form-group">
+                    <label for="tenantEmail">Email Address</label>
+                    <input type="email" id="tenantEmail" placeholder="email@gmail.com" required>
+                    <div id="emailError" class="error-msg">Please enter a valid email address.</div>
+                </div>
+                <div class="form-group">
+                    <label for="tenantPhone">Phone Number</label>
+                    <input type="tel" id="tenantPhone" placeholder="09123456789" required>
+                    <div id="phoneError" class="error-msg">Please enter a valid phone number (numeric).</div>
+                </div>
+                <button type="submit" class="btn btn-primary" style="width: 100%; justify-content: center;"><i class="ph ph-floppy-disk"></i> Save Profile</button>
+            </form>
+        </div>
+
+        <!-- Change Password -->
+        <div class="card animate-element">
+            <h3 style="font-family: 'DM Sans'; font-size: 1.2rem; font-weight: 700; margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 10px;">Change Password</h3>
+            <form id="passwordForm">
+                <div class="form-group">
+                    <label for="currentPass">Current Password</label>
+                    <input type="password" id="currentPass" placeholder="••••••••" required>
+                </div>
+                <div class="form-group">
+                    <label for="newPass">New Password</label>
+                    <input type="password" id="newPass" placeholder="Enter new password" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmPass">Confirm New Password</label>
+                    <input type="password" id="confirmPass" placeholder="Confirm new password" required>
+                </div>
+                <button type="submit" class="btn btn-primary" style="background: var(--gold); color: var(--primary); width: 100%; justify-content: center;"><i class="ph ph-lock-key"></i> Update Password</button>
+            </form>
+        </div>
+    </div>
+</main>
+
+<script>
+const tenantId = localStorage.getItem("tenantId");
+if(!tenantId) window.location.href = "login.html";
+
+let tenantData = {};
+
+async function loadTenantProfile() {
+    try {
+        const res = await fetch(`/api/tenants/${tenantId}`);
+        if(!res.ok) throw new Error("Failed to fetch profile");
+        const freshTenant = await res.json();
+        tenantData = freshTenant;
+
+        document.getElementById("tenantNameInput").value = freshTenant.name || "";
+        document.getElementById("tenantEmail").value = freshTenant.email || "";
+        document.getElementById("tenantPhone").value = freshTenant.phone || "";
+
+        document.getElementById("tenantHeaderName").textContent = freshTenant.name;
+        document.getElementById("tenantAvatar").textContent = freshTenant.name.split(" ").map(n=>n[0]).join("").toUpperCase();
+
+        localStorage.setItem("tenant", JSON.stringify(freshTenant));
+    } catch(err) {
+        console.error("Server fetch error:", err);
+    }
+}
+
+document.getElementById("profileForm").addEventListener("submit", async e => {
+    e.preventDefault();
+
+    const name = document.getElementById("tenantNameInput").value.trim();
+    const email = document.getElementById("tenantEmail").value.trim();
+    const phone = document.getElementById("tenantPhone").value.trim();
+
+    let isValid = true;
+
+    // Name Validation (Letters and Spaces)
+    if (!/^[A-Za-z\s]+$/.test(name)) {
+        document.getElementById("nameError").style.display = "block";
+        isValid = false;
+    } else {
+        document.getElementById("nameError").style.display = "none";
+    }
+
+    // Email Validation
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById("emailError").style.display = "block";
+        isValid = false;
+    } else {
+        document.getElementById("emailError").style.display = "none";
+    }
+
+    // Phone Validation (Numeric)
+    if (!/^\d+$/.test(phone)) {
+        document.getElementById("phoneError").style.display = "block";
+        isValid = false;
+    } else {
+        document.getElementById("phoneError").style.display = "none";
+    }
+
+    if (!isValid) return;
+
+    try {
+        const res = await fetch(`/api/update-tenant/${tenantId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                name,
+                email,
+                phone,
+                roomNumber: tenantData.roomNumber
+            })
+        });
+        const data = await res.json();
+        if(res.ok){
+            alert("Profile updated successfully!");
+            await loadTenantProfile();
+        } else {
+            alert(data.message || "Failed to update profile");
+        }
+    } catch(err){
+        console.error(err);
+        alert("Failed to update profile.");
+    }
+});
+
+document.getElementById("passwordForm").addEventListener("submit", async e => {
+    e.preventDefault();
+    const currentPass = document.getElementById("currentPass").value;
+    const newPass = document.getElementById("newPass").value;
+    const confirmPass = document.getElementById("confirmPass").value;
+
+    if(newPass !== confirmPass){
+        alert("New passwords do not match!");
+        return;
+    }
+
+    try {
+        const res = await fetch(`/api/change-password/${tenantId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ currentPass, newPass })
+        });
+        const data = await res.json();
+        if(res.ok) {
+            alert("Password updated successfully!");
+            document.getElementById("passwordForm").reset();
+        } else {
+            alert(data.message || "Failed to update password");
+        }
+    } catch(err){
+        console.error(err);
+        alert("Failed to update password.");
+    }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+    localStorage.removeItem("tenantId");
+    localStorage.removeItem("tenant");
+    window.location.href="login.html";
+});
+
+loadTenantProfile();
+</script>
+
+<script src="js/tenant.js"></script>
+
+</body>
+</html>

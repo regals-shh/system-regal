@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Gateway | Regal Rooms System</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <style>
+        /* --- ELITE ADMIN SYSTEM TOKENS --- */
+        :root {
+            --primary: #14532D;       
+            --primary-light: #16A34A; 
+            --gold: #bba97d;
+            --bg-body: #F8F6F1;       
+            --bg-tint: #EEF6F0;       
+            --bg-surface: #FFFFFF;    
+            --text-main: #1C1C1C;
+            --text-sub: #543e06;
+            --text-muted: #6B7280;
+            --shadow-soft: 0 10px 30px rgba(0,0,0,0.04);
+            --shadow-elevated: 0 20px 50px rgba(20, 83, 45, 0.08);
+            --shadow-gold: 0 15px 35px rgba(187, 169, 125, 0.2);
+            --radius-card: 24px;
+            --radius-btn: 14px;
+            --transition: all 0.5s cubic-bezier(0.25, 1, 0.33, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-body);
+            background-image: radial-gradient(circle at 2px 2px, rgba(20, 83, 45, 0.02) 1px, transparent 0);
+            background-size: 40px 40px;
+            color: var(--text-main);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1, h2, h3 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--primary);
+            font-weight: 400;
+            line-height: 1.15;
+        }
+        h1 { font-size: 4.8rem; font-weight: 700; letter-spacing: -0.02em; }
+        h2 { font-size: 3.5rem; text-align: center; margin-bottom: 1.5rem; }
+        h3 { font-size: 2rem; }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- PREMIUM BUTTONS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 18px 40px;
+            border-radius: 100px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            gap: 12px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+            z-index: 1;
+        }
+
+        .btn-primary {
+            background: var(--primary);
+            color: white;
+            box-shadow: 0 10px 25px rgba(20, 83, 45, 0.2);
+        }
+        .btn-primary::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%;
+            background: var(--primary-light); z-index: -1; transition: var(--transition);
+        }
+        .btn-primary:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 15px 35px rgba(20, 83, 45, 0.3);
+        }
+        .btn-primary:hover::before { width: 100%; }
+
+        .btn-on-gold {
+            background: var(--gold);
+            color: white;
+            box-shadow: var(--shadow-gold);
+        }
+        .btn-on-gold:hover {
+            background: #9a8765;
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(187, 169, 125, 0.35);
+        }
+
+        /* --- NAVIGATION --- */
+        nav { 
+            position: fixed; top: 0; width: 100%; height: 100px; z-index: 1000;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(20, 83, 45, 0.05);
+            display: flex; align-items: center; transition: var(--transition);
+        }
+        nav.scrolled { height: 85px; box-shadow: var(--shadow-soft); background: rgba(255, 255, 255, 0.95); }
+        .nav-inner { display: flex; align-items: center; margin: 0 auto; width: 95%; max-width: 1400px; }
+        .logo-area { display: flex; align-items: center; gap: 18px; flex: 1; text-decoration: none; }
+        .logo-container { 
+            width: 55px; height: 55px; border-radius: 16px; overflow: hidden;
+            border: 2px solid var(--gold); background: white;
+            display: flex; align-items: center; justify-content: center;
+            transition: var(--transition);
+        }
+        .logo-area:hover .logo-container { transform: rotate(-5deg) scale(1.05); }
+        .logo-img { width: 100%; height: 100%; object-fit: cover; }
+        .logo-text { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--primary); font-weight: 700; }
+        .nav-links { display: flex; gap: 45px; justify-content: center; align-items: center; }
+        .nav-links a { 
+            font-weight: 600; font-size: 1rem; color: var(--text-main);
+            opacity: 0.7; transition: var(--transition); text-decoration: none;
+            position: relative; padding: 8px 0;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2.5px;
+            background: var(--gold); transition: var(--transition);
+        }
+        .nav-links a:hover { opacity: 1; color: var(--primary); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-auth { flex: 1; display: flex; justify-content: flex-end; }
+
+        /* --- HERO --- */
+        .hero {
+            padding: 260px 0 180px;
+            background: radial-gradient(circle at 70% 30%, var(--bg-tint) 0%, transparent 50%),
+                        radial-gradient(circle at 30% 70%, #fff9ed 0%, transparent 50%);
+            text-align: center; position: relative;
+        }
+        .hero h1 span { color: var(--gold); }
+        .hero p {
+            font-size: 1.4rem; color: var(--text-sub); max-width: 800px;
+            margin: 0 auto 60px; opacity: 0.9; line-height: 1.7;
+        }
+        .hero-badge {
+            background: var(--bg-tint); color: var(--primary); padding: 10px 24px;
+            border-radius: 50px; font-size: 0.85rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; display: inline-block;
+            border: 1px solid rgba(20, 83, 45, 0.1);
+        }
+
+        /* --- SECTIONS --- */
+        section { padding: 140px 0; opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
+        section.in-view { opacity: 1; transform: translateY(0); }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 100px; }
+        .section-subtitle { color: var(--text-sub); font-size: 1.3rem; opacity: 0.8; line-height: 1.7; }
+
+        /* --- MODULE CARDS --- */
+        .modules-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 35px; }
+        .module-card {
+            background: white; padding: 60px 50px; border-radius: var(--radius-card);
+            box-shadow: var(--shadow-soft); border: 1px solid rgba(0,0,0,0.03);
+            transition: var(--transition); position: relative; overflow: hidden;
+        }
+        .module-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+            background: linear-gradient(90deg, var(--gold), var(--primary));
+            transform: scaleX(0); transition: transform 0.4s ease;
+        }
+        .module-card:hover::before { transform: scaleX(1); }
+        .module-card:hover { transform: translateY(-15px); box-shadow: var(--shadow-elevated); border-color: var(--gold); }
+        .module-icon {
+            width: 85px; height: 85px; background: var(--bg-tint);
+            border-radius: 22px; display: flex; align-items: center;
+            justify-content: center; font-size: 2.8rem; color: var(--primary);
+            margin-bottom: 40px; transition: var(--transition);
+            box-shadow: 0 10px 25px rgba(20, 83, 45, 0.08);
+        }
+        .module-card:hover .module-icon { background: var(--primary); color: white; transform: rotate(-5deg) scale(1.05); }
+        .module-card h3 { font-size: 1.6rem; margin-bottom: 20px; font-family: 'DM Sans', sans-serif; font-weight: 700; color: var(--text-main); }
+        .module-card p { color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; }
+
+        /* --- FINAL CTA --- */
+        .final-cta { background: linear-gradient(135deg, var(--gold), #9a8765); color: white; padding: 120px 0; text-align: center; border-radius: 100px 100px 0 0; }
+        .final-cta h2 { color: white; margin-bottom: 25px; font-size: 3.5rem; font-weight: 700; }
+        .final-cta p { font-size: 1.3rem; opacity: 0.9; margin-bottom: 50px; }
+
+        /* --- FOOTER --- */
+        footer { background: #0a1f0f; color: #f8fafc; padding: 100px 0 40px; text-align: center; }
+        .footer-logo { width: 85px; height: 85px; margin: 0 auto 35px; border-radius: 22px; border: 3px solid var(--gold); overflow: hidden; }
+        .footer-links { display: flex; justify-content: center; gap: 50px; margin: 45px 0; }
+        .footer-links a { color: white; opacity: 0.7; text-decoration: none; font-weight: 600; font-size: 1rem; transition: var(--transition); }
+        .footer-links a:hover { opacity: 1; color: var(--gold); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 45px; font-size: 0.9rem; opacity: 0.4; letter-spacing: 1px; }
+
+        @media (max-width: 1024px) {
+            h1 { font-size: 3.8rem; }
+            .modules-grid { grid-template-columns: repeat(2, 1fr); }
+        }
+
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .modules-grid { grid-template-columns: 1fr; }
+            h1 { font-size: 3.2rem; }
+            .hero { padding: 200px 0 120px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="#" class="logo-area">
+                <div class="logo-container">
+                    <img src="f8d390a7-88d8-4750-b172-9df8614002cb.jpg" alt="Logo" style="width:100%; height:100%; object-fit:cover;">
+                </div>
+                <span class="logo-text">Regal System</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#home">Gateway</a></li>
+                <li><a href="#modules">Modules</a></li>
+                <li><a href="#security">Security</a></li>
+            </ul>
+
+            <div class="nav-auth">
+                <a href="admin-login.html" class="btn btn-primary" style="padding: 12px 28px; font-size: 0.95rem;">
+                    <i class="ph ph-lock-key"></i> Authorized Login
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero" style="opacity: 1; transform: none;">
+        <div class="container">
+            <span class="hero-badge">Administrator Access Only</span>
+            <h1>Comprehensive Control. <br><span>Centralized Hub.</span></h1>
+            <p>Welcome to the Regal Rooms administrative core. Efficiently monitor occupancy, financial transactions, and facility maintenance from a single, high-security gateway.</p>
+            <div class="hero-buttons">
+                <a href="admin-login.html" class="btn btn-primary"><i class="ph ph-sign-in"></i> Access Admin Portal</a>
+            </div>
+        </div>
+    </section>
+
+    <section id="modules">
+        <div class="container">
+            <div class="section-header">
+                <span class="hero-badge">System Core</span>
+                <h2>Integrated Modules</h2>
+                <p class="section-subtitle">A robust suite of enterprise tools designed for precision property oversight.</p>
+            </div>
+            
+            <div class="modules-grid">
+                <div class="module-card">
+                    <div class="module-icon"><i class="ph ph-users-three"></i></div>
+                    <h3>Tenant Management</h3>
+                    <p>Oversee active leases, monitor unit occupancy, process move-ins, and manage digital tenant profiles seamlessly.</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon"><i class="ph ph-receipt"></i></div>
+                    <h3>Financial Tracking</h3>
+                    <p>Generate automated invoices, verify uploaded GCash/Bank proofs, and monitor overdue balances in real-time.</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon"><i class="ph ph-wrench"></i></div>
+                    <h3>Maintenance Hub</h3>
+                    <p>Track repair requests, assign staff, and monitor resolution timelines to ensure optimal living conditions for all units.</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon"><i class="ph ph-envelope-open"></i></div>
+                    <h3>Inquiry Dashboard</h3>
+                    <p>Centralized monitoring for public inquiries and site tour requests. Respond to potential tenants with professional efficiency.</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon"><i class="ph ph-megaphone"></i></div>
+                    <h3>Broadcast Engine</h3>
+                    <p>Push building-wide announcements, emergency alerts, or rule updates directly to tenant dashboards instantly.</p>
+                </div>
+                <div class="module-card">
+                    <div class="module-icon"><i class="ph ph-chart-bar"></i></div>
+                    <h3>Analytics Report</h3>
+                    <p>Export comprehensive reports on occupancy rates, revenue trends, and operational efficiency for data-driven decisions.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="security" class="final-cta">
+        <div class="container">
+            <h2>High-Security protocol</h2>
+            <p>Access to these modules requires encrypted authentication. Ensure you are on a trusted network before proceeding.</p>
+            <a href="admin-login.html" class="btn btn-primary" style="background: white; color: var(--primary); font-weight: 800;"><i class="ph ph-shield-check"></i> Proceed to Authentication</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">
+                <img src="f8d390a7-88d8-4750-b172-9df8614002cb.jpg" alt="Logo" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <h3 style="color: white; margin-bottom: 12px;">Regal Rooms System</h3>
+            <p style="opacity: 0.6; font-size: 0.95rem;">Property Monitoring & Administration Software v2.5</p>
+            <div class="footer-links">
+                <a href="#home">Gateway</a>
+                <a href="#modules">System Modules</a>
+                <a href="#security">Security Protocol</a>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 The Regal Rooms. Authorized Access Only. Developed for Resident Excellence.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // --- SECURITY ---
+        if (window.top !== window.self) {
+            window.top.location = window.location;
+        }
+
+        // --- INTERSECTION OBSERVER ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => observer.observe(section));
+
+        // --- NAVBAR SCROLL ---
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+    </script>
+</body>
+</html>

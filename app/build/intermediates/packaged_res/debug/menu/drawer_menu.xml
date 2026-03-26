@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_dashboard"
+            android:icon="@android:drawable/ic_dialog_info"
+            android:title="Overview" />
+        <item
+            android:id="@+id/nav_visitors"
+            android:icon="@android:drawable/ic_input_add"
+            android:title="Visitors" />
+        <item
+            android:id="@+id/nav_payments"
+            android:icon="@android:drawable/ic_menu_today"
+            android:title="Payments" />
+        <item
+            android:id="@+id/nav_maintenance"
+            android:icon="@android:drawable/ic_menu_manage"
+            android:title="Maintenance" />
+        <item
+            android:id="@+id/nav_announcements"
+            android:icon="@android:drawable/ic_dialog_email"
+            android:title="Announcements" />
+        <item
+            android:id="@+id/nav_services"
+            android:icon="@android:drawable/btn_star"
+            android:title="Amenity Services" />
+        <item
+            android:id="@+id/nav_settings"
+            android:icon="@android:drawable/ic_menu_preferences"
+            android:title="Settings" />
+    </group>
+    <item android:title="Account">
+        <menu>
+            <item
+                android:id="@+id/nav_logout"
+                android:icon="@android:drawable/ic_lock_power_off"
+                android:title="Secure Logout" />
+        </menu>
+    </item>
+</menu>

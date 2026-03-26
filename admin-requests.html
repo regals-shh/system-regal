@@ -1,0 +1,493 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Maintenance Requests | Regal Rooms</title>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="css/admin.css">
+
+<style>
+/* Enhanced styling matching admin-tenants aesthetic */
+.maintenance-section {
+    background: var(--bg-surface);
+    border-radius: var(--radius-card);
+    padding: 30px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 30px;
+    border: 1px solid rgba(0,0,0,0.02);
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.maintenance-title {
+    font-family: 'DM Serif Display', serif;
+    color: var(--primary);
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--bg-tint);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;
+    border-radius: 12px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background-color: var(--bg-tint) !important;
+    color: var(--text-main) !important;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 1px;
+    padding: 15px 20px;
+    text-align: left;
+}
+
+td {
+    padding: 16px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    color: var(--text-main);
+    font-size: 0.9rem;
+}
+
+tr:hover td {
+    background-color: #fafafa;
+}
+
+/* Enhanced status styling */
+.status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+.status.pending { 
+    background: #fef08a; 
+    color: #854d0e; 
+}
+
+.status.in-progress { 
+    background: #fee2e2; 
+    color: #991b1b; 
+}
+
+.status.resolved { 
+    background: #dcfce7; 
+    color: #166534; 
+}
+
+/* Enhanced stat cards */
+.stat-card-enhanced {
+    background: var(--bg-surface);
+    border-radius: var(--radius-card);
+    padding: 25px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0,0,0,0.02);
+    text-align: center;
+    transition: var(--transition);
+}
+
+.stat-card-enhanced:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.stat-card-enhanced .stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+    font-size: 1.5rem;
+}
+
+.stat-card-enhanced.pending .stat-icon {
+    background: #fef08a;
+    color: #854d0e;
+}
+
+.stat-card-enhanced.progress .stat-icon {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.stat-card-enhanced.resolved .stat-icon {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.stat-card-enhanced h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 10px;
+    color: var(--primary);
+}
+
+.stat-card-enhanced h2 {
+    font-size: 2.5rem;
+    font-family: 'DM Sans', sans-serif;
+    font-weight: 700;
+    margin: 0;
+}
+
+/* Enhanced action buttons */
+.btn-action {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-right: 8px;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn-status {
+    background: var(--bg-tint);
+    color: var(--primary);
+    border: 1px solid rgba(0,0,0,0.1);
+}
+
+.btn-status:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(187, 169, 125, 0.1);
+}
+
+.btn-delete {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.btn-delete:hover {
+    background: #991b1b;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Ticket ID styling */
+.ticket-id {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: var(--primary);
+    background: var(--bg-tint);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+}
+
+/* Tenant info styling */
+.tenant-info {
+    font-weight: 500;
+    color: var(--text-main);
+}
+
+.tenant-room {
+    font-size: 0.8rem;
+    color: var(--text-submain);
+    background: rgba(0,0,0,0.05);
+    padding: 2px 6px;
+    border-radius: 4px;
+}
+
+/* Category styling */
+.category-badge {
+    background: var(--light-bg);
+    color: var(--text-submain);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+</style>
+</head>
+
+<body>
+
+<aside class="sidebar" aria-label="Main Navigation">
+<div class="brand-area">
+<h2>Regal Rooms</h2>
+<span style="color: var(--text-sub); font-size: 0.8rem; letter-spacing: 1px;">ADMIN PORTAL</span>
+</div>
+
+<nav class="nav-menu" role="navigation">
+<a href="admin-dashboard.html" class="nav-link"><i class="ph ph-squares-four"></i> Overview</a>
+<a href="admin-visitors.html" class="nav-link"><i class="ph ph-users-three"></i> Visitor Logs</a>
+<a href="admin-tenants.html" class="nav-link"><i class="ph ph-users"></i> Tenants & Rooms</a>
+<a href="admin-billing.html" class="nav-link"><i class="ph ph-receipt"></i> Billing & Finance</a>
+<a href="admin-requests.html" class="nav-link active"><i class="ph ph-wrench"></i> Maintenance</a>
+<a href="admin-announcements.html" class="nav-link"><i class="ph ph-megaphone"></i> Announcements</a>
+<a href="admin-messages.html" class="nav-link"><i class="ph ph-envelope-open"></i> Messages</a>
+<a href="admin-services.html" class="nav-link"><i class="ph ph-sparkle"></i> Amenity Services</a>
+<a href="admin-reports.html" class="nav-link"><i class="ph ph-chart-bar"></i> Reports</a>
+<a href="admin-settings.html" class="nav-link"><i class="ph ph-gear"></i> System Settings</a>
+</nav>
+
+<button id="logoutBtn" class="logout-btn">
+<i class="ph ph-sign-out"></i> System Logout
+</button>
+</aside>
+
+<main class="main-content">
+
+<header class="top-header animate-element">
+<div>
+<button id="mobileMenuBtn" class="mobile-menu-btn">
+<i class="ph ph-list"></i>
+</button>
+
+<div>
+<h1>Maintenance Requests</h1>
+<p style="color: var(--text-submain);">
+Review and resolve tenant issues and repairs.
+</p>
+</div>
+</div>
+<div class="user-profile" aria-label="User Profile">
+<div class="user-avatar" aria-hidden="true"><i class="ph ph-shield-check" style="font-size: 1.2rem;"></i></div>
+<span id="adminName" style="font-weight: 600;">System Admin</span>
+</div>
+</header>
+
+<div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+
+<div class="stat-card-enhanced pending animate-element">
+<div class="stat-icon">
+<i class="ph ph-clock-clockwise"></i>
+</div>
+<h3>Pending</h3>
+<h2 id="pendingCount">0</h2>
+</div>
+
+<div class="stat-card-enhanced progress animate-element">
+<div class="stat-icon">
+<i class="ph ph-gear"></i>
+</div>
+<h3>In Progress</h3>
+<h2 id="progressCount">0</h2>
+</div>
+
+<div class="stat-card-enhanced resolved animate-element">
+<div class="stat-icon">
+<i class="ph ph-check-circle"></i>
+</div>
+<h3>Resolved</h3>
+<h2 id="resolvedCount">0</h2>
+</div>
+
+</div>
+
+
+<div class="maintenance-section animate-element">
+<div class="maintenance-title">
+<span>Maintenance Requests</span>
+<span style="font-size: 1rem; color: var(--primary);">Ticket Management</span>
+</div>
+
+<div class="table-wrapper">
+<table>
+<thead>
+<tr>
+<th>Ticket ID</th>
+<th>Tenant / Room</th>
+<th>Category</th>
+<th>Description</th>
+<th>Date Reported</th>
+<th>Status</th>
+<th>Actions</th>
+</tr>
+</thead>
+
+<tbody id="requestTable"></tbody>
+
+</table>
+</div>
+</div>
+
+</main>
+
+
+<script>
+  //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+
+// Protect page
+const token = localStorage.getItem("adminToken");
+if(!token){
+window.location.href = "admin-login.html";
+}
+
+
+// Logout
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+localStorage.clear();
+window.location.href="admin-index.html";
+});
+
+
+// Load Requests
+async function loadRequests(){
+
+try{
+
+const response = await fetch("/api/all-requests",{
+headers:{
+"Authorization":"Bearer "+token
+}
+});
+
+if(response.status===401){
+localStorage.removeItem("adminToken");
+window.location.href="admin-index.html";
+return;
+}
+
+const requests = await response.json();
+
+const table = document.getElementById("requestTable");
+table.innerHTML="";
+
+let pending=0;
+let progress=0;
+let resolved=0;
+
+
+requests.forEach(r=>{
+
+if(r.status==="Pending") pending++;
+if(r.status==="In Progress") progress++;
+if(r.status==="Resolved") resolved++;
+
+table.innerHTML += `
+
+<tr>
+
+<td><span class="ticket-id">#${r._id.slice(-5)}</span></td>
+
+<td>
+<div class="tenant-info">${r.tenantName}</div>
+<div class="tenant-room">${r.roomNumber}</div>
+</td>
+
+<td><span class="category-badge">${r.category}</span></td>
+
+<td>${r.description}</td>
+
+<td>${new Date(r.createdAt).toLocaleDateString()}</td>
+
+<td><span class="status ${r.status.toLowerCase().replace(' ', '-')}">${r.status}</span></td>
+
+<td>
+
+<select class="btn-action btn-status" onchange="updateStatus('${r._id}',this.value)">
+<option ${r.status==="Pending"?"selected":""}>Pending</option>
+<option ${r.status==="In Progress"?"selected":""}>In Progress</option>
+<option ${r.status==="Resolved"?"selected":""}>Resolved</option>
+</select>
+
+<br><br>
+
+<button class="btn-action btn-delete" onclick="deleteRequest('${r._id}')">
+<i class="ph ph-trash"></i> Delete
+</button>
+
+</td>
+
+</tr>
+
+`;
+
+});
+
+document.getElementById("pendingCount").textContent=pending;
+document.getElementById("progressCount").textContent=progress;
+document.getElementById("resolvedCount").textContent=resolved;
+
+}catch(err){
+console.error("Failed to load requests",err);
+}
+
+}
+
+
+// Update Status
+async function updateStatus(id,status){
+
+await fetch("/api/update-request-status/"+id,{
+method:"PUT",
+headers:{
+"Content-Type":"application/json",
+"Authorization":"Bearer "+token
+},
+body:JSON.stringify({status})
+});
+
+// Broadcast maintenance status change to all tabs
+localStorage.setItem('maintenanceStatusChanged', JSON.stringify({
+requestId: id,
+status: status,
+timestamp: Date.now()
+}));
+// Clear the item after setting to ensure the event triggers
+localStorage.removeItem('maintenanceStatusChanged');
+
+loadRequests();
+
+}
+
+
+// DELETE REQUEST
+async function deleteRequest(id){
+
+const confirmDelete = confirm("Are you sure you want to delete this ticket?");
+
+if(!confirmDelete) return;
+
+await fetch("/api/delete-request/"+id,{
+method:"DELETE",
+headers:{
+"Authorization":"Bearer "+token
+}
+});
+
+loadRequests();
+
+}
+
+
+// Initial load
+loadRequests();
+
+</script>
+
+
+<script src="js/admin.js"></script>
+
+</body>
+</html>

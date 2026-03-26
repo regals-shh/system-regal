@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Main Theme Colors -->
+    <color name="primary">#14532D</color>
+    <color name="primary_dark">#0d381e</color>
+    <color name="primary_light">#16A34A</color>
+    <color name="gold">#bba97d</color>
+    <color name="bg_body">#F8F6F1</color>
+    <color name="bg_tint">#EEF6F0</color>
+    <color name="bg_surface">#FFFFFF</color>
+    <color name="white">#FFFFFF</color>
+
+    <!-- Text Colors -->
+    <color name="text_main">#1C1C1C</color>
+    <color name="text_submain">#543e06</color>
+    <color name="text_sub">#6B7280</color>
+    <color name="text_grey">#9ca3af</color>
+    <color name="text_red">#bb2727</color>
+
+    <!-- Status & Button Colors (Matched to Website) -->
+    <color name="status_paid_bg">#dcfce7</color>
+    <color name="status_paid_text">#166534</color>
+
+    <color name="status_pending_bg">#fef08a</color>
+    <color name="status_pending_text">#854d0e</color>
+
+    <color name="status_overdue_bg">#fee2e2</color>
+    <color name="status_overdue_text">#991b1b</color>
+
+    <color name="btn_amber_bg">#fef3c7</color>
+    <color name="btn_amber_text">#92400e</color>
+
+    <color name="btn_blue_bg">#dbeafe</color>
+    <color name="btn_blue_text">#1e40af</color>
+
+    <color name="btn_red_bg">#fee2e2</color>
+    <color name="btn_red_text">#991b1b</color>
+</resources>

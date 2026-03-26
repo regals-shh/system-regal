@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Logs | Regal Rooms</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/tenant.css">
+    
+    <style>
+    /* Enhanced button animations matching tenant-payments */
+    .btn {
+        background: var(--primary);
+        color: white;
+        padding: 12px 24px;
+        border-radius: var(--radius-btn);
+        border: none;
+        font-weight: 600;
+        cursor: pointer;
+        transition: var(--transition);
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .btn:hover {
+        background: #0d381e;
+        transform: translateY(-2px) scale(1.02);
+        box-shadow: 0 10px 20px rgba(20, 83, 45, 0.2);
+    }
+
+    /* Enhanced button variants */
+    .btn-edit {
+        background: #dbeafe;
+        color: #1e40af;
+        padding: 8px 16px;
+        border-radius: var(--radius-btn);
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: var(--transition);
+        font-family: 'Inter', sans-serif;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-right: 8px;
+    }
+
+    .btn-edit:hover {
+        background: #1e40af;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    .btn-delete {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 8px 16px;
+        border-radius: var(--radius-btn);
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: var(--transition);
+        font-family: 'Inter', sans-serif;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        margin-right: 8px;
+    }
+
+    .btn-delete:hover {
+        background: #991b1b;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    /* Enhanced link animations */
+    a {
+        transition: var(--transition);
+    }
+
+    a:hover {
+        transform: translateX(3px);
+        text-decoration: underline;
+    }
+
+    /* Enhanced card animations */
+    .card, .visitor-section {
+        transition: var(--transition);
+    }
+
+    .card:hover, .visitor-section:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    }
+
+    /* Enhanced styling matching admin-tenants aesthetic */
+    .visitor-section {
+        background: var(--bg-surface);
+        border-radius: var(--radius-card);
+        padding: 30px;
+        box-shadow: var(--shadow-soft);
+        margin-bottom: 30px;
+        border: 1px solid rgba(0,0,0,0.02);
+        animation: fadeIn 0.6s ease-out;
+    }
+
+    @keyframes fadeIn {
+        from { opacity: 0; transform: translateY(10px); }
+        to { opacity: 1; transform: translateY(0); }
+    }
+
+    .visitor-title {
+        font-family: 'DM Serif Display', serif;
+        color: var(--primary);
+        font-size: 1.4rem;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--bg-tint);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .table-wrapper {
+        width: 100%;
+        overflow-x: auto;
+        border-radius: 12px;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    th {
+        background-color: var(--bg-tint) !important;
+        color: var(--primary) !important;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 1px;
+        padding: 15px 20px;
+        text-align: left;
+    }
+
+    td {
+        padding: 16px 20px;
+        border-bottom: 1px solid #f0f0f0;
+        color: var(--text-main);
+        font-size: 0.9rem;
+    }
+
+    tr:hover td {
+        background-color: #fafafa;
+    }
+
+    /* Enhanced visitor form */
+    .visitor-form {
+        display: flex;
+        gap: 15px;
+    }
+
+    .visitor-input {
+        flex: 1;
+        min-width: 250px;
+        padding: 12px 15px;
+        border: 1px solid #e5e7eb;
+        border-radius: var(--radius-btn);
+        outline: none;
+        transition: var(--transition);
+        font-family: 'Inter', sans-serif;
+    }
+
+    .visitor-input:focus {
+        border-color: var(--gold);
+        box-shadow: 0 0 0 3px rgba(187, 169, 125, 0.1);
+    }
+
+    /* Enhanced action buttons */
+    .btn-action {
+        padding: 6px 12px !important;
+        border-radius: var(--radius-btn) !important;
+        font-size: 0.75rem !important;
+        font-weight: 600 !important;
+        border: none !important;
+        cursor: pointer !important;
+        transition: var(--transition) !important;
+        font-family: 'Inter', sans-serif !important;
+        display: inline-flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+        margin-right: 6px !important;
+        white-space: nowrap !important;
+        line-height: 1.2 !important;
+    }
+
+    .btn-edit {
+        background: #fef3c7; /* Light amber background from admin-tenants */
+        color: #92400e;      /* Dark brown/orange text from admin-tenants */
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: var(--transition);
+        font-family: 'Inter', sans-serif;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-edit:hover {
+        background: var(--gold); /* Solid gold on hover */
+        color: var(--primary);   /* Deep green text on hover */
+        transform: scale(1.05);
+    }
+
+    .btn-delete {
+        background: #fee2e2;
+        color: #991b1b;
+        padding: 8px 16px;
+        border-radius: 8px;
+        font-size: 0.8rem;
+        font-weight: 600;
+        border: none;
+        cursor: pointer;
+        transition: var(--transition);
+        font-family: 'Inter', sans-serif;
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+    }
+
+    .btn-delete:hover {
+        background: #991b1b;
+        color: white;
+        transform: scale(1.05);
+    }
+
+    .btn-checkout {
+        background: var(--primary) !important;
+        color: white !important;
+    }
+
+    .btn-checkout:hover {
+        background: #0d381e !important;
+        transform: translateY(-1px) !important;
+        box-shadow: 0 2px 8px rgba(20, 83, 45, 0.2) !important;
+    }
+
+    /* Actions cell styling */
+    td:last-child {
+        white-space: nowrap !important;
+        padding: 12px 20px !important;
+    }
+
+    /* Force button container styling */
+    .visitor-section .btn-action {
+        padding: 6px 12px !important;
+        margin: 0 6px 0 0 !important;
+    }
+
+    /* Visitor name styling */
+    .visitor-name {
+        font-weight: 600;
+        color: var(--primary);
+    }
+
+    .visitor-date {
+        color: var(--text-submain);
+        font-size: 0.85rem;
+    }
+
+    .visitor-time {
+        font-family: 'Inter', sans-serif;
+        font-weight: 500;
+    }
+
+    .checkout-pending {
+        color: var(--text-red);
+        font-style: italic;
+    }
+
+    /* Stats card */
+    .stats-card {
+        background: linear-gradient(135deg, var(--primary), var(--primary-light));
+        color: white;
+        padding: 20px;
+        border-radius: var(--radius-card);
+        text-align: center;
+        margin-bottom: 20px;
+    }
+
+    .stats-card h3 {
+        margin: 0 0 10px 0;
+        font-size: 1rem;
+        opacity: 0.9;
+    }
+
+    .stats-card .visitor-count {
+        font-size: 2.5rem;
+        font-family: 'DM Sans', sans-serif;
+        font-weight: 700;
+        margin: 0;
+    }
+    </style>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand-area">
+            <h2>Regal Rooms</h2>
+            <span style="color: var(--text-sub); font-size: 0.8rem;">TENANT PORTAL</span>
+        </div>
+        <nav class="nav-menu">
+            <a href="tenant-dashboard.html" class="nav-link"><i class="ph ph-squares-four" aria-hidden="true"></i> Overview</a>
+            <a href="tenant-visitors.html" class="nav-link active"><i class="ph ph-user-plus"></i> Visitors</a>
+            <a href="tenant-payments.html" class="nav-link"><i class="ph ph-credit-card" aria-hidden="true"></i> Payments</a>
+            <a href="tenant-maintenance.html" class="nav-link"><i class="ph ph-wrench" aria-hidden="true"></i> Maintenance</a>
+            <a href="tenant-announcements.html" class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Announcements</a>
+            <a href="tenant-services.html" class="nav-link"><i class="ph ph-sparkle" aria-hidden="true"></i> Amenity Services</a>
+            <a href="tenant-settings.html" class="nav-link"><i class="ph ph-user-gear" aria-hidden="true"></i> Settings</a>
+            
+        </nav>
+<button id="logoutBtn" class="logout-btn">
+    <i class="ph ph-sign-out"></i> Secure Logout
+</button>
+    </aside>
+
+    <main class="main-content">
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+        <header class="top-header animate-element">
+            <div>
+                <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+                <div>
+                    <h1>Visitor Registration</h1>
+                    <p style="color: var(--text-submain);">Manage your visitor entries and maintain security logs.</p>
+                </div>
+            </div>
+            <div class="user-profile" aria-label="User Profile">
+                <div class="user-avatar" id="tenantAvatar"></div>
+                <span id="tenantProfileName" style="font-weight:600;"></span>
+            </div>
+        </header>
+
+        <section class="content-area">
+            <div id="currentTenantInfo" style="margin-bottom: 20px; padding: 15px; background: var(--bg-tint); border-radius: 8px; font-size: 0.9rem;">
+                <strong>Current Tenant:</strong> <span id="tenantNameDisplay">Loading...</span><br>
+                <strong>Room:</strong> <span id="roomNumberDisplay">Loading...</span>
+            </div>
+            
+            <div class="visitor-section animate-element">
+                <div class="visitor-title">
+                    <span>Add New Visitor</span>
+                    <span style="font-size: 1rem; color: var(--primary);">Quick Registration</span>
+                </div>
+                <div class="visitor-form">
+                    <input type="text" id="visitorFirstName" class="visitor-input" placeholder="First Name">
+                    <input type="text" id="visitorLastName" class="visitor-input" placeholder="Last Name">
+                    <button onclick="addVisitor()" class="btn btn-primary">
+                        <i class="ph ph-user-plus"></i> Register Entry
+                    </button>
+                </div>
+            </div>
+
+            <div class="visitor-section animate-element">
+                <div class="visitor-title">
+                    <span>Active & Recent Visitors</span>
+                    <span style="font-size: 1rem; color: var(--primary);" id="visitorCount">0 Visitors</span>
+                </div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Visitor Name</th>
+                                <th>Date</th>
+                                <th>Check-in</th>
+                                <th>Check-out</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="visitorTableBody">
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/tenant.js"></script>
+    <script>
+  //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+
+const tenantId = localStorage.getItem("tenantId");
+if(!tenantId) window.location.href="login.html";
+
+async function loadTenantProfile() {
+    try {
+        const res = await fetch(`/api/tenants/${tenantId}`);
+        if(!res.ok) throw new Error(`Failed tenant: ${res.status}`);
+        const tenant = await res.json();
+        
+        const name = tenant.name || "N/A";
+        document.getElementById("tenantProfileName").textContent = name;
+        document.getElementById("tenantAvatar").textContent = name.split(" ").map(n=>n[0]).join("").toUpperCase();
+        
+        localStorage.setItem("tenant", JSON.stringify(tenant));
+    } catch(err){
+        console.error(err);
+    }
+}
+
+loadTenantProfile();
+
+// Display current tenant information
+async function displayCurrentTenant() {
+    // Get fresh tenant data from API to ensure cross-device sync
+    const tenantId = localStorage.getItem("tenantId");
+    const res = await fetch(`/api/tenants/${tenantId}`);
+    const tenant = res.ok ? await res.json() : null;
+    
+    const tenantNameDisplay = document.getElementById("tenantNameDisplay");
+    const roomNumberDisplay = document.getElementById("roomNumberDisplay");
+    
+    if (tenant) {
+        tenantNameDisplay.textContent = tenant.name || "Unknown Tenant";
+        roomNumberDisplay.textContent = tenant.roomNumber || "Unknown Room";
+        
+        // Cache tenant data for consistency
+        localStorage.setItem("tenant", JSON.stringify(tenant));
+    } else {
+        tenantNameDisplay.textContent = "Unknown Tenant";
+        roomNumberDisplay.textContent = "Unknown Room";
+    }
+}
+
+// Display tenant info on page load
+displayCurrentTenant();
+
+//logout//
+
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+localStorage.removeItem("tenantId");
+window.location.href="login.html";
+});
+
+        /* VALIDATION */
+        function validateText(input){ return /^[A-Za-z\s]+$/.test(input); }
+
+        let visitors = [];
+
+        // Load visitors from database
+        async function loadVisitors() {
+            try {
+                const response = await fetch(`/api/tenant-visitors?tenantId=${tenantId}`);
+                visitors = await response.json();
+                renderTable();
+            } catch (error) {
+                console.error('Failed to load visitors:', error);
+                // Show empty table if database fails
+                visitors = [];
+                renderTable();
+            }
+        }
+
+        async function addVisitor() {
+            const firstName = document.getElementById('visitorFirstName').value.trim();
+            const lastName = document.getElementById('visitorLastName').value.trim();
+            
+            if (!firstName) return alert("Please enter a first name");
+            if (!lastName) return alert("Please enter a last name");
+            if (!validateText(firstName)) return alert("First name must contain only letters");
+            if (!validateText(lastName)) return alert("Last name must contain only letters");
+            
+            const visitorName = `${firstName} ${lastName}`;
+            
+            // Get fresh tenant data from API to ensure cross-device sync
+            const tenantId = localStorage.getItem("tenantId");
+            const res = await fetch(`/api/tenants/${tenantId}`);
+            const tenant = res.ok ? await res.json() : null;
+            const tenantName = tenant ? tenant.name : "Unknown Tenant";
+            const roomNumber = tenant ? tenant.roomNumber : "Unknown Room";
+            
+            try {
+                const response = await fetch('/api/add-visitor', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        visitorName: visitorName,
+                        tenantId: tenantId,
+                        tenantName: tenantName,
+                        roomNumber: roomNumber
+                    })
+                });
+                
+                if (response.ok) {
+                    document.getElementById('visitorFirstName').value = '';
+                    document.getElementById('visitorLastName').value = '';
+                    // Reload visitors from database
+                    await loadVisitors();
+                } else {
+                    throw new Error('Failed to add visitor');
+                }
+            } catch (error) {
+                console.error('Error adding visitor:', error);
+                alert('Failed to add visitor. Please try again.');
+            }
+        }
+
+        async function checkOut(id) {
+            try {
+                const response = await fetch(`/api/checkout-visitor/${id}`, {
+                    method: 'PUT'
+                });
+                
+                if (response.ok) {
+                    // Reload visitors from database
+                    await loadVisitors();
+                } else {
+                    throw new Error('Failed to check out visitor');
+                }
+            } catch (error) {
+                console.error('Error checking out visitor:', error);
+                alert('Failed to check out visitor. Please try again.');
+            }
+        }
+
+        async function editVisitor(id) {
+            // Find the visitor data
+            const visitor = visitors.find(v => v._id === id);
+            if (!visitor) return;
+            
+            // Create modal dialog for editing
+            const modalHtml = `
+                <div id="editVisitorModal" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(20, 83, 45, 0.4); backdrop-filter: blur(4px); display: flex; align-items: center; justify-content: center; z-index: 1000;">
+                    <div style="background: var(--bg-surface); padding: 40px; border-radius: var(--radius-card); width: 500px; max-width: 90%; box-shadow: 0 20px 50px rgba(0,0,0,0.2);">
+                        <h3 style="margin-bottom: 25px; font-size: 1.8rem; font-family: 'DM Serif Display', serif; color: var(--primary);">Edit Visitor Name</h3>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main); font-family: 'Inter', sans-serif;">First Name</label>
+                            <input type="text" id="editFirstName" value="${visitor.visitorName.split(' ')[0]}" style="width: 100%; padding: 12px 15px; border: 1px solid #e5e7eb; border-radius: var(--radius-btn); outline: none; transition: var(--transition); font-family: 'Inter', sans-serif; background: white; box-sizing: border-box; margin-bottom: 15px;">
+                        </div>
+                        
+                        <div style="margin-bottom: 20px;">
+                            <label style="display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9rem; color: var(--text-main); font-family: 'Inter', sans-serif;">Last Name</label>
+                            <input type="text" id="editLastName" value="${visitor.visitorName.split(' ').slice(1).join(' ')}" style="width: 100%; padding: 12px 15px; border: 1px solid #e5e7eb; border-radius: var(--radius-btn); outline: none; transition: var(--transition); font-family: 'Inter', sans-serif; background: white; box-sizing: border-box; margin-bottom: 15px;">
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; justify-content: flex-end;">
+                            <button onclick="closeEditVisitorModal()" style="padding: 10px 20px; border-radius: var(--radius-btn); border: none; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: 'Inter', sans-serif; background: var(--bg-tint); color: var(--primary);">Cancel</button>
+                            <button onclick="saveVisitorEdit('${id}')" style="padding: 10px 20px; border-radius: var(--radius-btn); border: none; font-weight: 600; cursor: pointer; transition: var(--transition); font-family: 'Inter', sans-serif; background: var(--primary); color: white;">Update</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            document.body.insertAdjacentHTML('beforeend', modalHtml);
+        }
+
+        function closeEditVisitorModal() {
+            const modal = document.getElementById('editVisitorModal');
+            if (modal) modal.remove();
+        }
+
+        async function saveVisitorEdit(id) {
+            const newFirstName = document.getElementById('editFirstName').value.trim();
+            const newLastName = document.getElementById('editLastName').value.trim();
+            
+            if (!newFirstName || !newLastName) {
+                alert("Both first and last names are required");
+                return;
+            }
+            
+            if (!validateText(newFirstName)) return alert("First name must contain only letters");
+            if (!validateText(newLastName)) return alert("Last name must contain only letters");
+            
+            const newName = `${newFirstName} ${newLastName}`;
+            
+            try {
+                const response = await fetch(`/api/update-visitor/${id}`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        visitorName: newName
+                    })
+                });
+                
+                const data = await response.json();
+                console.log('Update response:', data); // Debug log
+                
+                if (response.ok) {
+                    closeEditVisitorModal();
+                    // Force refresh by clearing visitors array first
+                    visitors = [];
+                    // Add small delay to ensure database update is complete
+                    await new Promise(resolve => setTimeout(resolve, 500));
+                    await loadVisitors();
+                    alert('Visitor updated successfully!');
+                } else {
+                    throw new Error(data.error || 'Failed to update visitor');
+                }
+            } catch (error) {
+                console.error('Error updating visitor:', error);
+                alert('Failed to update visitor. Please try again.');
+            }
+        }
+
+        async function renderTable() {
+            const tbody = document.getElementById('visitorTableBody');
+            const visitorCount = document.getElementById('visitorCount');
+            
+            // Get fresh tenant data from API to ensure cross-device sync
+            const tenantId = localStorage.getItem("tenantId");
+            const res = await fetch(`/api/tenants/${tenantId}`);
+            const tenant = res.ok ? await res.json() : null;
+            const currentRoomNumber = tenant ? tenant.roomNumber : null;
+            
+            // Filter visitors to only show those for current tenant's room
+            const tenantVisitors = currentRoomNumber 
+                ? visitors.filter(v => v.roomNumber === currentRoomNumber)
+                : visitors;
+            
+            tbody.innerHTML = tenantVisitors.map(v => {
+                // Format dates
+                const checkInDate = new Date(v.checkInTime);
+                const checkOutDate = v.checkOutTime ? new Date(v.checkOutTime) : null;
+                
+                const date = checkInDate.toLocaleDateString();
+                const checkIn = checkInDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                const checkOut = checkOutDate ? checkOutDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '---';
+                
+                return `
+                <tr>
+                    <td><span class="visitor-name">${v.visitorName}</span></td>
+                    <td><span class="visitor-date">${date}</span></td>
+                    <td><span class="visitor-time">${checkIn}</span></td>
+                    <td><span class="visitor-time ${checkOut === '---' ? 'checkout-pending' : ''}">${checkOut}</span></td>
+                    <td>
+                      <div style="display: flex; gap: 8px;">
+                        <button onclick="editVisitor('${v._id}')" class="btn-edit">
+                            <i class="ph ph-pencil"></i> Edit
+                        </button>
+                        ${checkOut === '---' ? `<button onclick="checkOut('${v._id}')" class="btn-delete">
+                            <i class="ph ph-sign-out"></i> Check-out
+                        </button>` : ''}
+                      </div>
+                    </td>
+                </tr>
+            `}).join('');
+            
+            // Update visitor count for current tenant only
+            const activeVisitors = tenantVisitors.filter(v => !v.checkOutTime).length;
+            visitorCount.textContent = `${activeVisitors} Active`;
+        }
+        loadVisitors();
+    </script>
+</body>
+</html>

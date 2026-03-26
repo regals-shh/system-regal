@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>System Reports | Regal Rooms</title>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<aside class="sidebar" aria-label="Main Navigation">
+    <div class="brand-area">
+        <h2>Regal Rooms</h2>
+        <span style="color: var(--text-sub); font-size: 0.8rem; letter-spacing: 1px;">ADMIN PORTAL</span>
+    </div>
+    <nav class="nav-menu" role="navigation">
+            <a href="admin-dashboard.html" class="nav-link"><i class="ph ph-squares-four" aria-hidden="true"></i> Overview</a>
+            <a href="admin-visitors.html" class="nav-link"><i class="ph ph-users-three"></i> Visitor Logs</a>
+            <a href="admin-tenants.html" class="nav-link"><i class="ph ph-users" aria-hidden="true"></i> Tenants & Rooms</a>
+            <a href="admin-billing.html" class="nav-link"><i class="ph ph-receipt" aria-hidden="true"></i> Billing & Finance</a>
+            <a href="admin-requests.html" class="nav-link"><i class="ph ph-wrench" aria-hidden="true"></i> Maintenance</a>
+            <a href="admin-announcements.html" class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Announcements</a>
+            <a href="admin-messages.html" class="nav-link"><i class="ph ph-envelope-open" aria-hidden="true"></i> Messages</a>
+            <a href="admin-services.html" class="nav-link"><i class="ph ph-sparkle" aria-hidden="true"></i> Amenity Services</a>
+            <a href="admin-reports.html" class="nav-link active"><i class="ph ph-chart-bar" aria-hidden="true"></i> Reports</a>
+            <a href="admin-settings.html" class="nav-link"><i class="ph ph-gear" aria-hidden="true"></i> System Settings</a>
+    </nav>
+    <button id="logoutBtn" class="logout-btn" aria-label="System Logout"><i class="ph ph-sign-out" aria-hidden="true"></i> System Logout</button>
+</aside>
+
+<main class="main-content">
+    <header class="top-header animate-element">
+        <div>
+            <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+            <div>
+                <h1>Performance Reports</h1>
+                <p style="color: var(--text-submain);">Analyze financial and occupancy data.</p>
+            </div>
+        </div>
+        <div class="user-profile" aria-label="User Profile">
+            <div class="user-avatar" aria-hidden="true"><i class="ph ph-shield-check" style="font-size: 1.2rem;"></i></div>
+            <span id="adminName" style="font-weight: 600;">System Admin</span>
+        </div>
+    </header>
+
+    <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        <div class="card animate-element" style="text-align: center; padding: 40px 20px;">
+            <div style="width: 80px; height: 80px; background: rgba(20, 83, 45, 0.1); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="ph ph-chart-line-up" style="font-size: 2.5rem; color: var(--primary);" aria-hidden="true"></i>
+            </div>
+            <h3 style="font-family: 'DM Sans'; font-size: 1.2rem; margin-bottom: 10px;">Year-to-Date Revenue</h3>
+            <h2 id="revenueAmount" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 5px;">₱0</h2>
+            <p id="revenueTrend" style="color: var(--text-submain);"><i class="ph ph-trend-up" style="color: #166534;" aria-hidden="true"></i> --</p>
+        </div>
+
+        <div class="card animate-element" style="text-align: center; padding: 40px 20px;">
+            <div style="width: 80px; height: 80px; background: rgba(187, 169, 125, 0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 20px;">
+                <i class="ph ph-house-line" style="font-size: 2.5rem; color: var(--gold);" aria-hidden="true"></i>
+            </div>
+            <h3 style="font-family: 'DM Sans'; font-size: 1.2rem; margin-bottom: 10px;">Average Occupancy</h3>
+            <h2 id="avgOccupancy" style="font-size: 2.5rem; color: var(--gold); margin-bottom: 5px;">0%</h2>
+            <p id="occupancyTrend" style="color: var(--text-submain);">--</p>
+        </div>
+    </div>
+</main>
+
+<script>
+  //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+// ===============================
+// LOGOUT PROTECTION
+// ===============================
+
+// Check if admin is logged in
+const adminId = localStorage.getItem("adminId");
+if (!adminId) {
+    window.location.href = "admin-login.html"; // redirect to login page
+}
+
+// Logout button
+document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "admin-index.html";
+  });
+// ===============================
+// FETCH REPORT DATA WITH AUTH
+// ===============================
+async function fetchJsonAuth(url) {
+    try {
+        const res = await fetch(url, {
+            headers: {
+                "Authorization": "Bearer " + adminId
+            }
+        });
+        if (res.status === 401) {
+            // Unauthorized → force logout
+            localStorage.removeItem("adminId");
+            window.location.href = "login.html";
+            return null;
+        }
+        return await res.json();
+    } catch (err) {
+        console.error("Fetch error:", err);
+        return null;
+    }
+}
+
+async function loadAdminReports() {
+    try {
+        const revenueData = await fetchJsonAuth('/api/reports/revenue') || { total: 0, trend: 0 };
+        document.getElementById('revenueAmount').textContent = "₱" + Number(revenueData.total).toLocaleString();
+        document.getElementById('revenueTrend').textContent = (revenueData.trend >= 0 ? "+" : "") + revenueData.trend + "% compared to last quarter";
+
+        const occupancyData = await fetchJsonAuth('/api/reports/occupancy') || { average: 0, trend: 0 };
+        document.getElementById('avgOccupancy').textContent = occupancyData.average.toFixed(1) + "%";
+        document.getElementById('occupancyTrend').textContent = "Trend: " + (occupancyData.trend >= 0 ? "+" : "") + occupancyData.trend + "% over last 6 months";
+    } catch (err) {
+        console.error("Failed to load reports:", err);
+        alert("Failed to load reports. Please refresh the page.");
+    }
+}
+
+loadAdminReports();
+</script>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

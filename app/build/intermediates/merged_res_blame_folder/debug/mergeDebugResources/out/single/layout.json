@@ -1,0 +1,86 @@
+[
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/activity_login.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/activity_login.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/item_dashboard_transaction.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/item_dashboard_transaction.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/activity_main.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/activity_main.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/dialog_edit_maintenance.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/dialog_edit_maintenance.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/fragment_payments.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_payments.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/fragment_maintenance.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_maintenance.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/item_maintenance.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/item_maintenance.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/fragment_visitors.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_visitors.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/dialog_edit_visitor.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/dialog_edit_visitor.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/fragment_services.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_services.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/dialog_rooftop_request.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/dialog_rooftop_request.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/dialog_parking_request.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/dialog_parking_request.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/activity_forgot_password.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/activity_forgot_password.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/item_announcement.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/item_announcement.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/fragment_dashboard.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_dashboard.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/item_service_request.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/item_service_request.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/item_invoice.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/item_invoice.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/fragment_settings.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_settings.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/item_visitor.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/item_visitor.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/fragment_announcements.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/fragment_announcements.xml"
+    },
+    {
+        "merged": "com.regalrooms.tenant-mergeDebugResources-43:/layout/nav_header.xml",
+        "source": "com.regalrooms.tenant-main-46:/layout/nav_header.xml"
+    }
+]

@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Billing & Finance | Regal Rooms</title>
+
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="css/admin.css">
+
+<style>
+/* MODALS */
+.modal{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:rgba(0,0,0,0.5);
+  justify-content:center;
+  align-items:center;
+  z-index:1000;
+}
+.modal-content{
+  background:white;
+  padding:30px;
+  border-radius:10px;
+  width:400px;
+  max-width:90%;
+}
+.modal-content input, .modal-content select{
+  width:100%;
+  padding:10px;
+  margin-bottom:12px;
+  border:1px solid #ddd;
+  border-radius:6px;
+}
+.modal-content button{
+  padding:10px 14px;
+  margin-right:6px;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+}
+
+/* STATUS LABELS */
+.status{
+  padding:4px 8px;
+  border-radius:6px;
+  font-size:12px;
+  font-weight:600;
+}
+.status.paid{ background:#dcfce7;color:#166534; }
+.status.pending{ background:#fef9c3;color:#854d0e; }
+.status.overdue{ background:#fee2e2;color:#991b1b; }
+.status.unpaid{ background:#f3f4f6;color:#6b7280; }
+
+/* Button variants matched with admin-tenants */
+.btn-edit {
+    background: #fef3c7; /* Light amber background from admin-rooms */
+    color: #92400e;      /* Dark brown/orange text from admin-rooms */
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.btn-edit:hover {
+    background: var(--gold); /* Solid gold on hover */
+    color: var(--primary);   /* Deep green text on hover */
+    transform: scale(1.05);
+}
+
+.btn-delete {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+.btn-delete:hover {
+    background: #991b1b;
+    color: white;
+    transform: scale(1.05);
+}
+.btn-verify {
+  background: #2cc8684a;
+  color: #166534;
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.875rem;
+  font-weight: 500;
+  transition: var(--transition); 
+}
+.btn-verify:hover {
+  background: #166534;
+  color: white;
+  transform: scale (1.05);
+
+}
+
+.btn-view {
+    background: #dbeafe; /* Light blue background */
+    color: #1e40af;      /* Blue text */
+    padding: 8px 16px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.btn-view:hover {
+    background: #1e40af; /* Solid blue on hover */
+    color: white;
+    transform: scale(1.05);
+}
+
+.close-btn {
+    background: transparent;
+    border: none;
+    color: #666;
+    padding: 8px 16px;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 0.875rem;
+    font-weight: 500;
+    transition: var(--transition);
+}
+
+.close-btn:hover {
+    color: #bb2727;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar" aria-label="Main Navigation">
+<div class="brand-area">
+<h2>Regal Rooms</h2>
+<span style="color: var(--text-sub); font-size: 0.8rem; letter-spacing: 1px;">ADMIN PORTAL</span>
+</div>
+
+<nav class="nav-menu" role="navigation">
+  <a href="admin-dashboard.html" class="nav-link"><i class="ph ph-squares-four" aria-hidden="true"></i> Overview</a>
+  <a href="admin-visitors.html" class="nav-link"><i class="ph ph-users-three" aria-hidden="true"></i> Visitor Logs</a>
+  <a href="admin-tenants.html" class="nav-link"><i class="ph ph-users" aria-hidden="true"></i> Tenants & Rooms</a>
+  <a href="admin-billing.html" class="nav-link active"><i class="ph ph-receipt" aria-hidden="true"></i> Billing & Finance</a>
+  <a href="admin-requests.html" class="nav-link"><i class="ph ph-wrench" aria-hidden="true"></i> Maintenance</a>
+  <a href="admin-announcements.html" class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Announcements</a>
+  <a href="admin-messages.html" class="nav-link"><i class="ph ph-envelope-open" aria-hidden="true"></i> Messages</a>
+  <a href="admin-services.html" class="nav-link"><i class="ph ph-sparkle" aria-hidden="true"></i> Amenity Services</a>
+  <a href="admin-reports.html" class="nav-link"><i class="ph ph-chart-bar" aria-hidden="true"></i> Reports</a>
+  <a href="admin-settings.html" class="nav-link"><i class="ph ph-gear" aria-hidden="true"></i> System Settings</a>
+</nav>
+
+<button id="logoutBtn" class="logout-btn" aria-label="System Logout"><i class="ph ph-sign-out" aria-hidden="true"></i> System Logout</button>
+</aside>
+
+<!-- MAIN CONTENT -->
+<main class="main-content">
+<header class="top-header animate-element">
+<div>
+  <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+  <div>
+    <h1>Billing & Finance</h1>
+    <p style="color: var(--text-submain);">Manage invoices, track payments, and monitor revenue.</p>
+  </div>
+</div>
+<div class="user-profile" aria-label="User Profile">
+  <div class="user-avatar" aria-hidden="true"><i class="ph ph-shield-check" style="font-size: 1.2rem;"></i></div>
+  <span id="adminName" style="font-weight: 600;">System Admin</span>
+</div>
+</header>
+
+<!-- DASHBOARD CARDS -->
+<div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));">
+  <div class="card stat-card animate-element">
+    <div class="stat-info">
+      <h4 style="color:var(--text-main);">Collected</h4>
+      <h2 id="collectedAmount" style="color: var(--primary);">₱0</h2>
+      <p style="color: var(--text-submain);"><i class="ph ph-trend-up" aria-hidden="true"></i> Revenue collected</p>
+    </div>
+    <div class="stat-icon" aria-hidden="true"><i class="ph ph-wallet"></i></div>
+  </div>
+  <div class="card stat-card animate-element">
+    <div class="stat-info">
+      <h4 style="color:var(--text-main);">Uncollected / Overdue</h4>
+      <h2 id="uncollectedAmount" style="color: #991b1b;">₱0</h2>
+      <p style="color: var(--text-submain);"><i class="ph ph-warning-circle" aria-hidden="true"></i> Outstanding payments</p>
+    </div>
+    <div class="stat-icon" style="background: #fee2e2; color: #991b1b;" aria-hidden="true"><i class="ph ph-warning-circle"></i></div>
+  </div>
+  <div class="card stat-card animate-element">
+    <div class="stat-info">
+      <h4 style="color:var(--text-main);">Pending Verification</h4>
+      <h2 id="pendingCount" style="color: #991b1b;">0</h2>
+      <p style="color: var(--text-submain);"><i class="ph ph-clock" aria-hidden="true"></i> Awaiting review</p>
+    </div>
+    <div class="stat-icon" style="background: #fef9c3; color: #854d0e;" aria-hidden="true"><i class="ph ph-clock"></i></div>
+  </div>
+</div>
+
+<!-- INVOICE TABLE -->
+<div class="card animate-element">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+            <h3 style="font-family: 'DM Sans'; font-size: 1.2rem; font-weight: 700;">Invoice Management</h3>
+            <button class="btn btn-primary" onclick="openInvoiceModal()"><i class="ph ph-plus" aria-hidden="true"></i> Generate Invoice</button>
+        </div>
+        <div class="table-container" tabindex="0" aria-label="Invoice Table">
+            <table role="table">
+                <thead>
+                    <tr role="row">
+                        <th role="columnheader" style="color:var(--text-submain);">Invoice ID</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Tenant</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Room</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Amount</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Due Date</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Status</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Action</th>
+                    </tr>
+                </thead>
+                <tbody id="invoiceTable"></tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- CREATE INVOICE MODAL -->
+<div class="modal" id="invoiceModal">
+<div class="modal-content">
+<h3>Create Invoice</h3>
+<form id="invoiceForm">
+<select id="tenantName" required></select>
+<select id="roomNumber" required></select>
+<input type="number" id="amount" placeholder="Amount" required>
+<input type="text" id="description" placeholder="Description" required>
+<input type="date" id="dueDate" required>
+<button type="submit" class="btn btn-primary">Create Invoice</button>
+<button type="button" class="close-btn" onclick="closeInvoiceModal()">Cancel</button>
+</form>
+</div>
+</div>
+
+<!-- EDIT INVOICE MODAL -->
+<div class="modal" id="editInvoiceModal">
+<div class="modal-content">
+<h3>Edit Invoice</h3>
+<form id="editInvoiceForm">
+<input type="hidden" id="editInvoiceId">
+<select id="editTenantName" required></select>
+<select id="editRoomNumber" required></select>
+<input type="number" id="editAmount" required>
+<input type="text" id="editDescription" required>
+<input type="date" id="editDueDate" required>
+<button type="submit" class="btn btn-primary">Update Invoice</button>
+<button type="button" class="close-btn" onclick="closeEditModal()">Cancel</button>
+</form>
+</div>
+</div>
+
+<!-- PROOF IMAGE MODAL -->
+<div class="modal" id="proofModal">
+<div class="modal-content" style="max-width:95%; width:1200px; max-height:95vh;">
+<h3>Payment Proof</h3>
+<div style="max-height:80vh; overflow:auto; text-align:center; background:#f8f9fa; padding:20px; border-radius:8px; margin-bottom:20px;">
+    <img id="proofImg" src="" alt="Proof" style="max-width:100%; max-height:75vh; border-radius:8px; box-shadow:0 4px 6px rgba(0,0,0,0.1); object-fit:contain;">
+</div>
+<div style="display:flex; gap:10px;">
+    <button type="button" class="btn btn-outline" style="flex:1;" onclick="window.open(document.getElementById('proofImg').src, '_blank')">Open in New Tab</button>
+    <button type="button" class="btn btn-primary" style="flex:1;" onclick="closeProofModal()">Close Preview</button>
+</div>
+</div>
+</div>
+
+<script>
+  //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+
+// AUTH PROTECTION
+const token = localStorage.getItem("adminToken");
+if(!token) window.location.href = "admin-login.html";
+
+// LOGOUT
+document.getElementById("logoutBtn").addEventListener("click", ()=> {
+  localStorage.clear();
+  window.location.href = "admin-index.html";
+});
+
+// Disable past dates for due date fields
+function setMinDate(){
+    const today = new Date().toISOString().split("T")[0];
+
+    const dueDate = document.getElementById("dueDate");
+    const editDueDate = document.getElementById("editDueDate");
+
+    if(dueDate) dueDate.min = today;
+    if(editDueDate) editDueDate.min = today;
+}
+
+// run when page loads
+setMinDate();
+
+// MOBILE SIDEBAR
+document.getElementById("mobileMenuBtn")?.addEventListener("click", ()=>{
+  document.querySelector(".sidebar").classList.toggle("open");
+});
+
+// MODALS
+function openInvoiceModal(){ document.getElementById("invoiceModal").style.display="flex"; loadTenantRoomDropdowns(); }
+function closeInvoiceModal(){ document.getElementById("invoiceModal").style.display="none"; }
+function closeEditModal(){ document.getElementById("editInvoiceModal").style.display="none"; }
+function viewProof(url){
+  if(!url){ alert("No proof image"); return; }
+  const modal = document.getElementById("proofModal");
+  const img = document.getElementById("proofImg");
+  img.src = url.startsWith("http") ? url : `/uploads/${url}`;
+  modal.style.display="flex";
+}
+function closeProofModal(){ document.getElementById("proofModal").style.display="none"; document.getElementById("proofImg").src=""; }
+document.getElementById("proofModal").addEventListener("click", e => { if(e.target.id==="proofModal") closeProofModal(); });
+
+// TENANTS & ROOMS
+let tenantRoomMap = {};
+async function loadTenantRoomDropdowns(){
+  const res = await fetch("/api/tenants",{ headers:{ "Authorization":"Bearer "+token }});
+  const tenants = await res.json();
+  tenantRoomMap={};
+  const tenantSelects = [document.getElementById("tenantName"), document.getElementById("editTenantName")];
+  const roomSelects = [document.getElementById("roomNumber"), document.getElementById("editRoomNumber")];
+
+  tenantSelects.forEach(sel=>{
+    sel.innerHTML='<option value="">Select Tenant</option>';
+    tenants.forEach(t=>{
+      sel.innerHTML+=`<option value="${t.name}">${t.name}</option>`;
+      tenantRoomMap[t.name]=t.roomNumber;
+    });
+  });
+
+  roomSelects.forEach(sel=>{
+    sel.innerHTML='<option value="">Select Room</option>';
+    tenants.forEach(t=>{
+      sel.innerHTML+=`<option value="${t.roomNumber}">${t.roomNumber}</option>`;
+    });
+  });
+
+  tenantSelects.forEach(sel=>{ sel.onchange = function(){ const room=tenantRoomMap[this.value]||""; roomSelects.forEach(r=>{r.value=room;}); }; });
+  roomSelects.forEach(rsel=>{ rsel.onchange = function(){ const tenant=Object.keys(tenantRoomMap).find(k=>tenantRoomMap[k]===this.value)||""; tenantSelects.forEach(tsel=>{tsel.value=tenant;}); }; });
+}
+
+// LOAD INVOICES
+async function loadInvoices(){
+  try {
+    const res = await fetch("/api/invoices",{ headers:{ "Authorization":"Bearer "+token }});
+    
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Failed to load invoices:", errorData);
+      alert("Failed to load invoices: " + (errorData.error || errorData.message || "Unknown error"));
+      return;
+    }
+    
+    const invoices = await res.json();
+    const table = document.getElementById("invoiceTable");
+    table.innerHTML="";
+    let collected=0, uncollected=0, pending=0;
+
+    invoices.forEach(inv=>{
+      if(inv.status==="Paid") collected+=inv.amount;
+      else uncollected+=inv.amount;
+      if(inv.status==="Pending") pending++;
+
+      const row=document.createElement("tr");
+      row.innerHTML=`
+        <td>#INV-${inv._id.slice(-4)}</td>
+        <td>${inv.tenantName}</td>
+        <td>${inv.roomNumber}</td>
+        <td>₱${inv.amount}</td>
+        <td>${inv.dueDate ? new Date(inv.dueDate).toLocaleDateString():"-"}</td>
+        <td><span class="status ${inv.status.toLowerCase()}">${inv.status}</span></td>
+        <td>
+          <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+            ${inv.proofImage ? `<button onclick="viewProof('${inv.proofImage}')" class="btn-view">View Proof</button>` : `<span style="color:#888">Waiting Proof</span>`}
+            ${inv.proofImage && (inv.status==="Pending" || inv.status==="Unpaid") ? `<button onclick="verifyPayment('${inv._id}')" class="btn-verify">Verify</button>` : ""}
+            <button onclick="openEditInvoice('${inv._id}','${inv.tenantName}','${inv.roomNumber}','${inv.amount}','${inv.description}','${inv.dueDate}')" class="btn-edit">Edit</button>
+            <button onclick="deleteInvoice('${inv._id}')" class="btn-delete">Delete</button>
+          </div>
+        </td>
+      `;
+      table.appendChild(row);
+    });
+
+    document.getElementById("collectedAmount").textContent="₱"+collected.toLocaleString();
+    document.getElementById("uncollectedAmount").textContent="₱"+uncollected.toLocaleString();
+    document.getElementById("pendingCount").textContent=pending;
+  } catch (error) {
+    console.error("Network error loading invoices:", error);
+    alert("Network error: " + error.message);
+  }
+}
+
+// CREATE INVOICE
+document.getElementById("invoiceForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const tenantName=document.getElementById("tenantName").value;
+  const roomNumber=document.getElementById("roomNumber").value;
+  const amount=document.getElementById("amount").value;
+  const description=document.getElementById("description").value;
+  const dueDate=document.getElementById("dueDate").value;
+
+  try {
+    const res = await fetch("/api/create-invoice",{ method:"POST", headers:{ "Content-Type":"application/json","Authorization":"Bearer "+token }, body:JSON.stringify({tenantName,roomNumber,amount,description,dueDate}) });
+    
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error("Invoice creation failed:", errorData);
+      alert("Failed to create invoice: " + (errorData.error || errorData.message || "Unknown error"));
+      return;
+    }
+    
+    const data = await res.json();
+    console.log("Invoice created successfully:", data);
+    alert("Invoice Created");
+    closeInvoiceModal();
+    loadInvoices();
+  } catch (error) {
+    console.error("Network error during invoice creation:", error);
+    alert("Network error: " + error.message);
+  }
+});
+
+// EDIT INVOICE
+function openEditInvoice(id,tenant,room,amount,desc,due){
+  document.getElementById("editInvoiceModal").style.display="flex";
+  document.getElementById("editInvoiceId").value=id;
+  document.getElementById("editTenantName").value=tenant;
+  document.getElementById("editRoomNumber").value=room;
+  document.getElementById("editAmount").value=amount;
+  document.getElementById("editDescription").value=desc;
+  document.getElementById("editDueDate").value=due ? due.split("T")[0] : "";
+  loadTenantRoomDropdowns();
+}
+document.getElementById("editInvoiceForm").addEventListener("submit", async e=>{
+  e.preventDefault();
+  const id=document.getElementById("editInvoiceId").value;
+  const tenantName=document.getElementById("editTenantName").value;
+  const roomNumber=document.getElementById("editRoomNumber").value;
+  const amount=document.getElementById("editAmount").value;
+  const description=document.getElementById("editDescription").value;
+  const dueDate=document.getElementById("editDueDate").value;
+
+  await fetch(`/api/update-invoice/${id}`,{ method:"PUT", headers:{ "Content-Type":"application/json","Authorization":"Bearer "+token }, body:JSON.stringify({tenantName,roomNumber,amount,description,dueDate}) });
+  alert("Invoice Updated");
+  closeEditModal();
+  loadInvoices();
+});
+
+// DELETE INVOICE
+async function deleteInvoice(id){
+  if(!confirm("Delete this invoice?")) return;
+  await fetch(`/api/delete-invoice/${id}`,{ method:"DELETE", headers:{ "Authorization":"Bearer "+token } });
+  alert("Invoice Deleted");
+  loadInvoices();
+}
+
+// VERIFY PAYMENT
+async function verifyPayment(id){
+  if(!confirm("Mark this invoice as Paid?")) return;
+  const res = await fetch(`/api/verify-payment/${id}`, { method:"PUT", headers:{ "Authorization":"Bearer "+token } });
+  if(res.ok){ alert("Invoice marked as Paid"); loadInvoices(); }
+  else { const err=await res.json(); alert("Failed: "+(err.message||"Unknown error")); }
+}
+
+// INITIAL LOAD
+loadInvoices();
+loadTenantRoomDropdowns();
+</script>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

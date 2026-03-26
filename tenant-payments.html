@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Payments | Regal Rooms</title>
+
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="css/tenant.css">
+
+<style>
+/* Enhanced button animations matching other tenant pages */
+.btn {
+    background: var(--primary);
+    color: white;
+    padding: 12px 24px;
+    border-radius: var(--radius-btn);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn:hover {
+    background: #0d381e;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(20, 83, 45, 0.2);
+}
+
+/* Enhanced link animations */
+a {
+    transition: var(--transition);
+}
+
+a:hover {
+    transform: translateX(3px);
+    text-decoration: underline;
+}
+
+/* Enhanced card animations */
+.card {
+    transition: var(--transition);
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+/* Enhanced header animations */
+.top-header {
+    transition: var(--transition);
+}
+
+.top-header:hover {
+    transform: translateY(-2px);
+}
+
+/* Enhanced user profile */
+.user-profile {
+    transition: var(--transition);
+}
+
+.user-profile:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+}
+
+/* Enhanced dashboard grid animations */
+.dashboard-grid {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Enhanced balance card animations */
+.dashboard-grid > div:first-child {
+    transition: var(--transition);
+}
+
+.dashboard-grid > div:first-child:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 20px 40px rgba(20, 83, 45, 0.2);
+}
+
+/* Enhanced table animations - entrance only */
+.table-container {
+    transition: var(--transition);
+    animation: fadeInUp 0.8s ease-out 0.3s both;
+}
+
+.table-container:hover {
+    transform: none;
+    box-shadow: none;
+}
+
+/* Remove table row hover effects */
+table tr {
+    transition: none;
+}
+
+table tr:hover {
+    background-color: transparent;
+    transform: none;
+}
+
+/* Enhanced status badges */
+.status {
+    transition: var(--transition);
+}
+
+.status:hover {
+    transform: scale(1.1);
+}
+
+/* Button variants matched with admin-billing */
+.btn-edit {
+    background: #dbeafe; /* Light blue background */
+    color: #1e40af;      /* Blue text */
+    padding: 8px 16px;
+    border-radius: var(--radius-btn);
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 8px;
+    flex-direction: row; /* Ensure horizontal layout */
+}
+
+.btn-edit:hover {
+    background: #1e40af; /* Solid blue on hover */
+    color: white;
+    transform: scale(1.05);
+}
+
+.btn-delete {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 8px 16px;
+    border-radius: var(--radius-btn);
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 8px;
+}
+
+.btn-delete:hover {
+    background: #991b1b;
+    color: white;
+    transform: scale(1.05);
+}
+</style>
+
+</head>
+
+<body>
+
+<aside class="sidebar" aria-label="Main Navigation">
+        <div class="brand-area">
+            <h2>Regal Rooms</h2>
+            <span style="color: var(--text-sub); font-size: 0.8rem; letter-spacing: 1px;">TENANT PORTAL</span>
+        </div>
+        <nav class="nav-menu" role="navigation">
+            <a href="tenant-dashboard.html" class="nav-link"><i class="ph ph-squares-four" aria-hidden="true"></i> Overview</a>
+            <a href="tenant-visitors.html" class="nav-link"><i class="ph ph-user-plus"></i> Visitors</a>
+            <a href="tenant-payments.html" class="nav-link active"><i class="ph ph-credit-card" aria-hidden="true"></i> Payments</a>
+            <a href="tenant-maintenance.html" class="nav-link"><i class="ph ph-wrench" aria-hidden="true"></i> Maintenance</a>
+            <a href="tenant-announcements.html" class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Announcements</a>
+            <a href="tenant-services.html" class="nav-link"><i class="ph ph-sparkle" aria-hidden="true"></i> Amenity Services</a>
+            <a href="tenant-settings.html" class="nav-link"><i class="ph ph-user-gear" aria-hidden="true"></i> Settings</a>
+        </nav>
+        <button id="logoutBtn" class="logout-btn" aria-label="Secure Logout"><i class="ph ph-sign-out" aria-hidden="true"></i> Secure Logout</button>
+    </aside>
+
+
+<main class="main-content">
+
+<header class="top-header animate-element">
+<div>
+    <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+    <div>
+        <h1>Billing & Payments</h1>
+        <p style="color: var(--text-submain);">Manage your transactions and view history.</p>
+    </div>
+</div>
+<div class="user-profile" aria-label="User Profile">
+    <div class="user-avatar" id="tenantAvatar"></div>
+    <span id="tenantProfileName" style="font-weight:600;"></span>
+</div>
+</header>
+
+
+<div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+
+<div class="card" style="background: linear-gradient(135deg, var(--primary), #0d381e); color: white;">
+
+<h4 style="color: var(--gold); margin-bottom:10px;">Current Balance</h4>
+ 
+<h2 id="currentBalance" style="font-size:3rem; color: white;">₱0</h2>
+
+<p id="billingCycle" style="margin-bottom:20px;font-size:0.9rem;opacity:0.8;">
+Due for billing cycle: —
+</p>
+
+<button id="uploadProofBtn" class="btn" style="background: var(--gold); color: var(--primary); width:100%;">
+Upload Proof of Payment
+</button>
+
+<input type="file" id="proofFile" accept="image/*" style="display:none;">
+
+</div>
+
+
+<div class="card">
+
+<h3>Payment Guidelines</h3>
+
+<ul style="list-style:none;display:flex;flex-direction:column;gap:10px;">
+<li><strong>BDO:</strong> 0012 3456 7890 (Regal Rooms)</li>
+<li><strong>GCash:</strong> 0975 334 6229 (Admin)</li>
+<li><strong>Cash:</strong> In person payment (Admin)</li>
+<li>Payments are verified within 24 hours.</li>
+</ul>
+
+</div>
+
+</div>
+
+
+<div class="card">
+
+<h3>Payment History</h3>
+
+<div class="table-container">
+
+<table>
+
+<thead>
+<tr>
+<th style="color:brown;">Invoice ID</th>
+<th style="color:brown;">Description</th>
+<th style="color:brown;">Due Date</th>
+<th style="color:brown;">Amount</th>
+<th style="color:brown;">Status</th>
+</tr>
+</thead>
+
+<tbody id="paymentTable"></tbody>
+
+</table>
+
+</div>
+
+</div>
+
+</main>
+
+
+<script>
+  //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+
+const tenantId = localStorage.getItem("tenantId");
+if(!tenantId) window.location.href="login.html";
+
+async function loadTenantProfile() {
+    try {
+        const res = await fetch(`/api/tenants/${tenantId}`);
+        if(!res.ok) throw new Error(`Failed tenant: ${res.status}`);
+        const tenant = await res.json();
+        
+        const name = tenant.name || "N/A";
+        document.getElementById("tenantProfileName").textContent = name;
+        document.getElementById("tenantAvatar").textContent = name.split(" ").map(n=>n[0]).join("").toUpperCase();
+        
+        localStorage.setItem("tenant", JSON.stringify(tenant));
+    }catch(err){
+        console.error("Profile load error:", err);
+    }
+}
+
+loadTenantProfile();
+
+let latestInvoiceId = null;
+let selectedInvoice = null;
+
+const uploadBtn = document.getElementById("uploadProofBtn");
+const proofInput = document.getElementById("proofFile");
+
+
+/* LOAD INVOICES */
+
+
+async function loadTenantInvoices(){
+
+
+try{
+
+
+// Get fresh tenant data from API to ensure sync with dashboard
+const tenantId = localStorage.getItem("tenantId");
+const tenantRes = await fetch(`/api/tenants/${tenantId}`);
+const tenant = tenantRes.ok ? await tenantRes.json() : null;
+
+
+if(!tenant || !tenant.roomNumber){
+    console.error("No tenant data found");
+    return;
+}
+
+
+// Store fresh tenant data in localStorage for consistency
+localStorage.setItem("tenant", JSON.stringify(tenant));
+
+
+const res = await fetch(`/api/tenant-invoices/${tenant.roomNumber}`);
+const invoices = await res.json();
+
+
+const table = document.getElementById("paymentTable");
+table.innerHTML = "";
+
+let totalBalance = 0;
+latestInvoiceId = null;
+
+if(!invoices || invoices.length === 0){
+
+document.getElementById("currentBalance").innerText = "₱0";
+
+table.innerHTML = `
+<tr>
+<td colspan="5" style="text-align:center;padding:20px;">
+No invoices found
+</td>
+</tr>
+`;
+
+document.getElementById("billingCycle").innerText =
+"Due for billing cycle: —";
+
+return;
+
+}
+
+/* SORT BY DATE */
+
+invoices.sort((a,b)=> new Date(b.dueDate) - new Date(a.dueDate));
+
+invoices.forEach(inv=>{
+
+let statusClass = "pending";
+
+if(inv.status === "Paid") statusClass = "paid";
+if(inv.status === "Overdue") statusClass = "overdue";
+
+/* BALANCE */
+
+if(inv.status !== "Paid"){
+totalBalance += Number(inv.amount);
+latestInvoiceId = inv._id;
+}
+
+/* DATE FORMAT */
+
+let dueDate = "-";
+
+if(inv.dueDate){
+dueDate = new Date(inv.dueDate).toLocaleDateString();
+}
+
+/* ACTION BUTTONS */
+
+let actions = "";
+
+if(inv.status !== "Paid"){
+
+actions = `
+<br>
+<div style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px;">
+    <button onclick="replaceProof('${inv._id}')" class="btn-edit">Change</button>
+    <button onclick="deleteProof('${inv._id}')" class="btn-delete">Delete</button>
+</div>
+`;
+
+}
+
+/* CREATE ROW */
+
+const row = document.createElement("tr");
+
+row.innerHTML = `
+<td>#INV-${inv._id.slice(-4)}</td>
+<td>${inv.description}</td>
+<td>${dueDate}</td>
+<td>₱${Number(inv.amount).toLocaleString()}</td>
+<td>
+<span class="status ${statusClass}">${inv.status}</span>
+${actions}
+</td>
+`;
+
+table.appendChild(row);
+
+});
+
+/* UPDATE BALANCE */
+
+document.getElementById("currentBalance").innerText =
+"₱" + totalBalance.toLocaleString();
+
+/* BILLING CYCLE */
+
+const latestInvoice = invoices[0];
+
+if(latestInvoice && latestInvoice.dueDate){
+
+const due = new Date(latestInvoice.dueDate);
+
+const month = due.toLocaleString("default",{month:"long"});
+const year = due.getFullYear();
+
+document.getElementById("billingCycle").innerText =
+"Due for billing cycle: " + month + " " + year;
+
+}
+
+}catch(err){
+
+console.error("Failed loading invoices",err);
+
+}
+
+}
+
+loadTenantInvoices();
+
+
+
+/* CLICK UPLOAD BUTTON */
+
+uploadBtn.addEventListener("click",()=>{
+
+if(!latestInvoiceId){
+alert("No pending invoice.");
+return;
+}
+
+selectedInvoice = latestInvoiceId;
+
+proofInput.click();
+
+});
+
+
+/* REPLACE PROOF */
+
+function replaceProof(id){
+
+selectedInvoice = id;
+proofInput.click();
+
+}
+
+
+/* DELETE PROOF */
+
+async function deleteProof(id){
+
+if(!confirm("Delete proof of payment?")) return;
+
+try{
+
+await fetch(`/api/delete-proof/${id}`,{
+method:"DELETE"
+});
+
+alert("Proof deleted");
+
+loadTenantInvoices();
+
+}catch(err){
+
+alert("Delete failed");
+
+}
+
+}
+
+
+/* FILE SELECTED */
+
+proofInput.addEventListener("change", async ()=>{
+    const file = proofInput.files[0];
+    if(!file) return;
+    if(!selectedInvoice){
+        alert("Invoice not selected.");
+        return;
+    }
+    
+    const formData = new FormData();
+    formData.append("proof", file);
+    
+    try{
+        console.log("Uploading file:", file.name, "Size:", file.size, "Invoice:", selectedInvoice);
+        
+        const res = await fetch(`/api/upload-payment/${selectedInvoice}`,{
+            method:"POST",
+            body: formData
+        });
+        
+        console.log("Response status:", res.status);
+        
+        const data = await res.json();
+        loadTenantInvoices();
+        
+        alert("Proof uploaded successfully");
+        
+        // Trigger dashboard update across all tabs and current tab
+        localStorage.setItem('paymentUpdated', Date.now());
+        
+        // Also try to update dashboard directly if it's open in same tab
+        try {
+            if (window.opener && !window.opener.closed) {
+                // If dashboard opened this window, refresh it
+                window.opener.loadTenantDashboard();
+            }
+        } catch (e) {
+            // Fallback - dispatch custom event
+            window.dispatchEvent(new CustomEvent('paymentUpdated'));
+        }
+        
+        proofInput.value = "";  // clear input
+    }catch(err){
+        alert("Upload failed. Please try again.");
+        console.error("Upload error:", err);
+    }
+});
+
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+    localStorage.removeItem("tenantId");
+    window.location.href="login.html";
+});
+
+</script>
+
+
+<script src="js/tenant.js"></script>
+
+</body>
+</html>

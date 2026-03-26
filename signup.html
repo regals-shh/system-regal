@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up | Regal Rooms</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/animations.css">
+    <style>
+        :root { 
+            --primary: #14532D; 
+            --gold: #bba97d; 
+            --bg: #F8F6F1; 
+            --white: #FFFFFF;
+            --error: #dc2626;
+            --radius: 10px;
+            --transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: var(--bg); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            min-height: 100vh; 
+            margin: 0;
+            padding: 20px;
+            opacity: 0;
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        .card { 
+            background: var(--white); 
+            padding: 50px 40px; 
+            border-radius: 20px; 
+            width: 100%; 
+            max-width: 420px; 
+            box-shadow: 0 15px 35px rgba(0,0,0,0.1); 
+            text-align: center; 
+            border-bottom: 5px solid var(--gold);
+            transform: translateY(20px);
+            opacity: 0;
+            animation: fadeInUp 0.6s ease-out 0.2s forwards;
+        }
+        
+        h2 { 
+            font-family: 'DM Serif Display', serif; 
+            color: var(--primary); 
+            margin-bottom: 25px; 
+            font-size: 2rem;
+            letter-spacing: 0.5px;
+        }
+        
+        .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+            opacity: 0;
+            transform: translateY(10px);
+        }
+        
+        .form-group:nth-child(1) { animation: fadeInUp 0.5s ease-out 0.3s forwards; }
+        .form-group:nth-child(2) { animation: fadeInUp 0.5s ease-out 0.4s forwards; }
+        .form-group:nth-child(3) { animation: fadeInUp 0.5s ease-out 0.5s forwards; }
+        .form-group:nth-child(4) { animation: fadeInUp 0.5s ease-out 0.6s forwards; }
+        .form-group:nth-child(5) { animation: fadeInUp 0.5s ease-out 0.7s forwards; }
+        .form-group:nth-child(6) { animation: fadeInUp 0.5s ease-out 0.8s forwards; }
+        
+        label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--primary);
+        }
+        
+        input { 
+            width: 100%; 
+            padding: 14px; 
+            border: 1.5px solid #E5E7EB; 
+            border-radius: var(--radius); 
+            box-sizing: border-box; 
+            background: #fafafa;
+            transition: var(--transition);
+            font-family: 'Inter', sans-serif;
+            font-size: 0.95rem;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: var(--gold);
+            box-shadow: 0 0 0 3px rgba(187, 169, 125, 0.2);
+        }
+        
+        .btn-container {
+            position: relative;
+            overflow: hidden;
+            border-radius: var(--radius);
+            margin-top: 10px;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 0.9s forwards;
+        }
+        
+        .btn { 
+            width: 100%; 
+            padding: 16px; 
+            background: var(--primary); 
+            color: white; 
+            border: none; 
+            border-radius: var(--radius); 
+            font-weight: 600; 
+            cursor: pointer; 
+            position: relative;
+            overflow: hidden;
+            transition: var(--transition);
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .btn:hover { 
+            background: #0d3c1e;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(20, 83, 45, 0.2);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .error {
+            color: var(--error);
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: none;
+            animation: shake 0.5s ease-in-out;
+        }
+        
+        .success {
+            color: #16A34A;
+            font-size: 0.85rem;
+            margin-top: 10px;
+            display: none;
+        }
+        
+        .footer { 
+            margin-top: 25px; 
+            font-size: 0.9rem; 
+            color: #666;
+            opacity: 0;
+            animation: fadeIn 0.5s ease-out 1s forwards;
+        }
+        
+        .footer a { 
+            color: var(--primary); 
+            font-weight: 600; 
+            text-decoration: none;
+            transition: var(--transition);
+            position: relative;
+        }
+        
+        .footer a:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--primary);
+            transition: var(--transition);
+        }
+        
+        .footer a:hover:after {
+            width: 100%;
+        }
+        
+        .back-home { 
+            display: block; 
+            margin-top: 15px; 
+            font-size: 0.8rem; 
+            color: var(--gold) !important;
+            text-decoration: none !important;
+            transition: var(--transition);
+            position: relative;
+            display: inline-block;
+        }
+        
+        .back-home:after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 1px;
+            bottom: -2px;
+            left: 0;
+            background-color: var(--gold);
+            transition: var(--transition);
+        }
+        
+        .back-home:hover:after {
+            width: 100%;
+        }
+        
+        /* Ripple effect */
+        .ripple {
+            position: absolute;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.7);
+            transform: scale(0);
+            animation: ripple 0.6s linear;
+            pointer-events: none;
+        }
+        
+        @keyframes ripple {
+            to {
+                transform: scale(4);
+                opacity: 0;
+            }
+        }
+        
+        /* Loading state */
+        .btn.loading {
+            color: transparent;
+            pointer-events: none;
+        }
+        
+        .btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        @keyframes fadeIn {
+            to { opacity: 1; }
+        }
+        
+        @keyframes fadeInUp {
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+            20%, 40%, 60%, 80% { transform: translateX(5px); }
+        }
+        
+        /* Responsive styles */
+        @media (max-width: 480px) {
+            .card {
+                padding: 40px 25px;
+            }
+            
+            h2 {
+                font-size: 1.8rem;
+            }
+            
+            .btn {
+                padding: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h2>Join Regal Rooms</h2>
+        <form id="signupForm">
+            <div class="form-group">
+                <label for="fullName">Full Name</label>
+                <input type="text" id="fullName" placeholder="Enter your full name" required autocomplete="name">
+            </div>
+            <div class="form-group">
+                <label for="email">Email Address</label>
+                <input type="email" id="email" placeholder="email@gmail.com" required autocomplete="username">
+            </div>
+            <div class="form-group">
+                <label for="apartment">Apartment Number</label>
+                <input type="text" id="apartment" placeholder="e.g., A-101" required autocomplete="off">
+            </div>
+            <div class="form-group">
+                <label for="phone">Phone Number</label>
+                <input type="tel" id="phone" placeholder="e.g., 09123456789" required autocomplete="tel">
+            </div>
+            <div class="form-group">
+                <label for="p1">Password (8+ chars, 1 uppercase, 1 number)</label>
+                <input type="password" id="p1" placeholder="Create a strong password" required autocomplete="new-password">
+            </div>
+            <div class="form-group">
+                <label for="p2">Confirm Password</label>
+                <input type="password" id="p2" placeholder="Re-enter your password" required autocomplete="new-password">
+            </div>
+            <div class="btn-container">
+                <button type="submit" class="btn" id="signupBtn">
+                    <i class="ph ph-user-plus"></i>
+                    <span>Create Account</span>
+                </button>
+            </div>
+            <div id="errorMsg" class="error"></div>
+            <div id="successMsg" class="success"></div>
+        </form>
+        <div class="footer">
+            Already have an account? <a href="login.html">Login here</a>
+            <a href="index.html" class="back-home">← Back to Main Website</a>
+        </div>
+    </div>
+    <script>
+          //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+        // Crypto Hashing Function
+        async function hashPassword(password) {
+            const msgBuffer = new TextEncoder().encode(password);
+            const hashBuffer = await crypto.subtle.digest('SHA-256', msgBuffer);
+            const hashArray = Array.from(new Uint8Array(hashBuffer));
+            return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            document.querySelectorAll('.btn, .footer a, .back-home').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (this.disabled || this.tagName === 'A') return;
+                    
+                    const ripple = document.createElement('span');
+                    const rect = this.getBoundingClientRect();
+                    const size = Math.max(rect.width, rect.height);
+                    
+                    ripple.style.width = ripple.style.height = `${size}px`;
+                    ripple.style.left = `${e.clientX - rect.left - size/2}px`;
+                    ripple.style.top = `${e.clientY - rect.top - size/2}px`;
+                    ripple.classList.add('ripple');
+                    
+                    const existingRipples = this.querySelectorAll('.ripple');
+                    existingRipples.forEach(r => r.remove());
+                    
+                    this.appendChild(ripple);
+                    
+                    setTimeout(() => {
+                        ripple.remove();
+                    }, 1000);
+                });
+            });
+            
+            document.querySelectorAll('input').forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentNode.querySelector('label').style.color = 'var(--primary)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentNode.querySelector('label').style.color = '';
+                });
+            });
+        });
+
+        document.getElementById('signupForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const fullName = document.getElementById('fullName');
+            const email = document.getElementById('email');
+            const apartment = document.getElementById('apartment');
+            const phone = document.getElementById('phone');
+            const password = document.getElementById('p1');
+            const confirmPassword = document.getElementById('p2');
+            const submitBtn = document.getElementById('signupBtn');
+            const errorMsg = document.getElementById('errorMsg');
+            const successMsg = document.getElementById('successMsg');
+            
+            errorMsg.style.display = 'none';
+            successMsg.style.display = 'none';
+            
+            // Full Name Validation (letters and spaces only, min 2 chars)
+            const nameRegex = /^[a-zA-Z\s]{2,50}$/;
+            if (!nameRegex.test(fullName.value.trim())) {
+                showError('Please enter a valid full name (letters only).');
+                return;
+            }
+
+            // Email Validation
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+            if (!emailRegex.test(email.value.trim())) {
+                showError('Please provide a valid email address.');
+                return;
+            }
+
+            // Apartment Number Validation (letters, numbers, dashes, spaces, 1-10 chars)
+            const aptRegex = /^[a-zA-Z0-9\-\s]{1,10}$/;
+            if (!aptRegex.test(apartment.value.trim())) {
+                showError('Please enter a valid apartment number (e.g., A-101).');
+                return;
+            }
+
+            // Philippine Phone Number Validation
+            const phoneRegex = /^(09|\+639)\d{9}$/;
+            const cleanPhone = phone.value.replace(/[-\s]/g, ''); 
+            if (!phoneRegex.test(cleanPhone)) {
+                showError('Please enter a valid Philippine mobile number (e.g., 09123456789).');
+                return;
+            }
+
+            // Password Complexity Validation
+            const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+            if (!passwordRegex.test(password.value)) {
+                showError('Password must be 8+ characters and contain an uppercase letter and a number.');
+                return;
+            }
+
+            if (password.value !== confirmPassword.value) {
+                showError('Passwords do not match!');
+                return;
+            }
+            
+            submitBtn.classList.add('loading');
+            submitBtn.disabled = true;
+            
+            try {
+                // Securely hash the password before sending over the network
+                const hashedPassword = await hashPassword(password.value);
+
+                const response = await fetch('/api/signup', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({
+                        email: email.value.trim(),
+                        password: hashedPassword,
+                        full_name: fullName.value.trim(),
+                        apartment_number: apartment.value.trim(),
+                        phone: cleanPhone 
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    localStorage.setItem('token', data.token);
+                    localStorage.setItem('user', JSON.stringify(data.user));
+                    
+                    submitBtn.innerHTML = '<i class="ph ph-check"></i> Account Created!';
+                    submitBtn.style.background = '#16A34A';
+                    successMsg.textContent = 'Registration successful! Redirecting to your dashboard...';
+                    successMsg.style.display = 'block';
+                    
+                    setTimeout(() => {
+                        window.location.href = 'tenant-dashboard.html';
+                    }, 2000);
+                } else {
+                    throw new Error(data.error || 'Registration failed');
+                }
+                
+            } catch (error) {
+                showError(error.message || 'Registration failed. Please try again.');
+                submitBtn.classList.remove('loading');
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="ph ph-user-plus"></i><span>Create Account</span>';
+            }
+        });
+
+        function showError(message) {
+            const errorMsg = document.getElementById('errorMsg');
+            errorMsg.textContent = message;
+            errorMsg.style.display = 'block';
+            errorMsg.style.animation = 'none';
+            void errorMsg.offsetWidth;
+            errorMsg.style.animation = 'shake 0.5s ease-in-out';
+        }
+    </script>
+</body>
+</html>

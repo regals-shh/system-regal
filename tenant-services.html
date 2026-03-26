@@ -1,0 +1,778 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amenity Services | Regal Rooms</title>
+
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="css/tenant.css">
+
+<style>
+/* Enhanced styling matching admin-tenants aesthetic */
+.services-section {
+    background: var(--bg-surface);
+    border-radius: var(--radius-card);
+    padding: 30px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 30px;
+    border: 1px solid rgba(0,0,0,0.02);
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.services-title {
+    font-family: 'DM Serif Display', serif;
+    color: var(--primary);
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--bg-tint);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Enhanced service cards */
+.service-card {
+    background: var(--bg-surface);
+    border: 1px solid rgba(0,0,0,0.08);
+    padding: 30px;
+    border-radius: var(--radius-card);
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+    text-align: center;
+}
+
+.service-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+}
+
+.service-icon {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: var(--bg-tint);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+    font-size: 2.5rem;
+    color: var(--primary);
+    transition: var(--transition);
+}
+
+.service-card:hover .service-icon {
+    background: var(--primary);
+    color: white;
+}
+
+.service-card h3 {
+    font-family: 'DM Serif Display', serif;
+    color: var(--primary);
+    font-size: 1.3rem;
+    margin-bottom: 10px;
+}
+
+.service-card p {
+    color: var(--text-submain);
+    font-size: 0.9rem;
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+
+/* Enhanced request cards */
+.request-card {
+    background: var(--bg-surface);
+    border: 1px solid rgba(0,0,0,0.08);
+    padding: 20px;
+    border-radius: var(--radius-card);
+    margin-bottom: 15px;
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+}
+
+.request-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.request-type {
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.request-unit {
+    background: var(--bg-tint);
+    color: var(--text-submain);
+    padding: 4px 8px;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.request-details {
+    color: var(--text-main);
+    font-size: 0.9rem;
+    margin-bottom: 15px;
+    line-height: 1.5;
+}
+
+.request-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    display: inline-block;
+}
+
+.request-status.pending { 
+    background: #fef08a; 
+    color: #854d0e; 
+}
+
+.request-status.approved { 
+    background: #dcfce7; 
+    color: #166534; 
+}
+
+.request-status.denied { 
+    background: #fee2e2; 
+    color: #991b1b; 
+}
+
+/* Enhanced action buttons */
+.btn-action {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-right: 8px;
+    font-family: 'Inter', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-edit {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+.btn-edit:hover {
+    background: #1e40af;
+    color: white;
+    transform: scale(1.05);
+}
+
+.btn-cancel {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.btn-cancel:hover {
+    background: #991b1b;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Enhanced modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(20, 83, 45, 0.4);
+    backdrop-filter: blur(4px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background: var(--bg-surface);
+    padding: 40px;
+    border-radius: var(--radius-card);
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+
+.modal-content h3 {
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    font-family: 'DM Serif Display', serif;
+    color: var(--primary);
+}
+
+.modal input,
+.modal textarea,
+.modal select {
+    width: 100%;
+    padding: 12px 15px;
+    border: 1px solid #e5e7eb;
+    border-radius: var(--radius-btn);
+    outline: none;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+    background: white;
+    box-sizing: border-box;
+    margin-bottom: 15px;
+}
+
+.modal input:focus,
+.modal textarea:focus,
+.modal select:focus {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px rgba(187, 169, 125, 0.1);
+}
+
+.modal-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 20px;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border-radius: var(--radius-btn);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+}
+
+.modal-buttons button:first-child {
+    background: var(--primary);
+    color: white;
+}
+
+.modal-buttons button:first-child:hover {
+    background: #0d381e;
+    transform: translateY(-2px);
+}
+
+.modal-buttons button:last-child {
+    background: var(--bg-tint);
+    color: var(--primary);
+}
+
+.modal-buttons button:last-child:hover {
+    background: #d1e7dd;
+}
+
+/* Empty state */
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: var(--text-submain);
+    font-family: 'Inter', sans-serif;
+}
+
+.empty-state i {
+    font-size: 3rem;
+    color: var(--text-sub);
+    margin-bottom: 15px;
+}
+
+.empty-state p {
+    font-size: 1.1rem;
+    margin: 0;
+}
+
+/* Request count badge */
+.request-count {
+    background: var(--primary);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+/* Original styles */
+.modal{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background:rgba(0,0,0,0.5);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+}
+
+.modal-content{
+    background:white;
+    padding:25px;
+    border-radius:10px;
+    width:400px;
+    max-width:90%;
+}
+
+.modal input,
+.modal textarea{
+    width:100%;
+    padding:8px;
+    margin-top:5px;
+    margin-bottom:15px;
+    border:1px solid #ccc;
+    border-radius:6px;
+}
+
+.modal-buttons{
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+}
+
+.request-card{
+    border:1px solid #ddd;
+    padding:15px;
+    border-radius:10px;
+    margin-bottom:10px;
+}
+</style>
+
+</head>
+
+<body>
+
+<aside class="sidebar">
+    <div class="brand-area">
+        <h2>Regal Rooms</h2>
+        <span style="color: var(--text-sub); font-size: 0.8rem;">TENANT PORTAL</span>
+    </div>
+
+    <nav class="nav-menu">
+        <a href="tenant-dashboard.html" class="nav-link"><i class="ph ph-squares-four" aria-hidden="true"></i> Overview</a>
+            <a href="tenant-visitors.html" class="nav-link"><i class="ph ph-user-plus"></i> Visitors</a>
+            <a href="tenant-payments.html" class="nav-link"><i class="ph ph-credit-card" aria-hidden="true"></i> Payments</a>
+            <a href="tenant-maintenance.html" class="nav-link "><i class="ph ph-wrench" aria-hidden="true"></i> Maintenance</a>
+            <a href="tenant-announcements.html" class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Announcements</a>
+            <a href="tenant-services.html" class="nav-link active"><i class="ph ph-sparkle" aria-hidden="true"></i> Amenity Services</a>
+            <a href="tenant-settings.html" class="nav-link"><i class="ph ph-user-gear" aria-hidden="true"></i> Settings</a>
+    </nav>
+
+    <button id="logoutBtn" class="logout-btn">
+        <i class="ph ph-sign-out"></i> Secure Logout
+    </button>
+</aside>
+
+<main class="main-content">
+    <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list"></i></button>
+
+    <header class="top-header animate-element">
+        <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+        <div>
+            <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+            <div>
+                <h1>Building Services</h1>
+                <p style="color: var(--text-submain);">Request access or reserve building amenities.</p>
+            </div>
+        </div>
+        <div class="user-profile" aria-label="User Profile">
+            <div class="user-avatar" id="tenantAvatar"></div>
+            <span id="tenantProfileName" style="font-weight:600;"></span>
+        </div>
+    </header>
+
+    <div class="dashboard-grid">
+        <div class="service-card animate-element">
+            <div class="service-icon">
+                <i class="ph ph-car"></i>
+            </div>
+            <h3>Parking Slot Registration</h3>
+            <p>Register your vehicle to request a parking slot.</p>
+            <button class="btn btn-primary" onclick="openParkingModal()">
+                <i class="ph ph-plus-circle"></i> Request Parking
+            </button>
+        </div>
+
+        <div class="service-card animate-element">
+            <div class="service-icon">
+                <i class="ph ph-sun"></i>
+            </div>
+            <h3>Rooftop Reservation</h3>
+            <p>Reserve rooftop space for small gatherings.</p>
+            <button class="btn btn-primary" onclick="openRooftopModal()">
+                <i class="ph ph-calendar"></i> Reserve Rooftop
+            </button>
+        </div>
+    </div>
+
+    <div class="services-section animate-element">
+        <div class="services-title">
+            <span>Your Service Requests</span>
+            <span style="font-size: 1rem; color: var(--primary);" id="requestCount">0 Requests</span>
+        </div>
+        <div id="serviceList"></div>
+    </div>
+</main>
+
+<!-- PARKING MODAL -->
+<div class="modal" id="parkingModal">
+    <div class="modal-content">
+        <h3>Parking Request</h3>
+        <select id="vehicleTypeInput" onchange="togglePlateNumber()">
+            <option value="">Select Vehicle Type</option>
+            <option value="Single">Single</option>
+            <option value="Sidecar">Sidecar</option>
+            <option value="Car">Car</option>
+            <option value="Van">Van</option>
+            <option value="Bicycle">Bicycle</option>
+        </select>
+        <input id="plateInput" placeholder="Plate Number" style="display: block;">
+        <input type="date" id="parkingDateInput">
+        <input id="parkingTimeInput" placeholder="Time (Example: 8:00 AM)">
+
+        <div class="modal-buttons">
+            <button onclick="submitParking()">Submit</button>
+            <button onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- ROOFTOP MODAL -->
+<div class="modal" id="rooftopModal">
+    <div class="modal-content">
+        <h3>Rooftop Reservation</h3>
+        <input type="date" id="dateInput">
+        <input id="timeInput" placeholder="Time (Example 8AM - 12PM)">
+        <textarea id="detailsInput" placeholder="Purpose"></textarea>
+
+        <div class="modal-buttons">
+            <button onclick="submitRooftop()">Submit</button>
+            <button onclick="closeModal()">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<script>
+  //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+
+// Get fresh tenant data from API to ensure cross-device sync
+const tenantIdFromStorage = localStorage.getItem("tenantId");
+let tenant = null;
+
+// Load tenant data first
+async function loadInitialTenantData() {
+    try {
+        const res = await fetch(`/api/tenants/${tenantIdFromStorage}`);
+        tenant = res.ok ? await res.json() : null;
+    } catch (error) {
+        console.error('Error loading tenant data:', error);
+    }
+}
+
+loadInitialTenantData();
+
+let editingId = null;
+
+// Disable past date selection for rooftop reservation
+const dateInput = document.getElementById("dateInput");
+if(dateInput){
+    const today = new Date().toISOString().split("T")[0];
+    dateInput.min = today;
+}
+
+// Disable past date selection for parking reservation
+const parkingDateInput = document.getElementById("parkingDate");
+if(parkingDateInput){
+    const today = new Date().toISOString().split("T")[0];
+    parkingDateInput.min = today;
+}
+
+const tenantId = localStorage.getItem("tenantId");
+if(!tenantId) window.location.href="login.html";
+
+async function loadTenantProfile() {
+    try {
+        const res = await fetch(`/api/tenants/${tenantId}`);
+        if(!res.ok) throw new Error(`Failed tenant: ${res.status}`);
+        const tenant = await res.json();
+        
+        const name = tenant.name || "N/A";
+        document.getElementById("tenantProfileName").textContent = name;
+        document.getElementById("tenantAvatar").textContent = name.split(" ").map(n=>n[0]).join("").toUpperCase();
+        
+        localStorage.setItem("tenant", JSON.stringify(tenant));
+    } catch(err){
+        console.error(err);
+    }
+}
+
+loadTenantProfile();
+
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+    localStorage.removeItem("tenantId");
+    window.location.href="login.html";
+});
+
+function openParkingModal(){ document.getElementById("parkingModal").style.display="flex"; }
+function openRooftopModal(){ document.getElementById("rooftopModal").style.display="flex"; }
+function closeModal(){
+    document.getElementById("parkingModal").style.display="none";
+    document.getElementById("rooftopModal").style.display="none";
+    document.getElementById("vehicleTypeInput").value="";
+    document.getElementById("plateInput").value="";
+    document.getElementById("parkingDateInput").value="";
+    document.getElementById("parkingTimeInput").value="";
+    document.getElementById("dateInput").value="";
+    document.getElementById("timeInput").value="";
+    document.getElementById("detailsInput").value="";
+    editingId=null;
+}
+
+function togglePlateNumber(){
+    const vehicleType = document.getElementById("vehicleTypeInput").value;
+    const plateInput = document.getElementById("plateInput");
+    
+    if(vehicleType === "Bicycle"){
+        plateInput.style.display = "none";
+        plateInput.value = "";
+        plateInput.required = false;
+    } else {
+        plateInput.style.display = "block";
+        plateInput.required = true;
+    }
+}
+
+/* ======================
+PARKING SUBMIT
+====================== */
+async function submitParking(){
+    const vehicleType=document.getElementById("vehicleTypeInput").value.trim();
+    const plate=document.getElementById("plateInput").value.trim();
+    const date=document.getElementById("parkingDateInput").value;
+    const time=document.getElementById("parkingTimeInput").value.trim();
+
+    if(!vehicleType || !date || !time){
+        alert("Please complete all fields");
+        return;
+    }
+    
+    if(vehicleType !== "Bicycle" && !plate){
+        alert("Please enter plate number");
+        return;
+    }
+
+    // prevent past date selection
+    const today = new Date().toISOString().split("T")[0];
+    if(date < today){
+        alert("You cannot select a past date for parking.");
+        return;
+    }
+
+    const url = editingId ? "/api/service/"+editingId : "/api/request-service";
+    const method = editingId ? "PUT" : "POST";
+
+    await fetch(url,{
+        method,
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            tenantName:tenant.name,
+            unit:tenant.roomNumber,
+            type:"Parking",
+            vehicle: vehicleType,
+            plateNumber: vehicleType === "Bicycle" ? "N/A" : plate,
+            schedule: {date, time}
+        })
+    });
+
+    closeModal();
+    loadRequests();
+}
+
+/* ======================
+ROOFTOP SUBMIT
+====================== */
+async function submitRooftop(){
+    const date=document.getElementById("dateInput").value;
+    const time=document.getElementById("timeInput").value.trim();
+    const details=document.getElementById("detailsInput").value.trim();
+
+    if(!date || !time || !details){
+        alert("Please complete all fields");
+        return;
+    }
+
+    // prevent past date reservation
+    const today = new Date().toISOString().split("T")[0];
+    if(date < today){
+        alert("You cannot reserve a rooftop date in the past.");
+        return;
+    }
+
+    // Flexible time validation: AM/PM or 24-hour
+    const ampmRegex = /^(\d{1,2})(AM|PM)\s*-\s*(\d{1,2})(AM|PM)$/i;
+    const militaryRegex = /^([01]?\d|2[0-3]):([0-5]\d)\s*-\s*([01]?\d|2[0-3]):([0-5]\d)$/;
+
+    if(!ampmRegex.test(time) && !militaryRegex.test(time)){
+        alert("Invalid time format. Use either 8AM - 12PM or 08:00 - 12:00");
+        return;
+    }
+
+    const url = editingId ? "/api/service/"+editingId : "/api/request-service";
+    const method = editingId ? "PUT" : "POST";
+
+    await fetch(url,{
+        method,
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({
+            tenantName:tenant.name,
+            unit:tenant.roomNumber,
+            type:"Rooftop",
+            details,
+            schedule:{date,time}
+        })
+    });
+
+    closeModal();
+    loadRequests();
+}
+
+/* ======================
+CANCEL REQUEST
+====================== */
+async function cancelRequest(id){
+    if(!confirm("Are you sure you want to cancel this reservation?")) return;
+    const res = await fetch("/api/service/"+id,{method:"DELETE"});
+    const data = await res.json();
+    alert(data.message || "Request cancelled");
+    loadRequests();
+}
+
+/* ======================
+EDIT REQUEST
+====================== */
+function editRequest(r){
+    if(r.status!=="Pending"){
+        alert("Only pending requests can be edited.");
+        return;
+    }
+
+    editingId=r._id;
+
+    if(r.type==="Parking"){
+        openParkingModal();
+        document.getElementById("vehicleTypeInput").value=r.vehicle;
+        document.getElementById("plateInput").value=r.plateNumber === "N/A" ? "" : r.plateNumber;
+        document.getElementById("parkingDateInput").value=r.schedule?.date?.split("T")[0] || "";
+        document.getElementById("parkingTimeInput").value=r.schedule?.time || "";
+        togglePlateNumber();
+    }
+
+    if(r.type==="Rooftop"){
+        openRooftopModal();
+        document.getElementById("dateInput").value=r.schedule.date?.split("T")[0] || "";
+        document.getElementById("timeInput").value=r.schedule.time || "";
+        document.getElementById("detailsInput").value=r.details || "";
+    }
+}
+
+/* ======================
+LOAD REQUESTS
+====================== */
+async function loadRequests(){
+    // Wait for tenant data to be loaded
+    if (!tenant) {
+        await loadInitialTenantData();
+    }
+    
+    if (!tenant || !tenant.name) {
+        console.error('No tenant data available');
+        return;
+    }
+    
+    const response = await fetch("/api/my-services/"+tenant.name);
+    const requests = await response.json();
+
+    const container=document.getElementById("serviceList");
+    container.innerHTML="";
+
+    if(requests.length===0){
+        container.innerHTML="<div class='empty-state'><i class='ph ph-sparkle'></i><p>No service requests yet.</p></div>";
+        document.getElementById("requestCount").innerText = "0 Requests";
+        return;
+    }
+
+    requests.forEach(r=>{
+        let statusClass = "pending";
+        if(r.status==="Approved") statusClass = "approved";
+        if(r.status==="Denied") statusClass = "denied";
+
+        let info="";
+        if(r.type==="Parking"){
+            const plateDisplay = r.plateNumber === "N/A" ? "Not Required" : r.plateNumber || "-";
+            info = `Vehicle Type: ${r.vehicle || "-"} <br>Plate: ${plateDisplay} <br>Date: ${r.schedule?.date?.split("T")[0] || "-"} <br>Time: ${r.schedule?.time || "-"}`;
+        }
+        if(r.type==="Rooftop"){
+            info = `Date: ${r.schedule?.date?.split("T")[0] || "-"} <br>Time: ${r.schedule?.time || "-"} <br>Purpose: ${r.details || "-"}`;
+        }
+        let actions="";
+        if(r.status==="Pending"){
+            actions=`<button onclick='editRequest(${JSON.stringify(r)})' class="btn-action btn-edit"><i class="ph ph-pencil"></i> Edit</button>
+                     <button onclick="cancelRequest('${r._id}')" class="btn-action btn-cancel"><i class="ph ph-x"></i> Cancel</button>`;
+        }
+        if(r.status==="Approved"){
+            actions=`<button onclick="cancelRequest('${r._id}')" class="btn-action btn-cancel"><i class="ph ph-x"></i> Cancel Reservation</button>`;
+        }
+        if(r.status==="Denied"){
+            info += r.denialReason ? `<p style="color:red"><strong>Reason:</strong> ${r.denialReason}</p>` : "";
+        }
+
+        container.innerHTML+=`
+            <div class="request-card">
+                <div class="request-header">
+                    <span class="request-type">${r.type}</span>
+                    <span class="request-unit">${r.unit}</span>
+                    <span class="request-status ${statusClass}">${r.status}</span>
+                </div>
+                <div class="request-details">${info}</div>
+                <div style="margin-top:10px">${actions}</div>
+            </div>
+        `;
+    });
+
+    document.getElementById("requestCount").innerText = `${requests.length} Requests`;
+}
+
+loadRequests();
+</script>
+
+<script src="js/tenant.js"></script>
+</body>
+</html>

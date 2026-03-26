@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Dashboard | Regal Rooms</title>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<aside class="sidebar" aria-label="Main Navigation">
+        <div class="brand-area">
+            <h2>Regal Rooms</h2>
+            <span style="color: var(--text-sub); font-size: 0.8rem; letter-spacing: 1px;">ADMIN PORTAL</span>
+        </div>
+        <nav class="nav-menu" role="navigation">
+            <a href="admin-dashboard.html" class="nav-link active"><i class="ph ph-squares-four" aria-hidden="true"></i> Overview</a>
+            <a href="admin-visitors.html" class="nav-link"><i class="ph ph-users-three"></i> Visitor Logs</a>
+            <a href="admin-tenants.html" class="nav-link"><i class="ph ph-users" aria-hidden="true"></i> Tenants & Rooms</a>
+            <a href="admin-billing.html" class="nav-link"><i class="ph ph-receipt" aria-hidden="true"></i> Billing & Finance</a>
+            <a href="admin-requests.html" class="nav-link"><i class="ph ph-wrench" aria-hidden="true"></i> Maintenance</a>
+            <a href="admin-announcements.html" class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Announcements</a>
+            <a href="admin-messages.html" class="nav-link"><i class="ph ph-envelope-open" aria-hidden="true"></i> Messages</a>
+            <a href="admin-services.html" class="nav-link"><i class="ph ph-sparkle" aria-hidden="true"></i> Amenity Services</a>
+            <a href="admin-reports.html" class="nav-link"><i class="ph ph-chart-bar" aria-hidden="true"></i> Reports</a>
+            <a href="admin-settings.html" class="nav-link"><i class="ph ph-gear" aria-hidden="true"></i> System Settings</a>
+        </nav>
+        <button id="logoutBtn" class="logout-btn" aria-label="System Logout"><i class="ph ph-sign-out" aria-hidden="true"></i> System Logout</button>
+    </aside>
+
+<main class="main-content">
+    <header class="top-header animate-element">
+        <div>
+            <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+            <div>
+                <h1>System Overview</h1>
+                <p style="color: var(--text-submain);">Monitor your property's performance today.</p>
+            </div>
+        </div>
+        <div class="user-profile" aria-label="User Profile">
+            <div class="user-avatar" aria-hidden="true"><i class="ph ph-shield-check" style="font-size: 1.2rem;"></i></div>
+            <span id="adminName" style="font-weight: 600;">System Admin</span>
+        </div>
+    </header>
+
+    <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        <div class="card stat-card animate-element">
+            <div class="stat-info">
+                <h4 style="color: var(--text-main);">Total Occupancy</h4>
+                <h2 id="totalOccupancy" style="color: var(--primary);">-- / --</h2>
+                <p id="vacantUnits" style="color: var(--text-submain);"><i class="ph ph-door" aria-hidden="true"></i> -- Units currently vacant</p>
+            </div>
+            <div class="stat-icon" aria-hidden="true"><i class="ph ph-house-line"></i></div>
+        </div>
+
+        <div class="card stat-card animate-element">
+            <div class="stat-info">
+                <h4 style="color: var(--text-main);">Monthly Revenue</h4>
+                <h2 id="monthlyRevenue" style="color: var(--primary);">₱--</h2>
+                <p id="collectionRate" style="color: var(--text-submain);"><i class="ph ph-trend-up" aria-hidden="true"></i> --% collection rate</p>
+            </div>
+            <div class="stat-icon" aria-hidden="true"><i class="ph ph-wallet"></i></div>
+        </div>
+
+        <div class="card stat-card animate-element">
+            <div class="stat-info">
+                <h4 style="color: var(--text-main);">Pending Tasks</h4>
+                <h2 id="pendingTasks" style="color: #991b1b;">--</h2>
+                <p style="color: var(--text-submain);"><i class="ph ph-wrench" aria-hidden="true"></i> Unresolved maintenance</p>
+            </div>
+            <div class="stat-icon" style="background: #fee2e2; color: #991b1b;" aria-hidden="true"><i class="ph ph-warning-circle"></i></div>
+        </div>
+    </div>
+
+    <div class="card animate-element">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+            <h3 style="font-family: 'DM Sans'; font-size: 1.2rem; font-weight: 700;">Recent Payments</h3>
+        </div>
+        
+        <div class="table-container" tabindex="0" aria-label="Recent Payments Table">
+            <table role="table">
+                <thead>
+                    <tr role="row">
+                        <th role="columnheader" style="color:var(--text-submain);">Tenant Name</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Room</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Date Paid</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Amount</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="recentPayments">
+                    <!-- Filled dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script>
+  //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+
+  // 🚨 Protect dashboard immediately
+  const token = localStorage.getItem("adminToken");
+  if (!token) window.location.href = "admin-login.html";
+
+  document.getElementById("adminName").textContent = localStorage.getItem("adminName") || "System Admin";
+
+  async function loadDashboard() {
+    try {
+      const res = await fetch("/api/admin/dashboard", {
+        headers: { "Authorization": "Bearer " + token }
+      });
+      if (res.status === 401) throw new Error("Unauthorized");
+      const data = await res.json();
+
+      // Occupancy
+      const occupied = data.stats.occupiedUnits;
+      const total = data.stats.totalUnits;
+      document.getElementById("totalOccupancy").textContent = `${occupied} / ${total}`;
+      document.getElementById("vacantUnits").textContent = `${total - occupied} Units currently vacant`;
+
+      // Revenue
+      document.getElementById("monthlyRevenue").textContent = `₱${data.stats.revenue}`;
+      const collectionRate = ((data.stats.revenue / data.stats.totalExpectedRevenue) * 100).toFixed(0);
+      document.getElementById("collectionRate").textContent = `${collectionRate}% collection rate`;
+
+      // Pending Tasks
+      document.getElementById("pendingTasks").textContent = data.stats.pendingTasks;
+
+      // Recent Payments
+      const tbody = document.getElementById("recentPayments");
+      tbody.innerHTML = "";
+      data.recentPayments.forEach(p => {
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td>${p.tenantName}</td>
+          <td>${p.room}</td>
+          <td>${new Date(p.datePaid).toLocaleDateString()}</td>
+          <td>₱${p.amount}</td>
+          <td><span class="status ${p.status.toLowerCase()}">${p.status}</span></td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+    } catch (err) {
+      console.error(err);
+      alert("Session expired or error fetching data.");
+      localStorage.clear();
+      window.location.href = "admin-index.html";
+    }
+  }
+
+  loadDashboard();
+
+  // Logout
+  document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "admin-index.html";
+  });
+
+  // Mobile sidebar toggle
+  const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+  const sidebar = document.querySelector('.sidebar');
+  if (mobileMenuBtn && sidebar) {
+    mobileMenuBtn.addEventListener("click", () => sidebar.classList.toggle('open'));
+  }
+</script>
+<script src="js/admin.js"></script>
+</body>
+</html>

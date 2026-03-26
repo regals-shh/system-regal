@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amenity Services | Regal Rooms</title>
+
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="css/admin.css">
+
+<style>
+/* Enhanced styling matching admin-tenants aesthetic */
+.services-section {
+    background: var(--bg-surface);
+    border-radius: var(--radius-card);
+    padding: 30px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 30px;
+    border: 1px solid rgba(0,0,0,0.02);
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.services-title {
+    font-family: 'DM Serif Display', serif;
+    color: var(--primary);
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--bg-tint);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* Enhanced modal styling */
+.modal{
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100%;
+    background: rgba(20, 83, 45, 0.4); 
+    backdrop-filter: blur(4px);
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:1000;
+}
+
+.modal-content{
+    background: var(--bg-surface);
+    padding:40px;
+    border-radius: var(--radius-card);
+    width:450px;
+    max-width:90%;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+}
+
+.modal-content h3 {
+    margin-bottom: 25px;
+    font-size: 1.8rem;
+    font-family: 'DM Serif Display', serif;
+    color: var(--primary);
+}
+
+.modal input,
+.modal textarea{
+    width:100%;
+    padding:12px 15px;
+    margin-bottom:15px;
+    border:1px solid #ddd;
+    border-radius: var(--radius-btn);
+    font-family: 'Inter', sans-serif;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.modal input:focus,
+.modal textarea:focus {
+    border-color: var(--gold);
+}
+
+.modal-buttons{
+    display:flex;
+    gap:10px;
+    justify-content:flex-end;
+}
+
+.modal-buttons button {
+    padding: 10px 20px;
+    border-radius: var(--radius-btn);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+}
+
+.modal-buttons button:first-child {
+    background: var(--primary);
+    color: white;
+}
+
+.modal-buttons button:first-child:hover {
+    background: #0d381e;
+    transform: translateY(-2px);
+}
+
+.modal-buttons button:last-child {
+    background: var(--bg-tint);
+    color: var(--primary);
+}
+
+.modal-buttons button:last-child:hover {
+    background: #d1e7dd;
+}
+
+/* Enhanced request cards */
+.request-card{
+    border:1px solid rgba(0,0,0,0.08);
+    padding:20px;
+    border-radius: var(--radius-card);
+    margin-bottom:15px;
+    background: var(--bg-surface);
+    box-shadow: var(--shadow-soft);
+    transition: var(--transition);
+}
+
+.request-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+.request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.request-header h4 {
+    margin: 0;
+    color: var(--primary);
+    font-family: 'DM Serif Display', serif;
+    font-size: 1.1rem;
+}
+
+.request-tenant {
+    color: var(--text-submain);
+    font-size: 0.85rem;
+}
+
+.request-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 0.75rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.request-status.pending {
+    background: #fef08a;
+    color: #854d0e;
+}
+
+.request-status.approved {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.request-status.denied {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.request-details {
+    margin-bottom: 15px;
+}
+
+.request-details p {
+    margin: 5px 0;
+    color: var(--text-main);
+    font-size: 0.9rem;
+}
+
+.request-details strong {
+    color: var(--primary);
+    font-weight: 600;
+}
+
+/* Enhanced action buttons */
+.btn-action {
+    padding: 8px 16px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    margin-right: 8px;
+    font-family: 'Inter', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.btn-approve {
+    background: #dcfce7;
+    color: #166534;
+}
+
+.btn-approve:hover {
+    background: #166534;
+    color: white;
+    transform: scale(1.05);
+}
+
+.btn-deny {
+    background: #fef08a;
+    color: #854d0e;
+}
+
+.btn-deny:hover {
+    background: #854d0e;
+    color: white;
+    transform: scale(1.05);
+}
+
+.btn-delete {
+    background: #fee2e2;
+    color: #991b1b;
+}
+
+.btn-delete:hover {
+    background: #991b1b;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Service type icons */
+.service-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+}
+
+.service-icon.parking {
+    background: var(--light-bg);
+    color: var(--text-submain);
+}
+
+.service-icon.rooftop {
+    background: #dbeafe;
+    color: #1e40af;
+}
+
+/* Enhanced card sections */
+.service-section {
+    background: var(--bg-surface);
+    border-radius: var(--radius-card);
+    padding: 30px;
+    box-shadow: var(--shadow-soft);
+    border: 1px solid rgba(0,0,0,0.02);
+    animation: fadeIn 0.6s ease-out;
+}
+
+.service-section h3 {
+    font-family: 'DM Serif Display', serif;
+    color: var(--primary);
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--bg-tint);
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+</style>
+</head>
+<body>
+
+<aside class="sidebar" aria-label="Main Navigation">
+<div class="brand-area">
+<h2>Regal Rooms</h2>
+<span style="color: var(--text-sub); font-size: 0.8rem; letter-spacing: 1px;">ADMIN PORTAL</span>
+</div>
+
+<nav class="nav-menu" role="navigation">
+            <a href="admin-dashboard.html" class="nav-link"><i class="ph ph-squares-four" aria-hidden="true"></i> Overview</a>
+            <a href="admin-visitors.html" class="nav-link"><i class="ph ph-users-three"></i> Visitor Logs</a>
+            <a href="admin-tenants.html" class="nav-link"><i class="ph ph-users" aria-hidden="true"></i> Tenants & Rooms</a>
+            <a href="admin-billing.html" class="nav-link"><i class="ph ph-receipt" aria-hidden="true"></i> Billing & Finance</a>
+            <a href="admin-requests.html" class="nav-link"><i class="ph ph-wrench" aria-hidden="true"></i> Maintenance</a>
+            <a href="admin-announcements.html" class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Announcements</a>
+            <a href="admin-messages.html" class="nav-link"><i class="ph ph-envelope-open" aria-hidden="true"></i> Messages</a>
+            <a href="admin-services.html" class="nav-link active"><i class="ph ph-sparkle" aria-hidden="true"></i> Amenity Services</a>
+            <a href="admin-reports.html" class="nav-link"><i class="ph ph-chart-bar" aria-hidden="true"></i> Reports</a>
+            <a href="admin-settings.html" class="nav-link"><i class="ph ph-gear" aria-hidden="true"></i> System Settings</a>
+</nav>
+
+<button id="logoutBtn" class="logout-btn" aria-label="System Logout">
+<i class="ph ph-sign-out" aria-hidden="true"></i> System Logout
+</button>
+</aside>
+
+<main class="main-content">
+<header class="top-header animate-element">
+<div>
+<button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+<div>
+<h1>Amenity Services Management</h1>
+<p style="color: var(--text-submain);">Review and approve tenant requests for parking and facilities.</p>
+</div>
+</div>
+<div class="user-profile" aria-label="User Profile">
+<div class="user-avatar" aria-hidden="true"><i class="ph ph-shield-check" style="font-size: 1.2rem;"></i></div>
+<span id="adminName" style="font-weight: 600;">System Admin</span>
+</div>
+</header>
+
+<div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));">
+<div class="service-section animate-element">
+<h3>
+<div class="service-icon parking">
+<i class="ph ph-car"></i>
+</div>
+Parking Registrations
+</h3>
+<div id="parkingRequests" style="display:flex;flex-direction:column;gap:15px;margin-top:10px"></div>
+</div>
+
+<div class="service-section animate-element">
+<h3>
+<div class="service-icon rooftop">
+<i class="ph ph-sun"></i>
+</div>
+Rooftop Reservations
+</h3>
+<div id="rooftopRequests" style="display:flex;flex-direction:column;gap:15px;margin-top:10px"></div>
+</div>
+</div>
+</main>
+
+<!-- DENIAL MODAL -->
+<div class="modal" id="denyModal">
+<div class="modal-content">
+<h3>Reason for Denial</h3>
+<textarea id="denyReason" placeholder="Enter reason for denying this request"></textarea>
+<div class="modal-buttons">
+<button onclick="submitDeny()">Submit</button>
+<button onclick="closeDenyModal()">Cancel</button>
+</div>
+</div>
+</div>
+
+<script>
+  //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+// =====================
+// LOGOUT PROTECTION
+// =====================
+const token = localStorage.getItem("adminToken");
+if(!token) window.location.href = "admin-login.html"; // redirect if not logged in
+
+// LOGOUT BUTTON
+document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "admin-index.html";
+  });
+
+// FETCH WITH AUTH
+async function fetchWithAuth(url, options = {}) {
+    options.headers = options.headers || {};
+    options.headers["Authorization"] = "Bearer " + token;
+    const res = await fetch(url, options);
+    if(res.status === 401) {
+        localStorage.removeItem("adminToken");
+        window.location.href = "admin-index.html";
+        return;
+    }
+    return res;
+}
+
+// =====================
+// AMENITY SERVICE LOGIC
+// =====================
+let denyId = null;
+
+async function loadServiceRequests(){
+    const response = await fetchWithAuth("/api/services");
+    const requests = await response.json();
+
+    const parkingContainer = document.getElementById("parkingRequests");
+    const rooftopContainer = document.getElementById("rooftopRequests");
+
+    parkingContainer.innerHTML="";
+    rooftopContainer.innerHTML="";
+
+    requests.forEach(r=>{
+        let statusColor="orange";
+        if(r.status==="Approved") statusColor="green";
+        if(r.status==="Denied") statusColor="red";
+
+        let card=document.createElement("div");
+        card.className="request-card";
+
+        card.innerHTML=`
+        <div class="request-header">
+        <h4>${r.tenantName} <span class="request-tenant">(${r.unit})</span></h4>
+        <span class="request-status ${r.status.toLowerCase()}">${r.status}</span>
+        </div>
+
+        <div class="request-details">
+        ${r.type==="Parking" ? `<p><strong>Vehicle Type:</strong> ${r.vehicle}</p><p><strong>Plate:</strong> ${r.plateNumber === "N/A" ? "Not Required" : r.plateNumber}</p><p><strong>Date:</strong> ${r.schedule?.date ? new Date(r.schedule.date).toLocaleDateString() : "-"}</p><p><strong>Time:</strong> ${r.schedule?.time || "-"}</p>` : ``}
+        ${r.type==="Rooftop" ? `<p><strong>Date:</strong> ${r.schedule?.date}</p><p><strong>Time:</strong> ${r.schedule?.time}</p><p><strong>Purpose:</strong> ${r.details}</p>` : ``}
+        ${r.status==="Denied" && r.denialReason ? `<p style="color:red"><strong>Reason:</strong> ${r.denialReason}</p>` : ``}
+        </div>
+
+<div style="display:flex;gap:10px;margin-top:10px">
+
+${r.status !== "Approved" ? `
+<button class="btn-action btn-approve" onclick="updateStatus('${r._id}','Approved')">
+<i class="ph ph-check"></i> Approve
+</button>
+` : ``}
+
+${r.status !== "Approved" ? `
+<button class="btn-action btn-deny" onclick="openDenyModal('${r._id}')">
+<i class="ph ph-x"></i> Deny
+</button>
+` : ``}
+
+<button class="btn-action btn-delete" onclick="deleteRequest('${r._id}')">
+<i class="ph ph-trash"></i> Delete
+</button>
+
+</div>
+        `;
+
+        if(r.type==="Parking") parkingContainer.appendChild(card);
+        if(r.type==="Rooftop") rooftopContainer.appendChild(card);
+    });
+}
+
+async function updateStatus(id,status){
+    await fetchWithAuth("/api/service/"+id+"/status",{
+        method:"PUT",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({status})
+    });
+    loadServiceRequests();
+}
+
+function openDenyModal(id){
+    denyId=id;
+    document.getElementById("denyReason").value="";
+    document.getElementById("denyModal").style.display="flex";
+}
+
+function closeDenyModal(){
+    denyId=null;
+    document.getElementById("denyModal").style.display="none";
+}
+
+async function submitDeny(){
+    const reason=document.getElementById("denyReason").value.trim();
+    if(!reason){ alert("Please enter a reason."); return; }
+
+    await fetchWithAuth("/api/service/"+denyId+"/status",{
+        method:"PUT",
+        headers:{"Content-Type":"application/json"},
+        body:JSON.stringify({status:"Denied", denialReason:reason})
+    });
+
+    closeDenyModal();
+    loadServiceRequests();
+}
+
+async function deleteRequest(id){
+    if(!confirm("Delete this request?")) return;
+    await fetchWithAuth("/api/service/"+id,{method:"DELETE"});
+    loadServiceRequests();
+}
+
+loadServiceRequests();
+</script>
+
+<script src="js/admin.js"></script>
+</body>
+</html>

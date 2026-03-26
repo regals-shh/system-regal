@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="bg_body">#F8F6F1</color>
+    <color name="bg_surface">#FFFFFF</color>
+    <color name="gold">#bba97d</color>
+    <color name="primary">#14532D</color>
+    <color name="primary_dark">#0d381e</color>
+    <color name="primary_light">#16A34A</color>
+    <color name="status_overdue_bg">#fee2e2</color>
+    <color name="status_overdue_text">#991b1b</color>
+    <color name="status_paid_bg">#dcfce7</color>
+    <color name="status_paid_text">#166534</color>
+    <color name="status_pending_bg">#fef08a</color>
+    <color name="status_pending_text">#854d0e</color>
+    <color name="text_main">#1C1C1C</color>
+    <color name="text_sub">#543e06</color>
+    <color name="white">#FFFFFF</color>
+    <string name="app_name">Regal Rooms Tenant</string>
+    <string name="nav_announcements">Announcements</string>
+    <string name="nav_dashboard">Dashboard</string>
+    <string name="nav_logout">Logout</string>
+    <string name="nav_maintenance">Maintenance</string>
+    <string name="nav_payments">Payments</string>
+    <string name="nav_services">Services</string>
+    <string name="nav_settings">Settings</string>
+    <string name="nav_visitors">Visitors</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <style name="CircleImage" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
+    <style name="Theme.RegalRoomsTenant" parent="Theme.MaterialComponents.Light.NoActionBar">
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary_dark</item>
+        <item name="colorOnPrimary">@color/white</item>
+        <item name="android:statusBarColor">@color/primary_dark</item>
+    </style>
+</resources>

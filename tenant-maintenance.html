@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Maintenance | Regal Rooms</title>
+
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="css/tenant.css">
+
+<style>
+/* Enhanced button animations matching tenant-payments */
+.btn {
+    background: var(--primary);
+    color: white;
+    padding: 12px 24px;
+    border-radius: var(--radius-btn);
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-family: 'Inter', sans-serif;
+}
+
+.btn:hover {
+    background: #0d381e;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 10px 20px rgba(20, 83, 45, 0.2);
+}
+
+/* Enhanced button variants */
+.btn-edit {
+    background: #dbeafe;
+    color: #1e40af;
+    padding: 8px 16px;
+    border-radius: var(--radius-btn);
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 8px;
+}
+
+.btn-edit:hover {
+    background: #1e40af;
+    color: white;
+    transform: scale(1.05);
+}
+
+.btn-delete {
+    background: #fee2e2;
+    color: #991b1b;
+    padding: 8px 16px;
+    border-radius: var(--radius-btn);
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: var(--transition);
+    font-family: 'Inter', sans-serif;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: 8px;
+}
+
+.btn-delete:hover {
+    background: #991b1b;
+    color: white;
+    transform: scale(1.05);
+}
+
+/* Enhanced link animations */
+a {
+    transition: var(--transition);
+}
+
+a:hover {
+    transform: translateX(3px);
+    text-decoration: underline;
+}
+
+/* Enhanced card animations */
+.card, .maintenance-section {
+    transition: var(--transition);
+}
+
+.card:hover, .maintenance-section:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+}
+
+/* Enhanced styling matching admin-tenants aesthetic */
+.maintenance-section {
+    background: var(--bg-surface);
+    border-radius: var(--radius-card);
+    padding: 30px;
+    box-shadow: var(--shadow-soft);
+    margin-bottom: 30px;
+    border: 1px solid rgba(0,0,0,0.02);
+    animation: fadeIn 0.6s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.maintenance-title {
+    font-family: 'DM Serif Display', serif;
+    color: var(--primary);
+    font-size: 1.4rem;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--bg-tint);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.form-group{
+margin-bottom:20px;
+}
+
+.form-group label{
+display:block;
+font-weight:600;
+margin-bottom:8px;
+font-size:0.9rem;
+color:var(--text-main);
+font-family:'Inter',sans-serif;
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea{
+width:100%;
+padding:12px 15px;
+border:1px solid #e5e7eb;
+border-radius:var(--radius-btn);
+outline:none;
+transition:var(--transition);
+font-family:'Inter',sans-serif;
+background:white;
+box-sizing:border-box;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus{
+border-color:var(--gold);
+box-shadow:0 0 0 3px rgba(187,169,125,0.1);
+}
+
+.ticket{
+border:1px solid rgba(0,0,0,0.08);
+padding:20px;
+border-radius:var(--radius-card);
+margin-bottom:15px;
+box-shadow:var(--shadow-soft);
+transition:var(--transition);
+}
+
+.ticket:hover{
+transform:translateY(-3px);
+box-shadow:0 15px 35px rgba(0,0,0,0.1);
+}
+
+.ticket-header{
+display:flex;
+justify-content:space-between;
+align-items:center;
+margin-bottom:15px;
+}
+
+.ticket-title{
+font-weight:600;
+color:var(--primary);
+font-family:'DM Serif Display',serif;
+font-size:1.1rem;
+}
+
+.ticket-desc{
+color:var(--text-main);
+font-size:0.9rem;
+margin-bottom:15px;
+line-height:1.5;
+}
+
+.ticket-date{
+color:var(--text-submain);
+font-size:0.8rem;
+font-family:'Inter',sans-serif;
+display:flex;
+align-items:center;
+gap:6px;
+}
+
+.status{
+padding:6px 12px;
+border-radius:20px;
+font-size:0.75rem;
+font-weight:600;
+text-transform:uppercase;
+letter-spacing:0.5px;
+display:inline-block;
+}
+
+.status.pending{ 
+background:#fef08a; 
+color:#854d0e; 
+}
+
+.status.in-progress{ 
+background:#fee2e2; 
+color:#991b1b; 
+}
+
+.status.resolved{ 
+background:#dcfce7; 
+color:#166534; 
+}
+
+.btn-action{
+padding:8px 16px;
+border-radius:8px;
+font-size:0.8rem;
+font-weight:600;
+border:none;
+cursor:pointer;
+transition:var(--transition);
+margin-right:8px;
+font-family:'Inter',sans-serif;
+display:inline-flex;
+align-items:center;
+gap:6px;
+}
+
+.btn-edit{
+background:#dbeafe;
+color:#1e40af;
+}
+
+.btn-edit:hover{
+background:#1e40af;
+color:white;
+transform:scale(1.05);
+}
+
+.btn-delete{
+background:#fee2e2;
+color:#991b1b;
+}
+
+.btn-delete:hover{
+background:#991b1b;
+color:white;
+transform:scale(1.05);
+}
+
+.btn-locked{
+background:#f3f4f6;
+color:#6b7280;
+cursor:not-allowed;
+opacity:0.7;
+}
+
+.modal{
+display:none;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:rgba(20,83,45,0.4);
+backdrop-filter:blur(4px);
+justify-content:center;
+align-items:center;
+z-index:1000;
+}
+
+.modal-content{
+background:var(--bg-surface);
+padding:40px;
+border-radius:var(--radius-card);
+width:500px;
+max-width:90%;
+box-shadow:0 20px 50px rgba(0,0,0,0.2);
+}
+
+.modal-content h3{
+margin-bottom:25px;
+font-size:1.8rem;
+font-family:'DM Serif Display',serif;
+color:var(--primary);
+}
+
+.modal-buttons{
+display:flex;
+gap:10px;
+justify-content:flex-end;
+margin-top:20px;
+}
+
+.modal-buttons button{
+padding:10px 20px;
+border-radius:var(--radius-btn);
+border:none;
+font-weight:600;
+cursor:pointer;
+transition:var(--transition);
+font-family:'Inter',sans-serif;
+}
+
+.modal-buttons button:first-child{
+background:var(--primary);
+color:white;
+}
+
+.modal-buttons button:first-child:hover{
+background:#0d381e;
+transform:translateY(-2px);
+}
+
+.modal-buttons button:last-child{
+background:var(--bg-tint);
+color:var(--primary);
+}
+
+.modal-buttons button:last-child:hover{
+background:#d1e7dd;
+}
+
+.request-count{
+background:var(--primary);
+color:white;
+padding:4px 8px;
+border-radius:12px;
+font-size:0.8rem;
+font-weight:600;
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+
+<div class="brand-area">
+<h2>Regal Rooms</h2>
+<span style="color:var(--text-sub);font-size:0.8rem;letter-spacing:1px;">
+TENANT PORTAL
+</span>
+</div>
+
+<nav class="nav-menu">
+            <a href="tenant-dashboard.html" class="nav-link"><i class="ph ph-squares-four" aria-hidden="true"></i> Overview</a>
+            <a href="tenant-visitors.html" class="nav-link"><i class="ph ph-user-plus"></i> Visitors</a>
+            <a href="tenant-payments.html" class="nav-link"><i class="ph ph-credit-card" aria-hidden="true"></i> Payments</a>
+            <a href="tenant-maintenance.html" class="nav-link active"><i class="ph ph-wrench" aria-hidden="true"></i> Maintenance</a>
+            <a href="tenant-announcements.html" class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Announcements</a>
+            <a href="tenant-services.html" class="nav-link"><i class="ph ph-sparkle" aria-hidden="true"></i> Amenity Services</a>
+            <a href="tenant-settings.html" class="nav-link"><i class="ph ph-user-gear" aria-hidden="true"></i> Settings</a>
+
+</nav>
+
+<button id="logoutBtn" class="logout-btn">
+<i class="ph ph-sign-out"></i> Secure Logout
+</button>
+
+</aside>
+
+
+<!-- MAIN -->
+<main class="main-content">
+
+<header class="top-header animate-element">
+<div>
+    <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+    <div>
+        <h1>Maintenance & Repairs</h1>
+        <p style="color: var(--text-submain);">Report issues in your unit to administration</p>
+    </div>
+</div>
+<div class="user-profile" aria-label="User Profile">
+    <div class="user-avatar" id="tenantAvatar"></div>
+    <span id="tenantProfileName" style="font-weight:600;"></span>
+</div>
+</header>
+
+<div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
+
+<!-- SUBMIT REQUEST -->
+<div class="maintenance-section animate-element">
+    <div class="maintenance-title">
+        <span>Submit a Request</span>
+        <span style="font-size: 1rem; color: var(--primary);">Quick Report</span>
+    </div>
+    <form id="maintenanceForm">
+        <div class="form-group">
+            <label>Issue Type</label>
+            <select id="issueCategory" required>
+                <option value="">Select Category</option>
+                <option value="Plumbing">Plumbing</option>
+                <option value="Electrical">Electrical</option>
+                <option value="Air Conditioning">Air Conditioning</option>
+                <option value="Carpentry">Carpentry</option>
+                <option value="Painting">Painting</option>
+                <option value="Appliance Repair">Appliance Repair</option>
+                <option value="Pest Control">Pest Control</option>
+                <option value="Window/Glass Repair">Window/Glass Repair</option>
+                <option value="Flooring">Flooring</option>
+                <option value="Internet/Cable">Internet/Cable</option>
+                <option value="Other">Other</option>
+            </select>
+        </div>
+        <div class="form-group">
+            <label>Description</label>
+            <textarea id="issueDesc" rows="4" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary">
+            <i class="ph ph-paper-plane-tilt"></i> Send Request
+        </button>
+    </form>
+</div>
+
+<!-- TICKETS -->
+<div class="maintenance-section animate-element">
+    <div class="maintenance-title">
+        <span>Your Requests</span>
+        <span style="font-size: 1rem; color: var(--primary);" id="requestCount">0 Requests</span>
+    </div>
+    <div id="ticketList" style="display:flex;flex-direction:column;gap:15px;">
+    </div>
+</div>
+
+</div>
+
+</main>
+
+
+<!-- EDIT MODAL -->
+<div id="editModal" class="modal">
+
+<div class="modal-content">
+
+<h3>Edit Maintenance Request</h3>
+
+<input type="hidden" id="editRequestId">
+
+<div class="form-group">
+
+<label>Issue Type</label>
+
+<select id="editCategory">
+<option value="">Select Category</option>
+<option value="Plumbing">Plumbing</option>
+<option value="Electrical">Electrical</option>
+<option value="Air Conditioning">Air Conditioning</option>
+<option value="Carpentry">Carpentry</option>
+<option value="Painting">Painting</option>
+<option value="Appliance Repair">Appliance Repair</option>
+<option value="Pest Control">Pest Control</option>
+<option value="Locksmith">Locksmith</option>
+<option value="Window/Glass Repair">Window/Glass Repair</option>
+<option value="Flooring">Flooring</option>
+<option value="Water Heater">Water Heater</option>
+<option value="Internet/Cable">Internet/Cable</option>
+<option value="Cleaning">Cleaning</option>
+<option value="Other">Other</option>
+</select>
+
+</div>
+
+<div class="form-group">
+
+<label>Description</label>
+<textarea id="editDescription" rows="4"></textarea>
+
+</div>
+
+<div style="display:flex;gap:10px;justify-content:flex-end">
+
+<button onclick="closeModal()" class="btn btn-cancel" style="background:#6b7280;color:white;padding:10px 20px;border:none;border-radius:6px;cursor:pointer;font-weight:600;">Cancel</button>
+
+<button onclick="updateRequest()" class="btn btn-primary" style="background:var(--primary);color:white;padding:10px 20px;border:none;border-radius:6px;cursor:pointer;font-weight:600;">
+Update Request
+</button>
+
+</div>
+
+</div>
+
+</div>
+
+
+<script>
+  //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+
+const tenantId = localStorage.getItem("tenantId");
+if(!tenantId) window.location.href="login.html";
+
+async function loadTenantProfile() {
+    try {
+        const res = await fetch(`/api/tenants/${tenantId}`);
+        if(!res.ok) throw new Error(`Failed tenant: ${res.status}`);
+        const tenant = await res.json();
+        
+        const name = tenant.name || "N/A";
+        document.getElementById("tenantProfileName").textContent = name;
+        document.getElementById("tenantAvatar").textContent = name.split(" ").map(n=>n[0]).join("").toUpperCase();
+        
+        localStorage.setItem("tenant", JSON.stringify(tenant));
+    } catch(err){
+        console.error(err);
+    }
+}
+
+loadTenantProfile();
+
+let allRequests = [];
+
+/* SUBMIT REQUEST */
+document.getElementById("maintenanceForm")
+.addEventListener("submit",async function(e){
+
+e.preventDefault();
+
+const category=document.getElementById("issueCategory").value;
+const description=document.getElementById("issueDesc").value;
+
+const response=await fetch("/api/create-request",{
+
+method:"POST",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+tenantId:tenantId,
+category,
+description
+})
+
+});
+
+const data=await response.json();
+
+alert(data.message);
+
+document.getElementById("maintenanceForm").reset();
+
+loadRequests();
+
+});
+
+
+/* LOAD REQUESTS */
+
+async function loadRequests(){
+
+const response = await fetch(`/api/tenant-requests/${tenantId}`);
+const requests = await response.json();
+
+// Sort requests by date (most recent first)
+requests.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+allRequests = requests;
+
+const container = document.getElementById("ticketList");
+
+container.innerHTML = "";
+
+if(requests.length === 0){
+container.innerHTML = "<p>No maintenance requests yet.</p>";
+return;
+}
+
+requests.forEach((r)=>{
+
+const status = r.status || "Pending";
+
+/* CHECK IF REQUEST IS LOCKED */
+
+const locked = status === "In Progress" || status === "Resolved";
+
+/* BUTTONS */
+
+let actionButtons = "";
+
+if(locked){
+
+actionButtons = `
+<p class="btn-action btn-locked">
+<i class="ph ph-lock"></i> Request locked (${status})
+</p>
+`;
+
+}else{
+
+actionButtons = `
+<div style="margin-top:10px;display:flex;gap:10px;">
+
+<button onclick="openEditModal('${r._id}')" class="btn-action btn-edit">
+<i class="ph ph-pencil"></i> Edit
+</button>
+
+<button onclick="deleteRequest('${r._id}')" class="btn-action btn-delete">
+<i class="ph ph-trash"></i> Delete
+</button>
+
+</div>
+`;
+
+}
+
+container.innerHTML += `
+<div class="ticket">
+
+<div class="ticket-header">
+
+<span class="ticket-title">
+${r.category}
+</span>
+
+<span class="status ${status.toLowerCase().replace(' ', '-')}">
+${status}
+</span>
+
+</div>
+
+<p class="ticket-desc">
+${r.description}
+</p>
+
+<small class="ticket-date">
+<i class="ph ph-clock"></i>
+${new Date(r.createdAt).toLocaleDateString()}
+</small>
+
+${actionButtons}
+
+</div>
+`;
+
+document.getElementById("requestCount").innerText = `${requests.length} Requests`;
+
+});
+
+}
+
+
+/* DELETE */
+
+async function deleteRequest(id){
+
+const confirmDelete=confirm("Delete this request?");
+
+if(!confirmDelete) return;
+
+await fetch("/api/delete-request/"+id,{
+method:"DELETE"
+});
+
+loadRequests();
+
+}
+
+
+/* OPEN MODAL */
+
+function openEditModal(id){
+const r = allRequests.find(req => req._id === id);
+if(!r) return;
+
+document.getElementById("editRequestId").value=r._id;
+// Standardization logic for categories
+let categoryValue = r.category;
+if (categoryValue === "Aircon") categoryValue = "Air Conditioning";
+
+const categorySelect = document.getElementById("editCategory");
+categorySelect.value = categoryValue;
+
+// If still not matched, maybe it was a custom value or mismatch.
+// Let's ensure 'Air Conditioning' is consistent.
+if (categorySelect.selectedIndex === -1) {
+    // Attempt to match by text if value fails
+    for (let i = 0; i < categorySelect.options.length; i++) {
+        if (categorySelect.options[i].text === r.category || categorySelect.options[i].value === r.category) {
+            categorySelect.selectedIndex = i;
+            break;
+        }
+    }
+}
+
+document.getElementById("editDescription").value=r.description;
+
+document.getElementById("editModal").style.display="flex";
+
+}
+
+
+/* CLOSE MODAL */
+
+function closeModal(){
+
+document.getElementById("editModal").style.display="none";
+
+}
+
+
+/* UPDATE REQUEST */
+
+async function updateRequest(){
+
+const id=document.getElementById("editRequestId").value;
+
+const category=document.getElementById("editCategory").value;
+const description=document.getElementById("editDescription").value;
+
+const response=await fetch("/api/update-request/"+id,{
+
+method:"PUT",
+
+headers:{
+"Content-Type":"application/json"
+},
+
+body:JSON.stringify({
+category,
+description
+})
+
+});
+
+const data=await response.json();
+
+alert(data.message);
+
+closeModal();
+
+loadRequests();
+
+}
+
+
+/* LOGOUT */
+
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+    localStorage.clear();
+    window.location.href="login.html";
+});
+
+loadRequests();
+
+</script>
+
+<script src="js/tenant.js"></script>
+
+</body>
+</html>

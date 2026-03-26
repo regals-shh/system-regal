@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Admin Access | Regal Rooms</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+<link rel="stylesheet" href="css/animations.css">
+
+<style>
+
+:root{
+--primary:#14532D;
+--gold:#bba97d;
+--bg:#F8F6F1;
+--white:#FFFFFF;
+--radius:12px;
+--transition:all .3s cubic-bezier(.25,.8,.25,1);
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:var(--bg);
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+margin:0;
+padding:20px;
+opacity:0;
+animation:fadeIn .6s ease-out forwards;
+}
+
+.card{
+background:var(--white);
+padding:50px 40px;
+border-radius:20px;
+box-shadow:0 15px 35px rgba(0,0,0,.1);
+width:100%;
+max-width:400px;
+text-align:center;
+border:2px solid var(--gold);
+transform:translateY(20px);
+opacity:0;
+animation:fadeInUp .6s ease-out .2s forwards;
+}
+
+.brand{
+font-family:'DM Serif Display',serif;
+font-size:2.2rem;
+color:var(--primary);
+margin-bottom:5px;
+}
+
+.tag{
+font-size:.7rem;
+letter-spacing:2px;
+text-transform:uppercase;
+color:var(--gold);
+font-weight:700;
+margin-bottom:30px;
+display:block;
+}
+
+.form-group{
+text-align:left;
+margin-bottom:20px;
+}
+
+label{
+display:block;
+font-size:.8rem;
+font-weight:600;
+margin-bottom:8px;
+color:#4B5563;
+}
+
+input{
+width:100%;
+padding:14px;
+border:1.5px solid #E5E7EB;
+border-radius:var(--radius);
+box-sizing:border-box;
+background:#fafafa;
+font-family:'Inter';
+}
+
+input:focus{
+outline:none;
+border-color:var(--gold);
+box-shadow:0 0 0 3px rgba(187,169,125,.2);
+}
+
+.btn-admin{
+width:100%;
+padding:16px;
+background:var(--primary);
+color:white;
+border:none;
+border-radius:var(--radius);
+font-weight:600;
+cursor:pointer;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+}
+
+.btn-admin.loading{
+color:transparent;
+pointer-events:none;
+}
+
+.btn-admin.loading::after{
+content:'';
+position:absolute;
+width:20px;
+height:20px;
+border:2px solid rgba(255,255,255,.3);
+border-top-color:white;
+border-radius:50%;
+animation:spin .8s linear infinite;
+}
+
+.error{
+color:#dc2626;
+font-size:.85rem;
+margin-top:15px;
+display:none;
+}
+
+@keyframes spin{
+to{transform:rotate(360deg);}
+}
+
+@keyframes fadeIn{
+to{opacity:1;}
+}
+
+@keyframes fadeInUp{
+to{opacity:1;transform:translateY(0);}
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="brand">Regal Rooms</div>
+<span class="tag">Internal Admin System</span>
+
+<form id="adminForm">
+  <div class="form-group">
+    <label>Admin Email</label>
+    <input type="text" id="user" required>
+  </div>
+  <div class="form-group">
+    <label>Password</label>
+    <input type="password" id="pass" required>
+  </div>
+  <button type="submit" class="btn-admin" id="loginBtn">
+    <i class="ph ph-lock"></i> <span>Authorize Access</span>
+  </button>
+  <div id="errorMsg" class="error"></div>
+  
+  <!-- Forgot Password Link -->
+  <div style="margin-top: 20px;">
+    <a href="admin-forgot-password.html" style="color: var(--gold); text-decoration: none; font-size: 0.85rem; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; transition: var(--transition);">
+      <i class="ph ph-key"></i> Forgot Password?
+    </a>
+  </div>
+  
+  <!-- Back to Main Website Link -->
+  <div style="margin-top: 15px;">
+    <a href="index.html" style="color: var(--primary); text-decoration: none; font-size: 0.85rem; font-weight: 500; display: inline-flex; align-items: center; gap: 5px; transition: var(--transition);">
+      <i class="ph ph-house"></i> Back to Main Website
+    </a>
+  </div>
+</form>
+
+<script>
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+
+document.getElementById("adminForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const email = document.getElementById("user").value.trim();
+    const password = document.getElementById("pass").value.trim();
+
+    const btn = document.getElementById("loginBtn");
+    const error = document.getElementById("errorMsg");
+
+    error.style.display = "none";
+    btn.classList.add("loading");
+    btn.disabled = true;
+
+    try {
+        const res = await fetch("/api/admin/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email, password })
+        });
+        const data = await res.json();
+
+        if(res.ok){
+            // ✅ Store token and admin info
+            localStorage.setItem("adminToken", data.token);
+            localStorage.setItem("adminId", data._id);
+            localStorage.setItem("adminName", data.full_name);
+
+            setTimeout(() => window.location.href = "admin-dashboard.html", 500);
+        } else {
+            throw new Error(data.message || "Invalid credentials");
+        }
+    } catch(err) {
+        error.textContent = err.message;
+        error.style.display = "block";
+        btn.classList.remove("loading");
+        btn.disabled = false;
+    }
+});
+</script>
+
+</body>
+</html>

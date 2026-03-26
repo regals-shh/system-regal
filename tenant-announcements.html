@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Announcements | Regal Rooms</title>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="css/tenant.css">
+<style>
+    .announcements-section { background: var(--bg-surface); border-radius: var(--radius-card); padding: 30px; box-shadow: var(--shadow-soft); margin-bottom: 30px; border: 1px solid rgba(0,0,0,0.02); }
+    .announcement-card { background: var(--bg-surface); border: 1px solid rgba(0,0,0,0.08); padding: 25px; border-radius: var(--radius-card); margin-bottom: 20px; box-shadow: var(--shadow-soft); transition: var(--transition); border-left: 5px solid var(--primary); }
+    .empty-state { text-align: center; padding: 60px 20px; color: var(--text-submain); }
+    .empty-state i { font-size: 3rem; color: var(--gold); margin-bottom: 15px; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+    <div class="brand-area"><h2>Regal Rooms</h2><span style="color: var(--text-sub); font-size: 0.8rem;">TENANT PORTAL</span></div>
+    <nav class="nav-menu">
+        <a href="tenant-dashboard.html" class="nav-link"><i class="ph ph-squares-four"></i> Overview</a>
+        <a href="tenant-visitors.html" class="nav-link"><i class="ph ph-user-plus"></i> Visitors</a>
+        <a href="tenant-payments.html" class="nav-link"><i class="ph ph-credit-card"></i> Payments</a>
+        <a href="tenant-maintenance.html" class="nav-link"><i class="ph ph-wrench"></i> Maintenance</a>
+        <a href="tenant-announcements.html" class="nav-link active"><i class="ph ph-megaphone"></i> Announcements</a>
+        <a href="tenant-services.html" class="nav-link"><i class="ph ph-sparkle"></i> Amenity Services</a>
+        <a href="tenant-settings.html" class="nav-link"><i class="ph ph-user-gear"></i> Settings</a>
+    </nav>
+    <button id="logoutBtn" class="logout-btn"><i class="ph ph-sign-out"></i> Secure Logout</button>
+</aside>
+
+<main class="main-content">
+    <header class="top-header animate-element">
+        <div>
+            <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+            <div>
+                <h1>Announcements</h1>
+                <p style="color: var(--text-submain);">Stay updated with the latest notices.</p>
+            </div>
+        </div>
+        <div class="user-profile" aria-label="User Profile">
+            <div class="user-avatar" id="tenantAvatar"></div>
+            <span id="tenantProfileName" style="font-weight:600;"></span>
+        </div>
+    </header>
+
+    <div class="announcements-section">
+        <div class="announcements-title" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+            <span style="font-family: 'DM Serif Display'; font-size: 1.4rem; color: var(--primary);">Latest Announcements</span>
+            <span id="announcementCount" class="status pending">0 Unseen</span>
+        </div>
+        <div id="announcementList">
+            <!-- Announcements or Empty State will appear here -->
+            <div class="empty-state">
+                <i class="ph ph-spinner ph-spin"></i>
+                <p>Connecting to server...</p>
+            </div>
+        </div>
+    </div>
+</main>
+
+<script>
+// Get tenantId from localStorage
+const tenantId = localStorage.getItem("tenantId");
+let tenant = {};
+
+if(!tenantId) window.location.href="login.html";
+
+async function loadTenantProfile() {
+    try {
+        const res = await fetch(`/api/tenants/${tenantId}`);
+        if(!res.ok) throw new Error(`Failed tenant: ${res.status}`);
+        tenant = await res.json();
+        
+        const name = tenant.name || "N/A";
+        document.getElementById("tenantProfileName").textContent = name;
+        document.getElementById("tenantAvatar").textContent = name.split(" ").map(n=>n[0]).join("").toUpperCase();
+        
+        localStorage.setItem("tenant", JSON.stringify(tenant));
+    } catch(err){
+        console.error(err);
+    }
+}
+
+loadTenantProfile();
+
+async function loadAnnouncements() {
+    const listContainer = document.getElementById("announcementList");
+    try {
+        const response = await fetch("/api/announcements");
+        const announcements = await response.json();
+
+        if (!announcements || announcements.length === 0) {
+            listContainer.innerHTML = `
+                <div class="empty-state">
+                    <i class="ph ph-megaphone-simple"></i>
+                    <p>No announcements found in the database.</p>
+                    <small>Announcements posted by Admin will appear here.</small>
+                </div>`;
+            document.getElementById("announcementCount").textContent = "0 Unseen";
+            return;
+        }
+
+        listContainer.innerHTML = "";
+        let unseen = 0;
+
+        announcements.forEach(a => {
+            const isSeen = a.seenBy && a.seenBy.some(s => s.tenantId.toString() === tenantId);
+            if (!isSeen) unseen++;
+
+            const card = document.createElement("div");
+            card.className = "announcement-card";
+            card.style.borderLeftColor = a.priority === 'urgent' ? '#dc2626' : (a.priority === 'important' ? '#b45309' : 'var(--primary)');
+
+            card.innerHTML = `
+                <div style="display:flex; justify-content:space-between; margin-bottom:10px;">
+                    <span class="announcement-priority" style="color:var(--primary); font-weight:bold; text-transform:uppercase; font-size:0.7rem;">${a.priority}</span>
+                    <small style="color:#6b7280;">${new Date(a.createdAt).toLocaleDateString()}</small>
+                </div>
+                <h3 style="margin:0 0 10px 0; font-family:'DM Serif Display';">${a.title}</h3>
+                <p style="margin:0; color:#4b5563;">${a.message}</p>
+                <div style="margin-top:15px; border-top:1px solid #eee; padding-top:15px;">
+                    ${isSeen ? '<span class="seen-label"><i class="ph ph-check-circle"></i> Seen</span>' :
+                    `<button class="btn-seen" onclick="markSeen('${a._id}', this)" style="background:var(--primary); color:white; border:none; padding:8px 15px; border-radius:6px; cursor:pointer;">Mark as Seen</button>`}
+                </div>
+            `;
+            listContainer.appendChild(card);
+        });
+
+        document.getElementById("announcementCount").textContent = `${unseen} Unseen`;
+
+    } catch (error) {
+        console.error("Load Error:", error);
+        listContainer.innerHTML = `<div class="empty-state"><i class="ph ph-warning-circle"></i><p>Failed to connect to backend.</p></div>`;
+    }
+}
+
+loadAnnouncements();
+
+async function markSeen(id, btn) {
+    btn.disabled = true;
+    btn.textContent = "Updating...";
+    try {
+        const res = await fetch(`/api/announcement-seen/${id}`, {
+            method: "POST",
+            headers: {"Content-Type": "application/json"},
+            body: JSON.stringify({ tenantId: tenantId, name: tenant.name })
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || "Failed to mark as seen");
+        btn.outerHTML = '<span class="seen-label"><i class="ph ph-check-circle"></i> Seen</span>';
+        loadAnnouncements();
+    } catch (error) {
+        console.error("Mark Seen Error:", error);
+        btn.disabled = false;
+        btn.textContent = "Mark as Seen";
+    }
+}
+
+// LOGOUT
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+    localStorage.removeItem("tenantId");
+    localStorage.removeItem("tenant");
+    window.location.href="login.html";
+});
+</script>
+<script src="js/tenant.js"></script>
+</body>
+</html>

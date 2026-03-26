@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Regal Rooms | Premium Living & Monitoring</title>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@500;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/animations.css">
+    
+    <style>
+        /* --- UNIFIED SYSTEM TOKENS (MATCHING ADMIN) --- */
+        :root {
+            --primary: #14532D;       
+            --primary-light: #16A34A; 
+            --gold: #bba97d;
+            --bg-body: #F8F6F1;       
+            --bg-tint: #EEF6F0;       
+            --bg-surface: #FFFFFF;    
+            --text-main: #1C1C1C;
+            --text-sub: #543e06;
+            --text-submain: #6B7280;
+            --shadow-soft: 0 10px 25px rgba(0,0,0,0.05), 0 4px 10px rgba(0,0,0,0.03);
+            --shadow-elevated: 0 20px 40px rgba(0,0,0,0.08), 0 8px 16px rgba(0,0,0,0.06);
+            --shadow-gold: 0 15px 35px rgba(187, 169, 125, 0.25);
+            --radius-card: 20px;
+            --radius-btn: 12px;
+            --transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; scroll-padding-top: 100px; }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, var(--bg-body) 0%, var(--bg-tint) 50%, var(--bg-body) 100%);
+            color: var(--text-main);
+            line-height: 1.7;
+            -webkit-font-smoothing: antialiased;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, h4 {
+            font-family: 'DM Serif Display', serif;
+            color: var(--primary);
+            font-weight: 400;
+            line-height: 1.2;
+        }
+        h1 { font-size: 4.5rem; font-weight: 700; }
+        h2 { font-size: 3.2rem; text-align: center; margin-bottom: 1.5rem; }
+        h3 { font-size: 2rem; }
+
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* --- PROFESSIONAL BUTTONS --- */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 16px 36px;
+            border-radius: var(--radius-btn);
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: var(--transition);
+            border: none;
+            gap: 12px;
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            color: white;
+            box-shadow: 0 8px 25px rgba(22, 163, 74, 0.25);
+        }
+        .btn-primary::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 0%; height: 100%;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light)); z-index: -1; transition: var(--transition);
+        }
+        .btn-primary:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(22, 163, 74, 0.4);
+        }
+        .btn-primary:hover::before { width: 100%; }
+
+        .btn-outline {
+            background: transparent;
+            border: 2px solid var(--primary);
+            color: var(--primary);
+        }
+        .btn-outline:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-elevated);
+        }
+
+        .btn-on-gold {
+            background: linear-gradient(135deg, var(--gold), #9a8765);
+            color: white;
+            box-shadow: var(--shadow-gold);
+        }
+        .btn-on-gold:hover {
+            background: #9a8765;
+            transform: translateY(-3px);
+            box-shadow: 0 20px 40px rgba(187, 169, 125, 0.4);
+        }
+
+        /* --- PREMIUM NAVIGATION --- */
+        nav {
+            position: fixed; top: 0; width: 100%; height: 100px; z-index: 1000;
+            background: rgba(255, 255, 255, 0.95); backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border-bottom: 1px solid rgba(20, 83, 45, 0.08);
+            box-shadow: var(--shadow-soft);
+            display: flex; align-items: center; transition: var(--transition);
+        }
+        nav.scrolled { height: 85px; box-shadow: var(--shadow-elevated); background: rgba(255,255,255,0.98); }
+        .nav-inner { display: flex; align-items: center; margin: 0 auto; width: 95%; max-width: 1400px; }
+        .logo-area { display: flex; align-items: center; gap: 18px; flex: 1; text-decoration: none; }
+        .logo-container {
+            width: 55px; height: 55px; border-radius: 16px; overflow: hidden;
+            border: 3px solid var(--gold); background: white;
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: var(--shadow-gold);
+            transition: var(--transition);
+        }
+        .logo-container:hover { transform: rotate(-3deg) scale(1.05); box-shadow: 0 20px 40px rgba(187, 169, 125, 0.35); }
+        .logo-img { width: 100%; height: 100%; object-fit: cover; }
+        .logo-text { font-family: 'DM Serif Display', serif; font-size: 1.8rem; color: var(--primary); font-weight: 700; }
+        .nav-links { display: flex; gap: 40px; justify-content: center; align-items: center; }
+        .nav-links a {
+            font-weight: 600; font-size: 1rem; color: var(--text-main);
+            opacity: 0.8; transition: var(--transition); text-decoration: none;
+            position: relative; padding: 8px 0;
+        }
+        .nav-links a::after {
+            content: ''; position: absolute; bottom: -2px; left: 0; width: 0; height: 2px;
+            background: linear-gradient(90deg, var(--gold), var(--primary)); transition: var(--transition);
+        }
+        .nav-links a:hover { opacity: 1; color: var(--primary); }
+        .nav-links a:hover::after { width: 100%; }
+        .nav-auth { flex: 1; display: flex; justify-content: flex-end; }
+
+        /* --- PRESTIGE HERO --- */
+        .hero {
+            padding: 260px 0 180px;
+            background: radial-gradient(ellipse at top, var(--bg-tint) 0%, transparent 50%),
+                        radial-gradient(ellipse at bottom, var(--bg-body) 0%, transparent 50%),
+                        linear-gradient(135deg, var(--bg-body) 0%, #ffffff 50%, var(--bg-body) 100%);
+            text-align: center; position: relative; overflow: hidden;
+        }
+        .hero::before {
+            content: ''; position: absolute; top: 10%; left: 10%; right: 10%; bottom: 10%;
+            background: radial-gradient(circle, rgba(20,83,45,0.06) 0%, transparent 70%);
+            animation: hero-pulse 6s ease-in-out infinite;
+        }
+        @keyframes hero-pulse {
+            0%, 100% { transform: scale(1); opacity: 0.5; }
+            50% { transform: scale(1.1); opacity: 0.3; }
+        }
+        .hero h1 { font-size: 5rem; margin-bottom: 30px; letter-spacing: -0.02em; color: var(--text-main); font-weight: 800; }
+        .hero h1 span { color: var(--gold); }
+        .hero p {
+            font-size: 1.4rem; color: var(--text-submain); max-width: 800px;
+            margin: 0 auto 60px; opacity: 0.9; line-height: 1.7;
+        }
+        .hero-badge {
+            background: var(--bg-tint); color: var(--primary); padding: 10px 24px;
+            border-radius: 50px; font-size: 0.85rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 2px; margin-bottom: 25px; display: inline-block;
+            border: 1px solid rgba(20, 83, 45, 0.1);
+        }
+        .hero-buttons { display: flex; gap: 20px; justify-content: center; flex-wrap: wrap; position: relative; z-index: 2; }
+
+        /* --- STATS SECTION --- */
+        .stats-wrap { margin-top: -100px; position: relative; z-index: 10; }
+        .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 30px; }
+        .stat-card {
+            background: white; padding: 50px 35px; border-radius: var(--radius-card);
+            text-align: center; box-shadow: var(--shadow-elevated);
+            border: 1px solid rgba(0,0,0,0.03); transition: var(--transition);
+            position: relative; overflow: hidden;
+        }
+        .stat-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--primary));
+            transform: scaleX(0); transition: transform 0.4s ease;
+        }
+        .stat-card:hover::before { transform: scaleX(1); }
+        .stat-card:hover { transform: translateY(-12px); box-shadow: 0 30px 60px rgba(0,0,0,0.12); }
+        .stat-card h3 { font-size: 3.8rem; color: var(--primary-light); font-family: 'DM Sans', sans-serif; font-weight: 700; margin-bottom: 8px; }
+        .stat-card p { font-size: 0.9rem; color: var(--text-sub); text-transform: uppercase; letter-spacing: 2px; font-weight: 700; opacity: 0.8; }
+
+        /* --- SOPHISTICATED SECTIONS --- */
+        section { padding: 140px 0; opacity: 0; transform: translateY(40px); transition: all 0.8s ease-out; }
+        section.in-view { opacity: 1; transform: translateY(0); }
+        .section-header { text-align: center; max-width: 700px; margin: 0 auto 90px; }
+        .section-header h2 { font-size: 4rem; margin-bottom: 25px; font-weight: 700; }
+        .section-header p { font-size: 1.3rem; opacity: 0.8; max-width: 650px; margin: 0 auto; color: var(--text-submain); }
+
+        /* --- PREMIUM PROCESS & MODULE CARDS --- */
+        .process-steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 40px; margin-top: 80px; }
+        .step-card {
+            background: white; padding: 70px 50px; border-radius: var(--radius-card);
+            box-shadow: var(--shadow-soft); border: 1px solid rgba(0,0,0,0.04);
+            transition: var(--transition); position: relative; overflow: hidden;
+        }
+        .step-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+            background: linear-gradient(90deg, var(--gold), var(--primary));
+            transform: scaleX(0); transition: transform 0.4s ease;
+        }
+        .step-card:hover::before { transform: scaleX(1); }
+        .step-card:hover { transform: translateY(-15px); box-shadow: var(--shadow-elevated); border-color: var(--gold); }
+        .step-number { font-size: 5.5rem; font-family: 'DM Serif Display', serif; color: var(--gold); position: absolute; top: 40px; right: 45px; opacity: 0.08; }
+        .step-icon {
+            width: 85px; height: 85px; background: linear-gradient(135deg, var(--bg-tint), var(--bg-body));
+            border-radius: 22px; display: flex; align-items: center;
+            justify-content: center; font-size: 2.8rem; color: var(--primary);
+            margin-bottom: 40px; transition: var(--transition);
+            box-shadow: 0 8px 25px rgba(20, 83, 45, 0.1);
+        }
+        .step-card:hover .step-icon { background: var(--primary); color: white; transform: rotate(-5deg) scale(1.05); }
+        .step-card h3 { font-size: 1.6rem; margin-bottom: 20px; font-family: 'DM Sans', sans-serif; font-weight: 700; color: var(--text-main); }
+
+        /* --- LUXURY ROOM CARDS --- */
+        #rooms { background: var(--bg-tint); border-radius: 80px 80px 0 0; }
+        .rooms-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 35px; }
+        .room-card {
+            background: white; border-radius: var(--radius-card); overflow: hidden;
+            box-shadow: var(--shadow-soft); border: 1px solid rgba(0,0,0,0.04);
+            transition: var(--transition); display: flex; flex-direction: column;
+            position: relative;
+        }
+        .room-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 5px;
+            background: linear-gradient(90deg, var(--gold), var(--primary));
+            transform: scaleX(0); transition: transform 0.4s ease;
+        }
+        .room-card:hover::before { transform: scaleX(1); }
+        .room-card:hover { transform: translateY(-15px); box-shadow: var(--shadow-elevated); }
+        .room-content { padding: 50px; flex: 1; display: flex; flex-direction: column; }
+        .room-badge { background: var(--bg-tint); color: var(--primary); padding: 10px 20px; border-radius: 50px; font-size: 0.85rem; font-weight: 700; margin-bottom: 30px; width: fit-content; border: 1px solid rgba(20, 83, 45, 0.1); }
+        .room-features { margin: 25px 0; display: flex; flex-direction: column; gap: 18px; }
+        .feature { display: flex; align-items: center; gap: 15px; font-size: 1.05rem; color: var(--text-main); }
+        .feature i { color: var(--gold); font-size: 1.4rem; }
+        .room-bottom { margin-top: auto; padding-top: 35px; border-top: 1px solid var(--bg-tint); display: flex; align-items: center; justify-content: space-between; }
+        .room-price { font-size: 2.8rem; font-weight: 700; color: var(--primary); font-family: 'DM Sans', sans-serif; }
+        .room-price span { font-size: 1rem; color: var(--text-submain); font-weight: 400; opacity: 0.7; }
+
+        /* --- PREMIUM AMENITIES --- */
+        .amenities-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .amenity-card {
+            background: white; padding: 55px 45px; border-radius: var(--radius-card);
+            text-align: center; transition: var(--transition); box-shadow: var(--shadow-soft);
+            border: 1px solid rgba(0,0,0,0.04); position: relative; overflow: hidden;
+        }
+        .amenity-card::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, var(--primary), var(--primary-light));
+            opacity: 0; transition: opacity 0.4s ease;
+            z-index: 0;
+        }
+        .amenity-card:hover::before { opacity: 1; }
+        .amenity-card:hover { transform: translateY(-10px); box-shadow: var(--shadow-elevated); }
+        .amenity-card:hover h3, .amenity-card:hover p, .amenity-card:hover i { color: white !important; position: relative; z-index: 1; }
+        .amenity-icon-box { width: 85px; height: 85px; background: var(--bg-tint); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 35px; transition: var(--transition); position: relative; z-index: 1; }
+        .amenity-icon-box i { font-size: 2.8rem; color: var(--primary); }
+        .amenity-card:hover .amenity-icon-box { background: rgba(255,255,255,0.15); }
+
+        /* --- ELEGANT FAQ --- */
+        .faq-container { max-width: 850px; margin: 0 auto; }
+        .faq-item { background: white; border-radius: 20px; margin-bottom: 20px; border: 1px solid rgba(0,0,0,0.05); overflow: hidden; transition: var(--transition); }
+        .faq-header { width: 100%; padding: 35px 45px; background: none; border: none; font-family: 'DM Sans', sans-serif; font-weight: 700; font-size: 1.3rem; color: var(--primary); cursor: pointer; display: flex; justify-content: space-between; align-items: center; text-align: left; transition: var(--transition); }
+        .faq-header:hover { background: var(--bg-tint); }
+        .faq-body { max-height: 0; overflow: hidden; transition: max-height 0.5s ease; padding: 0 45px; color: var(--text-submain); line-height: 1.7; }
+        .faq-item.active { border-color: var(--gold); box-shadow: var(--shadow-elevated); }
+        .faq-item.active .faq-body { max-height: 400px; padding-bottom: 40px; }
+        .faq-item.active .faq-header i { transform: rotate(180deg); color: var(--gold); }
+
+        /* --- SOPHISTICATED CONTACT --- */
+        .contact-section { background: var(--bg-tint); border-radius: 80px 80px 0 0; }
+        .contact-form-card { background: white; padding: 80px; border-radius: var(--radius-card); box-shadow: var(--shadow-elevated); max-width: 950px; margin: 0 auto; border: 1px solid rgba(0,0,0,0.04); }
+        .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 35px; margin-bottom: 35px; }
+        .form-group { margin-bottom: 30px; }
+        .form-group label { display: block; font-weight: 700; margin-bottom: 15px; color: var(--primary); font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1.5px; }
+        .form-control { width: 100%; padding: 22px 28px; border: 2px solid var(--bg-tint); border-radius: 16px; font-family: inherit; font-size: 1rem; transition: var(--transition); outline: none; background: var(--bg-body); }
+        .form-control:focus { border-color: var(--gold); background: white; box-shadow: 0 0 0 6px rgba(187, 169, 125, 0.1); }
+
+        /* --- REFINED FOOTER --- */
+        footer { background: linear-gradient(135deg, #0a1f0f, #062010); color: #f8fafc; padding: 120px 0 60px; text-align: center; }
+        .footer-logo { width: 90px; height: 90px; margin: 0 auto 40px; border-radius: 22px; border: 3px solid var(--gold); overflow: hidden; box-shadow: var(--shadow-gold); }
+        .footer-links { display: flex; justify-content: center; gap: 50px; margin: 40px 0; }
+        .footer-links a { color: white; opacity: 0.7; text-decoration: none; font-weight: 600; font-size: 1rem; transition: var(--transition); }
+        .footer-links a:hover { opacity: 1; color: var(--gold); }
+        .footer-bottom { border-top: 1px solid rgba(255,255,255,0.08); padding-top: 50px; font-size: 0.9rem; opacity: 0.4; letter-spacing: 1px; }
+
+        /* --- ELITE CHATBOT DESIGN --- */
+        .chat-widget-wrapper { 
+            position: fixed; bottom: 40px; right: 40px; z-index: 2000; 
+            display: flex; align-items: center; gap: 20px;
+            animation: float-chat 3s ease-in-out infinite;
+        }
+        @keyframes float-chat {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        .chat-label { 
+            background: linear-gradient(135deg, white, var(--bg-tint)); 
+            color: var(--primary); padding: 14px 28px; border-radius: 50px; 
+            box-shadow: 0 15px 35px rgba(20, 83, 45, 0.15); 
+            font-weight: 700; font-size: 0.9rem; 
+            border: 2px solid var(--gold); 
+            position: relative; overflow: hidden;
+        }
+        .chat-label::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(187, 169, 125, 0.3), transparent);
+            animation: shimmer-label 2s infinite;
+        }
+        @keyframes shimmer-label {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+        
+        .chatbot-toggler { 
+            width: 75px; height: 75px; 
+            background: linear-gradient(135deg, var(--primary-light), var(--primary)); 
+            border-radius: 50%; border: none; cursor: pointer; 
+            display: flex; align-items: center; justify-content: center; 
+            box-shadow: 0 15px 35px rgba(20, 83, 45, 0.3), 0 0 0 4px rgba(255,255,255,0.1);
+            color: white; font-size: 2.2rem; 
+            transition: all 0.4s cubic-bezier(0.25, 1, 0.33, 1);
+            position: relative; overflow: hidden;
+        }
+        .chatbot-toggler::before {
+            content: ''; position: absolute; top: 50%; left: 50%; width: 0; height: 0;
+            background: rgba(255,255,255,0.2); border-radius: 50%;
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+        .chatbot-toggler:hover::before { width: 100%; height: 100%; }
+        .chatbot-toggler:hover { 
+            transform: scale(1.15) rotate(8deg); 
+            box-shadow: 0 20px 45px rgba(20, 83, 45, 0.4), 0 0 0 6px rgba(255,255,255,0.2);
+        }
+        .chatbot-toggler:active { transform: scale(1.05) rotate(-2deg); }
+        
+        .chatbot-container { 
+            position: fixed; right: 40px; bottom: 130px; width: 420px; 
+            background: white; border-radius: 24px; 
+            box-shadow: 0 25px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(20, 83, 45, 0.08);
+            opacity: 0; pointer-events: none; 
+            transform: translateY(40px) scale(0.9); 
+            transition: all 0.5s cubic-bezier(0.25, 1, 0.33, 1); 
+            z-index: 2000; overflow: hidden; 
+            display: flex; flex-direction: column;
+        }
+        .chatbot-container.show { 
+            opacity: 1; pointer-events: auto; 
+            transform: translateY(0) scale(1); 
+        }
+        
+        .chat-header { 
+            background: linear-gradient(135deg, var(--primary-light), var(--primary)); 
+            color: white; padding: 30px; 
+            display: flex; justify-content: space-between; align-items: center;
+            position: relative; overflow: hidden;
+        }
+        .chat-header::before {
+            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+        .chat-status {
+            display: flex; align-items: center; gap: 12px;
+        }
+        .status-indicator {
+            width: 10px; height: 10px; background: #22c55e; border-radius: 50%; 
+            box-shadow: 0 0 15px rgba(34, 197, 94, 0.5);
+            animation: pulse-status 2s infinite;
+        }
+        @keyframes pulse-status {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.8; }
+        }
+        .chat-title {
+            font-size: 1.1rem; font-weight: 700; font-family: 'DM Sans', sans-serif;
+            margin: 0;
+        }
+        .close-chat {
+            background: rgba(255,255,255,0.15); border: none; 
+            color: white; cursor: pointer; font-size: 1.3rem; 
+            width: 36px; height: 36px; border-radius: 50%;
+            display: flex; align-items: center; justify-content: center;
+            transition: all 0.3s ease;
+        }
+        .close-chat:hover { background: rgba(255,255,255,0.25); transform: rotate(90deg); }
+        
+        .chat-box { 
+            height: 480px; padding: 25px; overflow-y: auto; 
+            background: linear-gradient(180deg, #fdfdfd 0%, #f8f9fa 100%);
+            display: flex; flex-direction: column; gap: 20px;
+        }
+        .chat-box::-webkit-scrollbar {
+            width: 6px;
+        }
+        .chat-box::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        .chat-box::-webkit-scrollbar-thumb {
+            background: var(--bg-tint); border-radius: 3px;
+        }
+        
+        .message { 
+            max-width: 80%; padding: 16px 22px; border-radius: 20px; 
+            font-size: 0.95rem; line-height: 1.6; 
+            animation: messageSlide 0.4s ease-out;
+        }
+        @keyframes messageSlide {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .bot { 
+            background: white; color: var(--text-main); align-self: flex-start; 
+            border: 1px solid var(--bg-tint); 
+            box-shadow: 0 8px 25px rgba(0,0,0,0.06);
+            border-bottom-left-radius: 6px;
+        }
+        .user { 
+            background: linear-gradient(135deg, var(--primary-light), var(--primary)); 
+            color: white; align-self: flex-end;
+            border-bottom-right-radius: 6px;
+            box-shadow: 0 8px 25px rgba(20, 83, 45, 0.2);
+        }
+        
+        .chat-options { 
+            display: flex; flex-wrap: wrap; gap: 10px; margin-top: 12px;
+            animation: optionsSlide 0.5s ease-out 0.2s both;
+        }
+        @keyframes optionsSlide {
+            from { opacity: 0; transform: translateY(15px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .option-btn { 
+            background: linear-gradient(135deg, var(--bg-tint), white); 
+            color: var(--primary); border: 1.5px solid rgba(20, 83, 45, 0.1); 
+            padding: 12px 20px; border-radius: 50px; 
+            font-size: 0.85rem; font-weight: 600; cursor: pointer; 
+            transition: all 0.3s cubic-bezier(0.25, 1, 0.33, 1);
+            position: relative; overflow: hidden;
+        }
+        .option-btn::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(20, 83, 45, 0.1), transparent);
+            transition: left 0.5s;
+        }
+        .option-btn:hover::before { left: 100%; }
+        .option-btn:hover { 
+            background: linear-gradient(135deg, var(--primary), var(--primary-light)); 
+            color: white; border-color: var(--primary); 
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 25px rgba(20, 83, 45, 0.25);
+        }
+        .option-btn:active { transform: translateY(-1px) scale(1.02); }
+
+        @media (max-width: 1024px) {
+            h1 { font-size: 4rem; }
+            .stats-grid, .process-steps, .rooms-grid, .amenities-grid { grid-template-columns: repeat(2, 1fr); }
+            .form-grid { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            h1 { font-size: 3.5rem; }
+            .section-header h2 { font-size: 3rem; }
+            .stats-grid, .process-steps, .rooms-grid, .amenities-grid { grid-template-columns: 1fr; }
+            .hero-actions { flex-direction: column; }
+            .chatbot-container { width: 90%; right: 5%; bottom: 120px; }
+        }
+    </style>
+</head>
+<body>
+
+    <nav id="navbar">
+        <div class="nav-inner">
+            <a href="#" class="logo-area">
+                <div class="logo-container">
+                    <img src="f8d390a7-88d8-4750-b172-9df8614002cb.jpg" alt="Logo" class="logo-img">
+                </div>
+                <span class="logo-text">The Regal Rooms</span>
+            </a>
+            
+            <ul class="nav-links">
+                <li><a href="#home">Home</a></li>
+                <li><a href="#process">Steps</a></li>
+                <li><a href="#rooms">Rates</a></li>
+                <li><a href="#amenities">Amenities</a></li>
+                <li><a href="#faq">FAQ</a></li>
+            </ul>
+
+            <div class="nav-auth">
+                <a href="login.html" class="btn btn-primary" style="padding: 12px 30px; font-size: 0.95rem;">
+                    <i class="ph ph-user-circle"></i> Tenant Portal
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <section id="home" class="hero" style="opacity: 1; transform: none;">
+        <div class="container">
+            <span class="hero-badge">Excellence in Comfort</span>
+            <h1>Live Secure. <br>Live Better. <br><span>Live Regal.</span></h1>
+            <p>Experience the highest standard of modern living and advanced security in Sta Arcadia, Cabanatuan City. Designed for professionals and students who value peace of mind.</p>
+            <div class="hero-buttons">
+                <a href="#rooms" class="btn btn-primary">Check Availability <i class="ph ph-arrow-right"></i></a>
+                <a href="#location" class="btn btn-outline">Explore Location</a>
+            </div>
+        </div>
+    </section>
+
+    <div class="stats-wrap">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <h3 id="totalRooms">--</h3>
+                    <p>Total Units</p>
+                </div>
+                <div class="stat-card">
+                    <h3>24/7</h3>
+                    <p>CCTV Defense</p>
+                </div>
+                <div class="stat-card">
+                    <h3>100%</h3>
+                    <p>Digital Access</p>
+                </div>
+                <div class="stat-card">
+                    <h3>5 Yrs</h3>
+                    <p>Trusted Service</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section id="process">
+        <div class="container">
+            <div class="section-header">
+                <span class="hero-badge">Our System</span>
+                <h2>Three Steps To Home</h2>
+                <p class="section-subtitle">A streamlined digital journey from discovery to move-in.</p>
+            </div>
+            <div class="process-steps">
+                <div class="step-card">
+                    <span class="step-number">01</span>
+                    <div class="step-icon"><i class="ph ph-magnifying-glass"></i></div>
+                    <h3>Room Search</h3>
+                    <p>Browse our real-time availability tracker or consult our AI assistant to find the perfect unit for your needs.</p>
+                </div>
+                <div class="step-card">
+                    <span class="step-number">02</span>
+                    <div class="step-icon"><i class="ph ph-calendar-check"></i></div>
+                    <h3>Schedule Visit</h3>
+                    <p>Walk through our secure perimeter at Bliss Ville. Experience the premium atmosphere and amenities first-hand.</p>
+                </div>
+                <div class="step-card">
+                    <span class="step-number">03</span>
+                    <div class="step-icon"><i class="ph ph-key"></i></div>
+                    <h3>Instant Move-in</h3>
+                    <p>Sign your digital agreement, settle the deposit via automated billing, and receive your keys instantly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="rooms" style="background: var(--bg-tint); border-radius: 100px 100px 0 0;">
+        <div class="container">
+            <div class="section-header">
+                <span class="hero-badge">Selection</span>
+                <h2>Curated Unit Types</h2>
+                <p class="section-subtitle">Real-time availability of our premium accommodations.</p>
+            </div>
+            <div id="roomsContainer" class="rooms-grid"></div>
+        </div>
+    </section>
+
+    <section id="amenities">
+        <div class="container">
+            <div class="section-header">
+                <span class="hero-badge">Benefits</span>
+                <h2>World-Class Amenities</h2>
+                <p class="section-subtitle">Included facilities designed for your ultimate convenience and safety.</p>
+            </div>
+            <div class="amenities-grid">
+                <div class="amenity-card">
+                    <div class="amenity-icon-box"><i class="ph ph-car"></i></div>
+                    <h3>Secured Parking</h3>
+                    <p style="color: var(--text-submain);">Gated slots for vehicles and motorcycles with 24/7 high-definition CCTV coverage.</p>
+                </div>
+                <div class="amenity-card">
+                    <div class="amenity-icon-box"><i class="ph ph-wifi-high"></i></div>
+                    <h3>Enterprise WiFi</h3>
+                    <p style="color: var(--text-submain);">Building-wide high-speed fiber internet, perfect for remote work and digital learning.</p>
+                </div>
+                <div class="amenity-card">
+                    <div class="amenity-icon-box"><i class="ph ph-shield-check"></i></div>
+                    <h3>Monitoring Hub</h3>
+                    <p style="color: var(--text-submain);">Full HD surveillance across all common areas, hallways, and entrance gates.</p>
+                </div>
+                <div class="amenity-card">
+                    <div class="amenity-icon-box"><i class="ph ph-washing-machine"></i></div>
+                    <h3>Laundry Lounge</h3>
+                    <p style="color: var(--text-submain);">Spacious and clean facility with stable water supply and dedicated drying zones.</p>
+                </div>
+                <div class="amenity-card">
+                    <div class="amenity-icon-box"><i class="ph ph-sun"></i></div>
+                    <h3>Roof Garden</h3>
+                    <p style="color: var(--text-submain);">Open-air social space for relaxation or small evening gatherings under the stars.</p>
+                </div>
+                <div class="amenity-card">
+                    <div class="amenity-icon-box"><i class="ph ph-drop"></i></div>
+                    <h3>Reliable Water</h3>
+                    <p style="color: var(--text-submain);">Dual-tank backup system ensuring zero interruptions in water supply for all units.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="location" style="padding-bottom: 0;">
+        <div style="height: 600px; width: 100%; filter: contrast(1.1) brightness(0.95);">
+            <iframe src="https://maps.google.com/maps?q=Block%207%20Lot%2014%20Bliss%20Ville%20Mabini%20Extension&t=&z=16&ie=UTF8&iwloc=&output=embed" width="100%" height="100%" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+    </section>
+
+    <section id="faq">
+        <div class="container">
+            <div class="section-header">
+                <span class="hero-badge">Knowledge Base</span>
+                <h2>Resident Inquiries</h2>
+                <p class="section-subtitle">Common questions about life at The Regal Rooms.</p>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <button class="faq-header">Are visitors allowed in units? <i class="ph ph-caret-down"></i></button>
+                    <div class="faq-body">
+                        <p style="color: var(--text-submain);">Visitors are welcome in our communal receiving areas until 9 PM daily. For security and privacy, guests are not permitted in private units without prior admin clearance.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-header">Is there a mandatory curfew? <i class="ph ph-caret-down"></i></button>
+                    <div class="faq-body">
+                        <p style="color: var(--text-submain);">The main gate is secured at 10 PM. Residents requiring late access for professional duties are issued digital credentials upon request.</p>
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <button class="faq-header">What are the move-in requirements? <i class="ph ph-caret-down"></i></button>
+                    <div class="faq-body">
+                        <p style="color: var(--text-submain);">We require 1 month advance and 1 month security deposit. The security deposit is refundable upon move-out subject to contract terms.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact-us" class="contact-section">
+        <div class="container">
+            <div class="contact-form-card">
+                <h2 style="margin-bottom: 15px;">Send a Message</h2>
+                <p style="text-align: center; color: var(--text-submain); margin-bottom: 50px;">Submit your specific inquiries directly to our management team for a response within 24 hours.</p>
+
+                <form id="contactForm">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="contactName" class="form-control" placeholder="Juan Dela Cruz" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="contactEmail" class="form-control" placeholder="juan@email.com" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Subject of Inquiry</label>
+                        <input type="text" id="contactSubject" class="form-control" placeholder="Room Reservation Request" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Your Message</label>
+                        <textarea id="contactMessage" class="form-control" rows="5" placeholder="Provide details about your inquiry..." required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; padding: 20px;">
+                        <i class="ph ph-paper-plane-tilt"></i> Dispatch Correspondence
+                    </button>
+                </form>
+
+                <div id="contactSuccess" style="display: none; text-align: center; margin-top: 35px; padding: 35px; background: #f0fdf4; border-radius: 25px; color: #166534; border: 1.5px solid #dcfce7;">
+                    <i class="ph ph-check-circle" style="font-size: 3.5rem; margin-bottom: 15px; display: block;"></i>
+                    <h3 style="color: #166534; margin-bottom: 10px;">Message Delivered</h3>
+                    <p>Our administration will review your correspondence and contact you shortly.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="final-cta" style="background: var(--gold); text-align: center; color: white; padding: 120px 0;">
+        <div class="container">
+            <h2 style="color: white; font-size: 3.5rem;">Ready to Upgrade Your Living?</h2>
+            <p style="color: rgba(255,255,255,0.9); margin-bottom: 40px; font-size: 1.3rem;">Secure your spot at Regal today. Spaces fill up fast.</p>
+            <a href="#contact-us" class="btn btn-primary" style="background: white; color: var(--primary);"><i class="ph ph-house-line"></i> Reserve Now</a>
+        </div>
+    </section>
+
+    <footer>
+        <div class="container">
+            <div class="footer-logo">
+                <img src="f8d390a7-88d8-4750-b172-9df8614002cb.jpg" alt="Logo" style="width:100%; height:100%; object-fit:cover;">
+            </div>
+            <h3 style="color: white; margin-bottom: 15px;">The Regal Rooms</h3>
+            <div style="opacity: 0.6; font-size: 0.95rem;">
+                <p>Block 7 Lot 14 Bliss Ville, Mabini Extension, Sta Arcadia</p>
+                <p>Cabanatuan City, Philippines, 3100</p>
+            </div>
+            <div class="footer-links">
+                <a href="#home">Gateway</a>
+                <a href="#rooms">Room Selection</a>
+                <a href="#amenities">Included Benefits</a>
+                <a href="#faq">Support</a>
+            </div>
+            <div style="display: flex; justify-content: center; gap: 40px; margin-bottom: 50px;">
+                <span style="display:flex; align-items:center; gap:12px; color:var(--gold); font-weight:700;"><i class="ph ph-phone"></i> 0975 334 6229</span>
+                <span style="display:flex; align-items:center; gap:12px; color:var(--gold); font-weight:700;"><i class="ph ph-envelope"></i> admin@regalsams.ph</span>
+            </div>
+            <div class="footer-bottom">
+                &copy; 2026 The Regal Rooms. Precision Property Management & Resident Security.
+            </div>
+        </div>
+    </footer>
+
+    <div class="chat-widget-wrapper">
+        <div class="chat-label">Regal AI Assistant</div>
+        <button class="chatbot-toggler" onclick="toggleChat()" aria-label="Open Chat">
+            <i class="ph ph-chat-circle-dots"></i>
+        </button>
+    </div>
+
+    <div class="chatbot-container" id="chatbot">
+        <div class="chat-header">
+            <div class="chat-status">
+                <div class="status-indicator"></div>
+                <h4 class="chat-title">Regal Assistant</h4>
+            </div>
+            <button class="close-chat" onclick="toggleChat()" aria-label="Close Chat">
+                <i class="ph ph-x"></i>
+            </button>
+        </div>
+
+        <div class="chat-box" id="chatBox">
+            <div class="message bot">
+                Greetings. I am the Regal AI Assistant. I have direct access to our live inventory and can provide instant room availability, monthly rates, and site tour procedures. How may I serve you today?
+            </div>
+            <div class="chat-options">
+                <button class="option-btn" onclick="handleOption('Room Availability')">Room Availability</button>
+                <button class="option-btn" onclick="handleOption('Monthly Rates')">Monthly Rates</button>
+                <button class="option-btn" onclick="handleOption('Site Tour')">Site Tour</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- SECURITY ---
+        if (window.top !== window.self) { window.top.location = window.location; }
+
+        // --- INTERSECTION OBSERVER ---
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                }
+            });
+        }, { threshold: 0.1 });
+
+        document.querySelectorAll('section').forEach(section => observer.observe(section));
+
+        // --- NAVBAR SCROLL ---
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) nav.classList.add('scrolled');
+            else nav.classList.remove('scrolled');
+        });
+
+        // --- FAQ ACCORDION ---
+        document.querySelectorAll('.faq-header').forEach(header => {
+            header.addEventListener('click', () => {
+                const item = header.parentElement;
+                const isActive = item.classList.contains('active');
+
+                document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('active'));
+
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+
+        // --- API & DATA LOADING ---
+        const API = "http://localhost:5000/api";
+
+        async function loadContent() {
+            try {
+                // Room Stats
+                const statsRes = await fetch(API + "/rooms");
+                const rooms = await statsRes.json();
+                document.getElementById("totalRooms").innerText = rooms.length;
+
+                // Room Cards
+                const typesRes = await fetch(API + "/room-types");
+                const types = await typesRes.json();
+
+                const container = document.getElementById("roomsContainer");
+                container.innerHTML = types.map(type => {
+                    const available = rooms.filter(r => r.type._id === type._id && r.status === "Available").length;
+                    const features = type.features || ["Free WiFi", "Secure Gate", "24/7 CCTV"];
+
+                    return `
+                    <div class="room-card">
+                        <div class="room-content">
+                            <span class="room-badge">${available} Units Ready</span>
+                            <h3>${type.name}</h3>
+                            <div class="room-features">
+                                ${features.map(f => `<div class="feature-item"><i class="ph ph-seal-check"></i> ${f}</div>`).join('')}
+                            </div>
+                            <div class="room-bottom">
+                                <div class="room-price">₱${type.price}<span>/mo</span></div>
+                            </div>
+                        </div>
+                    </div>`;
+                }).join('');
+            } catch(err) {
+                console.error("Error loading content:", err);
+            }
+        }
+
+        loadContent();
+
+        // --- CHATBOT LOGIC ---
+        function toggleChat() {
+            document.getElementById("chatbot").classList.toggle("show");
+        }
+
+        function addMessage(text, sender) {
+            const box = document.getElementById("chatBox");
+            const msg = document.createElement("div");
+            msg.className = "chat-msg " + sender;
+            msg.innerHTML = text;
+            box.appendChild(msg);
+            box.scrollTop = box.scrollHeight;
+        }
+
+        async function handleOption(option) {
+            addMessage(option, "user");
+            let reply = "";
+            const lower = option.toLowerCase();
+
+            if (lower.includes("availability")) {
+                try {
+                    const res = await fetch(API + "/rooms");
+                    const rooms = await res.json();
+                    let stats = {};
+                    rooms.filter(r => r.status === "Available").forEach(r => {
+                        stats[r.type.name] = (stats[r.type.name] || 0) + 1;
+                    });
+                    reply = "<strong>Live Inventory Status:</strong><br><br>";
+                    Object.keys(stats).forEach(k => {
+                        reply += `✅ ${k}: ${stats[k]} available<br>`;
+                    });
+                } catch(e) { reply = "Error connecting to room database."; }
+            } else if (lower.includes("rates")) {
+                try {
+                    const res = await fetch(API + "/room-types");
+                    const types = await res.json();
+                    reply = "<strong>Monthly Rates:</strong><br><br>";
+                    types.forEach(t => reply += `• ${t.name}: ₱${t.price}<br>`);
+                } catch(e) { reply = "Unable to fetch live pricing."; }
+            } else if (lower.includes("tour")) {
+                reply = "On-site tours are available <strong>8:00 AM – 5:00 PM</strong> daily. Identify yourself to gate security on arrival.";
+            }
+
+            setTimeout(() => addMessage(reply, "bot"), 500);
+        }
+
+        // --- CONTACT FORM SUBMIT ---
+        document.getElementById("contactForm").addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const formData = {
+                name: document.getElementById("contactName").value,
+                email: document.getElementById("contactEmail").value,
+                subject: document.getElementById("contactSubject").value,
+                message: document.getElementById("contactMessage").value
+            };
+
+            try {
+                const res = await fetch(API + "/send-message", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(formData)
+                });
+                if (res.ok) {
+                    document.getElementById("contactForm").style.display = "none";
+                    document.getElementById("contactSuccess").style.display = "block";
+                }
+            } catch(e) { alert("Communication error. Please try again."); }
+        });
+    </script>
+</body>
+</html>

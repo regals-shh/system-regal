@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en" class="no-js">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tenant Login | Regal Rooms</title>
+
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Sans:wght@500;700&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+<style>
+:root{
+--primary:#14532D;
+--gold:#bba97d;
+--bg:#F8F6F1;
+--white:#FFFFFF;
+--radius:10px;
+}
+
+body{
+font-family:'Inter',sans-serif;
+background:var(--bg);
+display:flex;
+justify-content:center;
+align-items:center;
+min-height:100vh;
+margin:0;
+}
+
+.card{
+background:white;
+padding:50px 40px;
+border-radius:20px;
+box-shadow:0 15px 35px rgba(0,0,0,0.1);
+width:100%;
+max-width:400px;
+text-align:center;
+border-top:5px solid var(--gold);
+}
+
+.brand{
+font-family:'DM Serif Display',serif;
+font-size:2.2rem;
+color:var(--primary);
+}
+
+h2{
+font-weight:500;
+font-size:1rem;
+color:#666;
+margin-bottom:30px;
+letter-spacing:1px;
+}
+
+.form-group{
+text-align:left;
+margin-bottom:20px;
+}
+
+label{
+display:block;
+font-size:0.85rem;
+font-weight:600;
+margin-bottom:8px;
+color:var(--primary);
+}
+
+input{
+width:100%;
+padding:14px;
+border:1.5px solid #E5E7EB;
+border-radius:var(--radius);
+box-sizing:border-box;
+background:#fafafa;
+font-family:'Inter';
+}
+
+input:focus{
+outline:none;
+border-color:var(--gold);
+}
+
+.btn{
+width:100%;
+padding:16px;
+background:var(--primary);
+color:white;
+border:none;
+border-radius:var(--radius);
+font-weight:600;
+cursor:pointer;
+font-size:0.95rem;
+display:flex;
+align-items:center;
+justify-content:center;
+gap:10px;
+}
+
+.btn:hover{
+background:#0d3c1e;
+}
+
+.footer{
+margin-top:25px;
+font-size:0.9rem;
+color:#666;
+}
+
+.footer a{
+color:var(--primary);
+text-decoration:none;
+font-weight:600;
+}
+
+.back-home{
+display:block;
+margin-top:15px;
+font-size:0.8rem;
+color:var(--gold)!important;
+text-decoration:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<div class="brand">Regal Rooms</div>
+<h2>TENANT PORTAL</h2>
+
+<form id="tenantForm">
+
+<div class="form-group">
+<label>Email Address</label>
+<input type="email" id="email" placeholder="email@gmail.com" required>
+</div>
+
+<div class="form-group">
+<label>Password</label>
+<input type="password" id="password" placeholder="••••••••" required>
+</div>
+
+<button type="submit" class="btn">
+<i class="ph ph-sign-in"></i>
+<span>Sign In</span>
+</button>
+
+</form>
+
+<div class="footer">
+<a href="forgot-password.html">Forgot Password?</a>
+<a href="index.html" class="back-home">← Back to Home</a>
+</div>
+
+</div>
+
+<script>
+  //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+
+document.getElementById("tenantForm").addEventListener("submit", async function(e){
+    e.preventDefault();
+
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+
+    try{
+        const response = await fetch("http://localhost:5000/api/tenant-login", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({ email, password })
+        });
+
+        const data = await response.json();
+
+        if(response.ok){
+            // ✅ Store tenant object and tenantId
+            localStorage.setItem("tenant", JSON.stringify(data.tenant));
+            localStorage.setItem("tenantId", data.tenant.id); // <--- THIS IS IMPORTANT
+
+            alert("Login Successful");
+            window.location.href = "tenant-dashboard.html";
+        } else {
+            alert(data.message);
+        }
+
+    } catch(error){
+        console.error(error);
+        alert("Server connection failed");
+    }
+});
+</script>
+
+</body>
+</html>

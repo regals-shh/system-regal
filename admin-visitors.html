@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Visitor Management | Admin</title>
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand-area">
+            <h2>Regal Rooms</h2>
+            <span style="color: var(--text-sub); font-size: 0.8rem;">ADMIN PORTAL</span>
+        </div>
+        <nav class="nav-menu">
+            <a href="admin-dashboard.html" class="nav-link"><i class="ph ph-squares-four" aria-hidden="true"></i> Overview</a>
+            <a href="admin-visitors.html" class="nav-link active"><i class="ph ph-users-three"></i> Visitor Logs</a>
+            <a href="admin-tenants.html" class="nav-link"><i class="ph ph-users" aria-hidden="true"></i> Tenants & Rooms</a>
+            <a href="admin-billing.html" class="nav-link"><i class="ph ph-receipt" aria-hidden="true"></i> Billing & Finance</a>
+            <a href="admin-requests.html" class="nav-link"><i class="ph ph-wrench" aria-hidden="true"></i> Maintenance</a>
+            <a href="admin-announcements.html" class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Announcements</a>
+            <a href="admin-messages.html" class="nav-link"><i class="ph ph-envelope-open" aria-hidden="true"></i> Messages</a>
+            <a href="admin-services.html" class="nav-link"><i class="ph ph-sparkle" aria-hidden="true"></i> Amenity Services</a>
+            <a href="admin-reports.html" class="nav-link"><i class="ph ph-chart-bar" aria-hidden="true"></i> Reports</a>
+            <a href="admin-settings.html" class="nav-link"><i class="ph ph-gear" aria-hidden="true"></i> System Settings</a>
+            </nav>
+<button id="logoutBtn" class="logout-btn">
+    <i class="ph ph-sign-out"></i> Logout
+</button>
+</aside>
+
+    <main class="main-content">
+        <header class="top-header animate-element">
+            <div>
+                <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+                <div>
+                    <h1>Visitor Logs</h1>
+                    <p style="color: var(--text-submain);">Monitor and manage visitor entries.</p>
+                </div>
+            </div>
+            <div class="user-profile" aria-label="User Profile">
+                <div class="user-avatar" aria-hidden="true"><i class="ph ph-shield-check" style="font-size: 1.2rem;"></i></div>
+                <span id="adminName" style="font-weight: 600;">System Admin</span>
+            </div>
+        </header>
+
+        <section class="content-area">
+            <div class="card animate-element">
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Visitor</th>
+                                <th>Host Tenant</th>
+                                <th>Date</th>
+                                <th>In</th>
+                                <th>Out</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="adminVisitorTable">
+                            </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <script src="js/admin.js"></script>
+    <script>
+  //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+
+        const adminId = localStorage.getItem("adminId");
+if (!adminId) {
+    window.location.href = "login.html"; // redirect if not logged in
+}
+
+document.getElementById("logoutBtn").addEventListener("click", () => {
+    localStorage.clear();
+    window.location.href = "admin-index.html";
+  });
+
+        function loadAdminVisitors() {
+            fetch('/api/visitors')
+                .then(response => response.json())
+                .then(visitors => {
+                    const tbody = document.getElementById('adminVisitorTable');
+                    
+                    tbody.innerHTML = visitors.map(v => {
+                        // Format dates
+                        const checkInDate = new Date(v.checkInTime);
+                        const checkOutDate = v.checkOutTime ? new Date(v.checkOutTime) : null;
+                        
+                        const date = checkInDate.toLocaleDateString();
+                        const checkIn = checkInDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+                        const checkOut = checkOutDate ? checkOutDate.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'}) : '---';
+                        
+                        // Get tenant info from populated field or stored field
+                        const tenantName = v.tenantId?.name || v.tenantName || 'Unknown Tenant';
+                        const roomNumber = v.roomNumber || 'Unknown Room';
+                        
+                        return `
+                        <tr>
+                            <td style="font-weight:600;">${v.visitorName}</td>
+                            <td>
+                                <div style="display: flex; flex-direction: column; gap: 2px;">
+                                    <span style="font-weight: 500; color: var(--primary);">${tenantName}</span>
+                                    <span style="font-size: 0.85rem; color: var(--text-submain);">Room: ${roomNumber}</span>
+                                </div>
+                            </td>
+                            <td>${date}</td>
+                            <td>${checkIn}</td>
+                            <td>${checkOut}</td>
+                            <td>
+                                <span class="status ${!checkOutDate ? 'pending' : 'resolved'}">
+                                    ${!checkOutDate ? 'On-site' : 'Departed'}
+                                </span>
+                            </td>
+                        </tr>
+                    `}).join('');
+                })
+                .catch(error => {
+                    console.error('Failed to load visitors:', error);
+                    // Fallback to empty table
+                    document.getElementById('adminVisitorTable').innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-submain);">No visitors found</td></tr>';
+                });
+        }
+        loadAdminVisitors();
+    </script>
+</body>
+</html>

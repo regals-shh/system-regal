@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tenant Dashboard | Regal Rooms</title>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="css/tenant.css">
+</head>
+<body>
+
+<aside class="sidebar" aria-label="Main Navigation">
+    <div class="brand-area">
+        <h2>Regal Rooms</h2>
+        <span style="color: var(--text-sub); font-size: 0.8rem; letter-spacing: 1px;">TENANT PORTAL</span>
+    </div>
+    <nav class="nav-menu" role="navigation">
+            <a href="tenant-dashboard.html" class="nav-link active"><i class="ph ph-squares-four" aria-hidden="true"></i> Overview</a>
+            <a href="tenant-visitors.html" class="nav-link"><i class="ph ph-user-plus"></i> Visitors</a>
+            <a href="tenant-payments.html" class="nav-link"><i class="ph ph-credit-card" aria-hidden="true"></i> Payments</a>
+            <a href="tenant-maintenance.html" class="nav-link"><i class="ph ph-wrench" aria-hidden="true"></i> Maintenance</a>
+            <a href="tenant-announcements.html" class="nav-link"><i class="ph ph-megaphone" aria-hidden="true"></i> Announcements</a>
+            <a href="tenant-services.html" class="nav-link"><i class="ph ph-sparkle" aria-hidden="true"></i> Amenity Services</a>
+            <a href="tenant-settings.html" class="nav-link"><i class="ph ph-user-gear" aria-hidden="true"></i> Settings</a>
+    </nav>
+    <button id="logoutBtn" class="logout-btn" aria-label="Secure Logout"><i class="ph ph-sign-out" aria-hidden="true"></i> Secure Logout</button>
+</aside>
+
+<main class="main-content">
+    <header class="top-header animate-element">
+        <div>
+            <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
+            <div>
+                <h1>Welcome Back, <span id="tenantName">Loading...</span>!</h1>
+                <p id="tenantRoom" style="color: var(--text-submain);"></p>
+            </div>
+        </div>
+        <div class="user-profile" aria-label="User Profile">
+            <div class="user-avatar" id="tenantAvatar"></div>
+            <span id="tenantProfileName" style="font-weight:600;"></span>
+        </div>
+    </header>
+
+    <div class="dashboard-grid" style="grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));">
+        <div class="card stat-card animate-element">
+            <div class="stat-info">
+                <h4 style="color:var(--text-main);">Payment Due</h4>
+                <h2 id="paymentDue" style="color: var(--primary);">₱0</h2>
+                <p id="paymentDate" style="color: var(--text-submain);"><i class="ph ph-calendar-blank" aria-hidden="true"></i> --</p>
+            </div>
+            <div class="stat-icon" aria-hidden="true"><i class="ph ph-wallet"></i></div>
+        </div>
+
+        <div class="card stat-card animate-element">
+            <div class="stat-info">
+                <h4 style="color:var(--text-main);">Active Maintenance Requests</h4>
+                <h2 id="activeRequests" style="color: var(--primary);">0</h2>
+                <p id="requestsInfo" style="color: var(--text-submain);"><i class="ph ph-check-circle" aria-hidden="true"></i> --</p>
+            </div>
+            <div class="stat-icon" aria-hidden="true"><i class="ph ph-check-circle"></i></div>
+        </div>
+
+        <div class="card stat-card animate-element">
+            <div class="stat-info">
+                <h4 style="color:var(--text-main);">Admin Notices</h4>
+                <h2 id="adminNoticesCount" style="color: var(--primary);">0</h2>
+                <p id="adminNoticeText" style="color: var(--text-submain);"><i class="ph ph-bell" aria-hidden="true"></i> --</p>
+            </div>
+            <div class="stat-icon" style="background: #fef08a; color: #854d0e;" aria-hidden="true"><i class="ph ph-warning-circle"></i></div>
+        </div>
+    </div>
+
+    <div class="card animate-element">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; flex-wrap: wrap; gap: 10px;">
+            <h3 style="font-family: 'DM Sans'; font-size: 1.2rem; font-weight: 700;">Recent Activity</h3>
+            <a href="tenant-payments.html" style="color: var(--primary-light); font-weight: 600; font-size: 0.9rem;">View All</a>
+        </div>
+        <div class="table-container" tabindex="0" aria-label="Recent Payment Activity">
+            <table role="table">
+                <thead>
+                    <tr role="row">
+                        <th role="columnheader" style="color:var(--text-submain);">Description</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Date</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Amount</th>
+                        <th role="columnheader" style="color:var(--text-submain);">Status</th>
+                    </tr>
+                </thead>
+                <tbody id="recentPaymentsBody">
+                    <!-- Filled dynamically -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+</main>
+
+<script>
+  //laban clickjacking//
+if (window.top !== window.self) {
+alert("Clickjacking detected!");
+window.top.location = window.location;
+}
+
+const tenantId = localStorage.getItem("tenantId");
+if(!tenantId) window.location.href="login.html";
+
+async function loadTenantDashboard() {
+    try {
+        // Tenant info - Get fresh data from API to ensure sync
+        const res = await fetch(`/api/tenants/${tenantId}`);
+        if(!res.ok) throw new Error(`Failed tenant: ${res.status}`);
+        const tenant = await res.json();
+        
+        // Store fresh tenant data in localStorage for consistency
+        localStorage.setItem("tenant", JSON.stringify(tenant));
+
+        const name = tenant.name || "N/A";
+        const room = tenant.roomNumber || "N/A";
+        document.getElementById("tenantName").textContent = name;
+        document.getElementById("tenantRoom").textContent = "Room " + room;
+        document.getElementById("tenantProfileName").textContent = name;
+        document.getElementById("tenantAvatar").textContent = name.split(" ").map(n=>n[0]).join("").toUpperCase();
+
+        // Payments
+        const paymentsRes = await fetch(`/api/tenant-invoices/${room}`);
+        const payments = paymentsRes.ok ? await paymentsRes.json() : [];
+        const tbody = document.getElementById("recentPaymentsBody");
+        tbody.innerHTML = "";
+        payments.forEach(p=>{
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                <td role="cell">${p.description||"N/A"}</td>
+                <td role="cell">${p.dueDate?new Date(p.dueDate).toLocaleDateString():"N/A"}</td>
+                <td role="cell">₱${p.amount?.toLocaleString()||0}</td>
+                <td role="cell"><span class="status">${p.status||"N/A"}</span></td>
+            `;
+            tbody.appendChild(row);
+        });
+
+        const unpaid = payments.find(p=>p.status==="Pending");
+        if(unpaid){
+            document.getElementById("paymentDue").textContent = "₱"+(unpaid.amount||0).toLocaleString();
+            document.getElementById("paymentDate").textContent = unpaid.dueDate?new Date(unpaid.dueDate).toLocaleDateString():"N/A";
+        } else {
+            // Set payment due to 0 when no pending bills
+            document.getElementById("paymentDue").textContent = "₱0";
+            document.getElementById("paymentDate").textContent = "No pending bills";
+        }
+
+        // Maintenance - Only count pending requests
+        const reqRes = await fetch(`/api/tenant-requests/${tenantId}`);
+        const requests = reqRes.ok ? await reqRes.json() : [];
+        const activeRequests = requests.filter(req => req.status === "Pending");
+        document.getElementById("activeRequests").textContent = activeRequests.length;
+        document.getElementById("requestsInfo").textContent = activeRequests.length>0?"You have active requests":"All systems running smoothly";
+
+        // Announcements - Only count unseen announcements
+        const annRes = await fetch(`/api/announcements`);
+        const announcements = annRes.ok ? await annRes.json() : [];
+        const unseenAnnouncements = announcements.filter(ann => {
+            // Check if tenant has seen this announcement
+            const seenFromBackend = ann.seenBy && ann.seenBy.some(s => s.tenantId.toString() === tenant._id);
+            const seenFromLocal = JSON.parse(localStorage.getItem(`seenAnnouncements_${tenant._id}`) || '[]').includes(ann._id);
+            return !(seenFromBackend || seenFromLocal);
+        });
+        document.getElementById("adminNoticesCount").textContent = unseenAnnouncements.length;
+        document.getElementById("adminNoticeText").textContent = unseenAnnouncements.length>0?unseenAnnouncements[0].message:"No notices at this time";
+
+    } catch(err){
+        console.error(err);
+        alert("Failed to load dashboard data. Refresh the page.");
+    }
+}
+
+loadTenantDashboard();
+
+// Listen for payment updates from other pages
+window.addEventListener('storage', (e) => {
+    if (e.key === 'paymentUpdated' || e.key === 'invoiceStatusChanged') {
+        // Refresh dashboard when payment is made
+        loadTenantDashboard();
+    }
+});
+
+// Listen for maintenance status changes from admin portal
+window.addEventListener('storage', (e) => {
+    if (e.key === 'maintenanceStatusChanged') {
+        // Refresh dashboard counts when maintenance status changes
+        loadTenantDashboard();
+    }
+});
+
+// Function to refresh dashboard counts (called from other pages)
+function refreshDashboardCounts() {
+    loadTenantDashboard();
+}
+
+// Logout
+document.getElementById("logoutBtn").addEventListener("click", ()=>{
+    localStorage.removeItem("tenantId");
+    window.location.href="login.html";
+});
+</script>
+
+<script src="js/tenant.js"></script>
+
+</body>
+</html>

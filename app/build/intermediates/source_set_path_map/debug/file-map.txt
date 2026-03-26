@@ -1,0 +1,47 @@
+com.regalrooms.tenant-navigation-ui-2.7.7-0 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\0ac2e198dd61eccddadf3dd286f4cd51\transformed\navigation-ui-2.7.7\res
+com.regalrooms.tenant-lifecycle-livedata-2.6.2-1 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\0f276006ce70fe9861aa29df4ef3a2fa\transformed\lifecycle-livedata-2.6.2\res
+com.regalrooms.tenant-jetified-annotation-experimental-1.3.0-2 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\11a42232be4797ab3be9f86a4fd1f5fb\transformed\jetified-annotation-experimental-1.3.0\res
+com.regalrooms.tenant-material-1.11.0-3 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\153453171aa278bb934e31ac91c5e0cd\transformed\material-1.11.0\res
+com.regalrooms.tenant-jetified-lifecycle-runtime-ktx-2.6.2-4 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\15584786dee00046e4973858e6cce82b\transformed\jetified-lifecycle-runtime-ktx-2.6.2\res
+com.regalrooms.tenant-jetified-activity-1.8.0-5 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\29328ec0340cca38f93649d057a3a4b1\transformed\jetified-activity-1.8.0\res
+com.regalrooms.tenant-core-runtime-2.2.0-6 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\44f8b47d4c25034f4ed67f8eacd1bb86\transformed\core-runtime-2.2.0\res
+com.regalrooms.tenant-lifecycle-viewmodel-2.6.2-7 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\522f0c43bf8286bb2a791c0b3c9b9dbc\transformed\lifecycle-viewmodel-2.6.2\res
+com.regalrooms.tenant-jetified-fragment-ktx-1.6.2-8 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\5a2e5dd292c2ac29059496f80c2b1d5f\transformed\jetified-fragment-ktx-1.6.2\res
+com.regalrooms.tenant-slidingpanelayout-1.2.0-9 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\5ae3b67644a81f6068c243d060c3904d\transformed\slidingpanelayout-1.2.0\res
+com.regalrooms.tenant-lifecycle-runtime-2.6.2-10 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\65cf5dec282d8f77137495fa2d3d86d8\transformed\lifecycle-runtime-2.6.2\res
+com.regalrooms.tenant-jetified-lifecycle-viewmodel-savedstate-2.6.2-11 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\6c4ca20b6aa67d6f214bbb2a71c2896a\transformed\jetified-lifecycle-viewmodel-savedstate-2.6.2\res
+com.regalrooms.tenant-fragment-1.6.2-12 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\6d4353980b57261da2318d8a752787f4\transformed\fragment-1.6.2\res
+com.regalrooms.tenant-jetified-glide-4.16.0-13 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\79e664e2d21c5516f926b7b51fac2e42\transformed\jetified-glide-4.16.0\res
+com.regalrooms.tenant-recyclerview-1.1.0-14 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\7c679d6d8b3a39763911aa4e587d1d98\transformed\recyclerview-1.1.0\res
+com.regalrooms.tenant-constraintlayout-2.1.4-15 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\7f7c86abaddda57b230705efb31c6635\transformed\constraintlayout-2.1.4\res
+com.regalrooms.tenant-coordinatorlayout-1.1.0-16 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\85be7d57e60042a1d5ec9602c00edb37\transformed\coordinatorlayout-1.1.0\res
+com.regalrooms.tenant-lifecycle-livedata-core-2.6.2-17 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\93dec35277ba22c2931701296cec5919\transformed\lifecycle-livedata-core-2.6.2\res
+com.regalrooms.tenant-core-1.9.0-18 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\9d1d223da40b4d4b2381736cc5c30bb5\transformed\core-1.9.0\res
+com.regalrooms.tenant-jetified-lifecycle-viewmodel-ktx-2.6.2-19 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\a051e264bb2a7df92b06e1f9db191263\transformed\jetified-lifecycle-viewmodel-ktx-2.6.2\res
+com.regalrooms.tenant-navigation-runtime-2.7.7-20 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\a90f9c9ac528c3f0da7616a9649dbd36\transformed\navigation-runtime-2.7.7\res
+com.regalrooms.tenant-jetified-emoji2-views-helper-1.2.0-21 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\b556c84f03be32cf542140bad548f66b\transformed\jetified-emoji2-views-helper-1.2.0\res
+com.regalrooms.tenant-navigation-common-2.7.7-22 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\b5ac162007c25c9c5df529fbd52ac962\transformed\navigation-common-2.7.7\res
+com.regalrooms.tenant-jetified-appcompat-resources-1.6.1-23 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\b61e79ce8a716369d259a3880e3cbfd0\transformed\jetified-appcompat-resources-1.6.1\res
+com.regalrooms.tenant-jetified-profileinstaller-1.3.0-24 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\b67c1abc1214842f35bfa2d3219bf9e4\transformed\jetified-profileinstaller-1.3.0\res
+com.regalrooms.tenant-jetified-savedstate-1.2.1-25 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\c266eee971741f348f04163989be4620\transformed\jetified-savedstate-1.2.1\res
+com.regalrooms.tenant-jetified-window-1.0.0-26 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\cda1d60832c7573021df08c04f7f66e7\transformed\jetified-window-1.0.0\res
+com.regalrooms.tenant-jetified-lifecycle-process-2.6.2-27 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\cdd1b5b4a6d0ed8820fc07e4b0badac3\transformed\jetified-lifecycle-process-2.6.2\res
+com.regalrooms.tenant-jetified-emoji2-1.2.0-28 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\d112731c06992d37f87244e05bd57e52\transformed\jetified-emoji2-1.2.0\res
+com.regalrooms.tenant-jetified-activity-ktx-1.8.0-29 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\d78d5c30834b5ab4730c3d0c28d26a5a\transformed\jetified-activity-ktx-1.8.0\res
+com.regalrooms.tenant-jetified-startup-runtime-1.1.1-30 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\db0dcc8f5c1852d00ff283809670a42f\transformed\jetified-startup-runtime-1.1.1\res
+com.regalrooms.tenant-jetified-lifecycle-livedata-core-ktx-2.6.2-31 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\e41a5d537c1819afa3dc1b8979d40553\transformed\jetified-lifecycle-livedata-core-ktx-2.6.2\res
+com.regalrooms.tenant-cardview-1.0.0-32 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\e4c6ee135b33eda82bf894efaf3859e9\transformed\cardview-1.0.0\res
+com.regalrooms.tenant-drawerlayout-1.1.1-33 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\e5453fdbabbe4e8458bc660b190cf3d1\transformed\drawerlayout-1.1.1\res
+com.regalrooms.tenant-jetified-viewpager2-1.0.0-34 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\e68d39c5e86905eccd2ae4d0e620b8ef\transformed\jetified-viewpager2-1.0.0\res
+com.regalrooms.tenant-appcompat-1.6.1-35 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\e6b90d9473e099143e66326e18e4d50b\transformed\appcompat-1.6.1\res
+com.regalrooms.tenant-navigation-fragment-2.7.7-36 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\e7bbd8e47cda3f44718ffa989b2c2e88\transformed\navigation-fragment-2.7.7\res
+com.regalrooms.tenant-jetified-savedstate-ktx-1.2.1-37 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\ebf282265160588e2e878c5d002e7436\transformed\jetified-savedstate-ktx-1.2.1\res
+com.regalrooms.tenant-transition-1.4.1-38 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\f581ff1c2364ff68eca22ad4434866a4\transformed\transition-1.4.1\res
+com.regalrooms.tenant-jetified-core-ktx-1.9.0-39 C:\Users\Jerald\.gradle\caches\8.10.2\transforms\fb33e5c18b20e261852a70f5929f8b84\transformed\jetified-core-ktx-1.9.0\res
+com.regalrooms.tenant-pngs-40 C:\Users\Jerald\Desktop\Regals Monitoring System - Copy (4) - Copy - Copy - Copy - Copy - Copy\app\build\generated\res\pngs\debug
+com.regalrooms.tenant-resValues-41 C:\Users\Jerald\Desktop\Regals Monitoring System - Copy (4) - Copy - Copy - Copy - Copy - Copy\app\build\generated\res\resValues\debug
+com.regalrooms.tenant-packageDebugResources-42 C:\Users\Jerald\Desktop\Regals Monitoring System - Copy (4) - Copy - Copy - Copy - Copy - Copy\app\build\intermediates\incremental\debug\packageDebugResources\merged.dir
+com.regalrooms.tenant-packageDebugResources-43 C:\Users\Jerald\Desktop\Regals Monitoring System - Copy (4) - Copy - Copy - Copy - Copy - Copy\app\build\intermediates\incremental\debug\packageDebugResources\stripped.dir
+com.regalrooms.tenant-merged_res-44 C:\Users\Jerald\Desktop\Regals Monitoring System - Copy (4) - Copy - Copy - Copy - Copy - Copy\app\build\intermediates\merged_res\debug
+com.regalrooms.tenant-debug-45 C:\Users\Jerald\Desktop\Regals Monitoring System - Copy (4) - Copy - Copy - Copy - Copy - Copy\app\src\debug\res
+com.regalrooms.tenant-main-46 C:\Users\Jerald\Desktop\Regals Monitoring System - Copy (4) - Copy - Copy - Copy - Copy - Copy\app\src\main\res

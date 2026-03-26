@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Room Management | Regal Rooms</title>
+<script src="https://unpkg.com/@phosphor-icons/web"></script>
+<link rel="stylesheet" href="css/admin.css">
+
+<style>
+    /* Aesthetic Alignment */
+    .room-type-section {
+        margin-bottom: 40px;
+    }
+
+    .type-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 20px;
+        padding-bottom: 10px;
+        border-bottom: 2px solid var(--bg-tint);
+    }
+
+    .room-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+        gap: 20px;
+    }
+
+    /* Room Card Aligned to Dashboard Stat-Cards */
+    .room-card {
+        background: var(--bg-surface);
+        padding: 24px;
+        border-radius: var(--radius-card);
+        box-shadow: var(--shadow-soft);
+        border: 1px solid rgba(0,0,0,0.02);
+        text-align: center;
+        transition: var(--transition);
+    }
+
+    .room-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .room-number {
+        font-family: 'DM Sans', sans-serif;
+        font-size: 1.2rem;
+        font-weight: 700;
+        color: var(--text-main);
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    /* Status text without backgrounds, matching Dashboard shades */
+    .status-text {
+        font-size: 0.85rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .status-available {
+        color: var(--primary); /* Deep Green from dashboard */
+    }
+
+    .status-occupied {
+        color: var(--text-red); /* Dark Red from dashboard */
+    }
+
+    .room-actions {
+        display: flex;
+        gap: 8px;
+        justify-content: center;
+        margin-top: 20px;
+    }
+
+    .mini-btn {
+        padding: 6px 12px;
+        border-radius: 8px;
+        font-size: 0.75rem;
+        font-weight: 600;
+        cursor: pointer;
+        border: none;
+        transition: var(--transition);
+    }
+
+    .edit-btn { background: #fef3c7; color: #92400e; }
+    
+    /* Updated Delete Button to match admin-tenants behavior */
+    .delete-btn { 
+        background: #fee2e2; 
+        color: #991b1b; 
+    }
+    
+    .edit-btn:hover { background: var(--gold); color: var(--primary); }
+    
+    /* Matching the 'tapped' effect from tenants: solid red background, white text */
+    .delete-btn:hover, .delete-btn:active { 
+        background: #991b1b; 
+        color: white; 
+    }
+
+    /* Modal Styling */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(20, 83, 45, 0.4);
+        backdrop-filter: blur(4px);
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .modal-content {
+        background: var(--bg-surface);
+        padding: 30px;
+        border-radius: var(--radius-card);
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .modal-content input,
+    .modal-content select,
+    .modal-content textarea {
+        width: 100%;
+        padding: 12px;
+        margin-bottom: 15px;
+        border-radius: var(--radius-btn);
+        border: 1px solid #e5e7eb;
+        font-family: 'Inter', sans-serif;
+    }
+
+    .modal-footer {
+        display: flex;
+        gap: 10px;
+        justify-content: flex-end;
+    }
+</style>
+</head>
+<body>
+    <aside class="sidebar" aria-label="Main Navigation">
+        <div class="brand-area">
+            <h2>Regal Rooms</h2>
+            <span style="color: var(--text-sub); font-size: 0.8rem; letter-spacing: 1px;">ADMIN PORTAL</span>
+        </div>
+        <nav class="nav-menu" role="navigation">
+            <a href="admin-dashboard.html" class="nav-link"><i class="ph ph-squares-four"></i> Overview</a>
+            <a href="admin-visitors.html" class="nav-link"><i class="ph ph-users-three"></i> Visitor Logs</a>
+            <a href="admin-tenants.html" class="nav-link active"><i class="ph ph-users"></i> Tenants & Rooms</a>
+            <a href="admin-billing.html" class="nav-link"><i class="ph ph-receipt"></i> Billing & Finance</a>
+            <a href="admin-requests.html" class="nav-link"><i class="ph ph-wrench"></i> Maintenance</a>
+            <a href="admin-announcements.html" class="nav-link"><i class="ph ph-megaphone"></i> Announcements</a>
+            <a href="admin-messages.html" class="nav-link"><i class="ph ph-envelope-open"></i> Messages</a>
+            <a href="admin-services.html" class="nav-link"><i class="ph ph-sparkle"></i> Amenity Services</a>
+            <a href="admin-reports.html" class="nav-link"><i class="ph ph-chart-bar"></i> Reports</a>
+            <a href="admin-settings.html" class="nav-link"><i class="ph ph-gear"></i> System Settings</a>
+        </nav>
+        <button id="logoutBtn" class="logout-btn"><i class="ph ph-sign-out"></i> System Logout</button>
+    </aside>
+    
+    <main class="main-content">
+        <header class="top-header animate-element">
+            <div>
+                <button id="mobileMenuBtn" class="mobile-menu-btn"><i class="ph ph-list"></i></button>
+                <div>
+                    <h1>Room Inventory</h1>
+                    <p style="color: var(--text-submain);">Manage your property rooms and categories.</p>
+                </div>
+            </div>
+            <div class="user-profile" aria-label="User Profile">
+                <div class="user-avatar" aria-hidden="true"><i class="ph ph-shield-check" style="font-size: 1.2rem;"></i></div>
+                <span id="adminName" style="font-weight: 600;">System Admin</span>
+            </div>
+        </header>
+        <div class="header-actions" style="display: flex; gap: 10px; justify-content: flex-end; margin-bottom: 20px; padding: 20px; background: white; border-radius: var(--radius-card); border: 1px solid rgba(0,0,0,0.02);">
+            <button onclick="openTypeModal()" class="btn btn-primary"><i class="ph ph-plus-circle"></i> New Category</button>
+            <button onclick="openRoomModal()" class="btn btn-primary"><i class="ph ph-door"></i> Add Room</button>
+            <button class="btn" style="background: var(--gold); color: var(--primary);" onclick="window.location.href='admin-tenants.html'"><i class="ph ph-arrow-left"></i> Back</button>
+        </div>
+
+        <div id="roomContainer" class="animate-element"></div>
+    </main>
+
+    <div class="modal" id="roomModal">
+        <div class="modal-content">
+            <h3 id="roomModalTitle">Add Room</h3>
+            <label style="font-size: 0.8rem; font-weight: 600; margin-bottom: 5px; display: block;">Select Category</label>
+            <select id="roomType"></select>
+            <input type="text" id="roomNumber" placeholder="Room Number (e.g. 101)">
+            <div class="modal-footer">
+                <button onclick="closeRoomModal()" class="btn" style="background: #f3f4f6;">Cancel</button>
+                <button onclick="saveRoom()" class="btn btn-primary">Save Room</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="typeModal">
+      <div class="modal-content">
+        <h3>Room Category</h3>
+        <input type="text" id="typeName" placeholder="Type Name (e.g. Deluxe Suite)">
+        <input type="number" id="typePrice" placeholder="Monthly Price (₱)">
+        <textarea id="typeDescription" placeholder="Short description..." rows="3"></textarea>
+        <input type="text" id="typeFeatures" placeholder="Features (e.g. WiFi, AC, TV)">
+        <div class="modal-footer">
+            <button onclick="closeTypeModal()" class="btn" style="background: #f3f4f6;">Cancel</button>
+            <button onclick="addRoomType()" class="btn btn-primary">Save Category</button>
+        </div>
+      </div>
+    </div>
+
+<script>
+    const adminId = localStorage.getItem("adminId");
+    if (!adminId) window.location.href = "login.html";
+
+    document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.clear();
+        window.location.href = "admin-index.html";
+    });
+
+    const mobileMenuBtn = document.getElementById("mobileMenuBtn");
+    const sidebar = document.querySelector('.sidebar');
+    if (mobileMenuBtn && sidebar) {
+        mobileMenuBtn.addEventListener("click", () => sidebar.classList.toggle('open'));
+    }
+
+    setTimeout(() => {
+        document.querySelectorAll('.animate-element').forEach(el => el.classList.add('visible'));
+    }, 100);
+
+    const API = "http://localhost:5000/api";
+    let editingRoomId = null;
+    let editingTypeId = null;
+
+    async function loadRooms(){
+        const typesRes = await fetch(API+"/room-types");
+        const types = await typesRes.json();
+
+        const roomsRes = await fetch(API+"/rooms");
+        const rooms = await roomsRes.json();
+
+        const container = document.getElementById("roomContainer");
+        container.innerHTML="";
+
+        types.forEach(type => {
+            const roomsOfType = rooms.filter(r => r.type._id === type._id);
+
+            let html = `
+            <div class="room-type-section card" style="margin-bottom: 30px;">
+              <div class="type-header">
+                  <div>
+                      <h3 style="margin-bottom: 5px; font-family: 'DM Serif Display', serif;">${type.name}</h3>
+                      <span style="color: var(--primary); font-weight: 700; font-size: 0.9rem;">₱${Number(type.price).toLocaleString()} / month</span>
+                  </div>
+                  <div style="display:flex; gap: 10px;">
+                      <button class="mini-btn edit-btn" onclick="editRoomType('${type._id}')"><i class="ph ph-pencil"></i> Edit Type</button>
+                      <button class="mini-btn delete-btn" onclick="deleteRoomType('${type._id}')"><i class="ph ph-trash"></i></button>
+                  </div>
+              </div>
+
+              <div class="room-grid">
+            `;
+
+            if (roomsOfType.length === 0) {
+                html += `<p style="grid-column: 1/-1; color: #999; font-style: italic;">No rooms assigned yet.</p>`;
+            } else {
+                roomsOfType.forEach(room => {
+                    const isOccupied = room.status.toLowerCase() === 'occupied';
+                    const statusClass = isOccupied ? 'status-occupied' : 'status-available';
+                    
+                    html += `
+                    <div class="room-card">
+                      <span class="room-number">Room ${room.roomNumber}</span>
+                      <span class="status-text ${statusClass}">${room.status}</span>
+                      <div class="room-actions">
+                        <button class="mini-btn edit-btn" onclick="editRoom('${room._id}','${room.roomNumber}','${room.type._id}')">Edit</button>
+                        <button class="mini-btn delete-btn" onclick="deleteRoom('${room._id}')">Delete</button>
+                      </div>
+                    </div>
+                    `;
+                });
+            }
+
+            html += `</div></div>`;
+            container.innerHTML += html;
+        });
+    }
+
+    async function loadRoomTypes(){
+        const res = await fetch(API+"/room-types");
+        const types = await res.json();
+        const select = document.getElementById("roomType");
+        select.innerHTML="";
+        types.forEach(type=>{
+            select.innerHTML += `<option value="${type._id}">${type.name}</option>`;
+        });
+    }
+
+    async function saveRoom() {
+        const roomNumber = document.getElementById("roomNumber").value.trim();
+        const type = document.getElementById("roomType").value;
+        if (!roomNumber) return alert("Room number required");
+
+        let url = editingRoomId ? `${API}/update-room/${editingRoomId}` : `${API}/add-room`;
+        let method = editingRoomId ? "PUT" : "POST";
+
+        await fetch(url, {
+            method: method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ roomNumber, type })
+        });
+
+        closeRoomModal();
+        loadRooms();
+    }
+
+    async function addRoomType() {
+        const name = document.getElementById("typeName").value.trim();
+        const price = document.getElementById("typePrice").value;
+        const description = document.getElementById("typeDescription").value.trim();
+        const features = document.getElementById("typeFeatures").value.split(",").map(f => f.trim()).filter(f => f);
+
+        if (!name || !price) return alert("Fill required fields");
+
+        let url = editingTypeId ? `${API}/update-room-type/${editingTypeId}` : `${API}/add-room-type`;
+        let method = editingTypeId ? "PUT" : "POST";
+
+        await fetch(url, {
+            method: method,
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ name, price, description, features })
+        });
+
+        closeTypeModal();
+        loadRooms();
+        loadRoomTypes();
+    }
+
+    async function deleteRoomType(id) {
+        if (!confirm("Delete this category? This will delete all associated rooms.")) return;
+        await fetch(API + "/delete-room-type/" + id, { method: "DELETE" });
+        loadRooms();
+    }
+
+    function editRoomType(id) {
+        editingTypeId = id;
+        fetch(`${API}/room-types/${id}`).then(res => res.json()).then(type => {
+            document.getElementById("typeName").value = type.name;
+            document.getElementById("typePrice").value = type.price;
+            document.getElementById("typeDescription").value = type.description || "";
+            document.getElementById("typeFeatures").value = type.features.join(", ");
+            openTypeModal();
+        });
+    }
+
+    function editRoom(id, roomNumber, typeId){
+        editingRoomId = id;
+        document.getElementById("roomModalTitle").innerText="Edit Room";
+        openRoomModal();
+        document.getElementById("roomNumber").value = roomNumber;
+        setTimeout(() => { document.getElementById("roomType").value = typeId; }, 200);
+    }
+
+    async function deleteRoom(id){
+        if(!confirm("Delete this room?")) return;
+        await fetch(API+"/delete-room/"+id, { method:"DELETE" });
+        loadRooms();
+    }
+
+    function openRoomModal(){ document.getElementById("roomModal").style.display="flex"; loadRoomTypes(); }
+    function closeRoomModal(){ editingRoomId=null; document.getElementById("roomModal").style.display="none"; }
+    function openTypeModal(){ document.getElementById("typeModal").style.display="flex"; }
+    function closeTypeModal(){ document.getElementById("typeModal").style.display="none"; editingTypeId = null; }
+
+    loadRooms();
+    loadRoomTypes();
+</script>
+
+<script src="js/admin.js"></script>
+</body>
+</html>
