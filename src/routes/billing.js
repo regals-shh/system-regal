@@ -390,7 +390,7 @@ try{
 
 await Invoice.findByIdAndUpdate(
 req.params.id,
-{ status:"Paid" }
+{ status:"Paid", datePaid: new Date() }
 );
 
 res.json({

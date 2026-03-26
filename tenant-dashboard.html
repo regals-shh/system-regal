@@ -31,7 +31,7 @@
         <div>
             <button id="mobileMenuBtn" class="mobile-menu-btn" aria-label="Open Mobile Menu" aria-expanded="false"><i class="ph ph-list" aria-hidden="true"></i></button>
             <div>
-                <h1>Welcome Back, <span id="tenantName">Loading...</span>!</h1>
+                <h1>Welcome Back!</h1>
                 <p id="tenantRoom" style="color: var(--text-submain);"></p>
             </div>
         </div>
@@ -115,7 +115,6 @@ async function loadTenantDashboard() {
 
         const name = tenant.name || "N/A";
         const room = tenant.roomNumber || "N/A";
-        document.getElementById("tenantName").textContent = name;
         document.getElementById("tenantRoom").textContent = "Room " + room;
         document.getElementById("tenantProfileName").textContent = name;
         document.getElementById("tenantAvatar").textContent = name.split(" ").map(n=>n[0]).join("").toUpperCase();
