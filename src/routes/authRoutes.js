@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const nodemailer = require('nodemailer');
+const { Resend } = require('resend');
 const crypto = require('crypto');
 const dotenv = require('dotenv');
 
@@ -13,77 +14,57 @@ const bcrypt = require('bcryptjs');
 // Load environment variables from parent directory
 dotenv.config({ path: require('path').join(__dirname, '../', '.env') });
 
-// Support both new EMAIL_ and legacy GMAIL_ environment variables
-const EMAIL_HOST = (process.env.EMAIL_HOST || 'smtp.gmail.com').trim();
-const EMAIL_PORT = parseInt(process.env.EMAIL_PORT || '587');
-const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_EMAIL || '').trim();
-const EMAIL_APP_PASSWORD = process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD || '';
+// Email configuration
+const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_EMAIL || 'onboarding@resend.dev').trim();
+const RESEND_API_KEY = process.env.RESEND_API_KEY || process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD || '';
 
-console.log('Email User configured:', !!EMAIL_USER);
-console.log('Email App Password configured:', !!EMAIL_APP_PASSWORD);
-
-// Email transporter setup - supports Gmail, custom SMTP, or SendGrid
-let transporter;
-if (EMAIL_APP_PASSWORD && EMAIL_USER) {
-    // Use SendGrid if EMAIL_HOST is sendgrid
-    if (EMAIL_HOST.includes('sendgrid')) {
-        transporter = nodemailer.createTransport({
-            host: 'smtp.sendgrid.net',
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: 'apikey',
-                pass: EMAIL_APP_PASSWORD
-            }
-        });
-    } else if (EMAIL_HOST.includes('gmail')) {
-        transporter = nodemailer.createTransport({
-            host: 'smtp.gmail.com',
-            port: 587,
-            secure: false,
-            requireTLS: true,
-            auth: {
-                user: EMAIL_USER,
-                pass: EMAIL_APP_PASSWORD
-            },
-            tls: {
-                rejectUnauthorized: false,
-                minVersion: 'TLSv1.2'
-            }
-        });
-    } else {
-        transporter = nodemailer.createTransport({
-            host: EMAIL_HOST,
-            port: EMAIL_PORT,
-            secure: EMAIL_PORT === 465,
-            auth: {
-                user: EMAIL_USER,
-                pass: EMAIL_APP_PASSWORD
-            }
-        });
-    }
+// Initialize Resend if API key is available
+let resend = null;
+if (RESEND_API_KEY && RESEND_API_KEY.startsWith('re_')) {
+    resend = new Resend(RESEND_API_KEY);
+    console.log('Resend email service configured');
 } else {
-    console.warn('WARNING: Email not configured. Password reset emails will not work.');
-    // Create a dummy transporter that logs instead of sending
-    transporter = {
-        sendMail: async (options) => {
-            console.log('Email would be sent (email not configured):', options);
-            throw new Error('Email service not configured');
-        },
-        verify: (callback) => callback(new Error('Email not configured'))
-    };
+    console.log('Resend API key not found, checking for SMTP fallback...');
 }
 
-// Verify transporter configuration
-transporter.verify((error, success) => {
-    if (error) {
-        console.log('Email transporter error:', error);
-        console.log('Please check your email configuration in .env file');
+// Fallback Nodemailer transporter for non-Resend setups
+let transporter;
+if (!resend) {
+    const EMAIL_HOST = (process.env.EMAIL_HOST || 'smtp.gmail.com').trim();
+    const EMAIL_PORT = parseInt(process.env.EMAIL_PORT || '587');
+    const EMAIL_APP_PASSWORD = process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD || '';
+    
+    if (EMAIL_APP_PASSWORD && EMAIL_USER && !RESEND_API_KEY.startsWith('re_')) {
+        transporter = nodemailer.createTransport({
+            host: EMAIL_HOST.includes('gmail') ? 'smtp.gmail.com' : EMAIL_HOST,
+            port: 587,
+            secure: false,
+            requireTLS: true,
+            auth: {
+                user: EMAIL_USER,
+                pass: EMAIL_APP_PASSWORD
+            }
+        });
+        console.log('SMTP transporter configured for:', EMAIL_HOST);
     } else {
-        console.log('Email transporter is ready to send messages');
+        console.warn('WARNING: Email not configured. Password reset emails will not work.');
+        transporter = {
+            sendMail: async (options) => {
+                throw new Error('Email service not configured');
+            },
+            verify: (callback) => callback(new Error('Email not configured'))
+        };
     }
-});
+    
+    // Verify transporter
+    transporter.verify((error, success) => {
+        if (error) {
+            console.log('SMTP transporter error:', error.message);
+        } else {
+            console.log('SMTP transporter ready');
+        }
+    });
+}
 
 // Generate 6-digit reset code
 const generateResetCode = () => {
@@ -94,7 +75,7 @@ const generateResetCode = () => {
 const sendResetEmail = async (email, resetCode, userType) => {
     try {
         console.log(`Attempting to send reset email to ${email}...`);
-        console.log(`Using EMAIL_USER: ${EMAIL_USER}`);
+        console.log(`From: ${EMAIL_USER}`);
         
         const subject = `Password Reset Code - Regal Rooms ${userType === 'admin' ? 'Admin' : 'Tenant'} Account`;
         const htmlContent = `
@@ -128,18 +109,31 @@ const sendResetEmail = async (email, resetCode, userType) => {
             </div>
         `;
 
-        const mailOptions = {
-            from: `"Regal Rooms" <${EMAIL_USER}>`,
-            to: email,
-            subject: subject,
-            html: htmlContent
-        };
-
-        const result = await transporter.sendMail(mailOptions);
-        console.log('Email sent successfully:', result.messageId);
-        return result;
+        // Use Resend if available (works on Render free tier)
+        if (resend) {
+            console.log('Using Resend to send email...');
+            const result = await resend.emails.send({
+                from: `Regal Rooms <${EMAIL_USER}>`,
+                to: email,
+                subject: subject,
+                html: htmlContent
+            });
+            console.log('Resend email sent:', result.id);
+            return result;
+        } else {
+            // Fallback to SMTP (may not work on Render)
+            console.log('Using SMTP to send email...');
+            const result = await transporter.sendMail({
+                from: `"Regal Rooms" <${EMAIL_USER}>`,
+                to: email,
+                subject: subject,
+                html: htmlContent
+            });
+            console.log('SMTP email sent:', result.messageId);
+            return result;
+        }
     } catch (error) {
-        console.error('Detailed email error:', error);
+        console.error('Email sending error:', error);
         throw error;
     }
 };
