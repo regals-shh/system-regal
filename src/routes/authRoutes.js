@@ -15,7 +15,7 @@ dotenv.config({ path: require('path').join(__dirname, '../', '.env') });
 
 // Support both new EMAIL_ and legacy GMAIL_ environment variables
 const EMAIL_HOST = (process.env.EMAIL_HOST || 'smtp.gmail.com').trim();
-const EMAIL_PORT = (process.env.EMAIL_PORT || 587).toString().trim();
+const EMAIL_PORT = parseInt(process.env.EMAIL_PORT || '587');
 const EMAIL_USER = (process.env.EMAIL_USER || process.env.GMAIL_EMAIL || '').trim();
 const EMAIL_APP_PASSWORD = process.env.EMAIL_APP_PASSWORD || process.env.GMAIL_APP_PASSWORD || '';
 
@@ -25,20 +25,27 @@ console.log('Email App Password configured:', !!EMAIL_APP_PASSWORD);
 // Email transporter setup (supports Gmail and custom SMTP)
 let transporter;
 if (EMAIL_APP_PASSWORD && EMAIL_USER) {
-    // Use Gmail service if host is gmail, otherwise use custom SMTP
+    // Use Gmail OAuth2/service configuration for Render compatibility
     if (EMAIL_HOST.includes('gmail')) {
         transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp.gmail.com',
+            port: 587,
+            secure: false, // Use STARTTLS
+            requireTLS: true,
             auth: {
                 user: EMAIL_USER,
                 pass: EMAIL_APP_PASSWORD
+            },
+            tls: {
+                rejectUnauthorized: false,
+                minVersion: 'TLSv1.2'
             }
         });
     } else {
         transporter = nodemailer.createTransport({
             host: EMAIL_HOST,
-            port: parseInt(EMAIL_PORT),
-            secure: parseInt(EMAIL_PORT) === 465,
+            port: EMAIL_PORT,
+            secure: EMAIL_PORT === 465,
             auth: {
                 user: EMAIL_USER,
                 pass: EMAIL_APP_PASSWORD
