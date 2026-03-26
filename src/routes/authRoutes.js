@@ -112,14 +112,26 @@ const sendResetEmail = async (email, resetCode, userType) => {
         // Use Resend if available (works on Render free tier)
         if (resend) {
             console.log('Using Resend to send email...');
-            const result = await resend.emails.send({
-                from: `Regal Rooms <${EMAIL_USER}>`,
-                to: email,
-                subject: subject,
-                html: htmlContent
-            });
-            console.log('Resend email sent:', result.id);
-            return result;
+            try {
+                const result = await resend.emails.send({
+                    from: `Regal Rooms <${EMAIL_USER}>`,
+                    to: email,
+                    subject: subject,
+                    html: htmlContent
+                });
+                console.log('Resend result:', JSON.stringify(result, null, 2));
+                if (result.error) {
+                    throw new Error(`Resend error: ${result.error.message}`);
+                }
+                if (!result.data || !result.data.id) {
+                    throw new Error('Resend returned no email ID - possible authentication issue');
+                }
+                console.log('Resend email sent, ID:', result.data.id);
+                return result;
+            } catch (resendError) {
+                console.error('Resend send error:', resendError);
+                throw resendError;
+            }
         } else {
             // Fallback to SMTP (may not work on Render)
             console.log('Using SMTP to send email...');
